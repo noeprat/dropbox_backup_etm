@@ -58,6 +58,7 @@ def extract_sub(str, participants_dict):
     i=1
     while (old_name not in participants_dict.keys()) and i <len(split):
         old_name += '_' + split[i]
+        i+=1
     if old_name not in participants_dict.keys():
         raise AssertionError
     else:
