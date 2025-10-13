@@ -4,8 +4,11 @@
 def extract_extension(str):
     """
     Returns the extension of the filename / path string, dot included
+
     Returns an empty string if there is no extension (folders or specific files)
+
     Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
+
     Example:
     ext = extract_extension('folder/file.nii.gz')
     >>> ext
@@ -35,16 +38,20 @@ def extract_id(str):
     """
     Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
     """
-    str = remove_extension(str)
-    split = str.split("_")
+    filename = remove_extension(str).split('/')[-1]
+    split = filename.split("_")
     id_index = None
     for i,elt in enumerate(split):
         if is_date(elt):
             id_index = i+1
+            break
     id_elt = ''
-    for split_elt in split[id_index:]:
-        if not split_elt.isalpha():
-            id_elt = id_elt + split_elt.lower()
+    if id_index is not None:
+        for split_elt in split[id_index:]:
+            if not split_elt.isalpha():
+                id_elt = id_elt + split_elt.lower()
+    else:
+        id_elt = ''
     return id_elt
 
 
@@ -65,6 +72,15 @@ def extract_sub(str, participants_dict):
         return participants_dict[old_name]
 
 def extract_type(str):
+    """
+    Possible types (so far):
+     - anat
+     - anat_segmentation
+     - ct
+     - ct_segmentation
+     - func
+     - simulation
+    """
     filename = remove_extension(str.split('/')[-1])
     extension = extract_extension(str)
     keywords = [keyword.lower() for keyword in filename.split('_')]
@@ -89,6 +105,24 @@ def extract_type(str):
     return type
 
 def get_category(str):
+    """
+    Returns additional information on the data
+
+    Possible categories (so far):
+     - ssl_tissues_post_pro_step_02
+     - ssl_tissues_post_pro_step_01
+     - ssl_tissues
+     - deepseg
+     - for_making_levels
+     - lumbar
+     - ax_lspine
+     - ax_obl_sacrum
+     - bladder
+     - individual_spinal_levels
+     - resting_state
+     - total_spineseg
+     - lumbar
+    """
     if is_localizer(str):
         return 'localizer'
     filename = remove_extension(str.split('/')[-1])
@@ -111,11 +145,14 @@ def get_category(str):
         'ax_lspine',
         'ax_obl_sacrum',
         'bladder',
-        'individual_spinal_levels'
+        'individual_spinal_levels',
+        'resting_state'
     ]
 
     expressions_to_search_in_filename = [
-        'total_spineseg'
+        'total_spineseg',
+        'lumbar',
+
     ]
 
     for dir_expression in expressions_to_search_in_dirs:
@@ -126,7 +163,7 @@ def get_category(str):
     
 
     for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename.lower():
+        if filename_expression in filename.lower() and (filename_expression not in categories):
             categories.append(filename_expression)
             break
     category = '_'.join(categories)
@@ -135,6 +172,47 @@ def get_category(str):
 
 
 def get_seg_info(str):
+    """
+    Returns additional information about a segmentation (if it is a mask, the part that was targeted, the tools used to segment, ...)
+    
+    Possible seg_info (so far):
+     - segmentator_tissues
+     - step1_canal
+     - step1_cord
+     - step1_levels
+     - step1_output
+     - step2_output
+     - l2
+     - l3
+     - l4
+     - l5
+     - more_caudal
+     - more_rostral
+     - s1
+     - s2
+     - s3
+     - s4
+     - aorta
+     - autochthon_left
+     - autochthon_right
+     - colon
+     - gluteus_maximus_left
+     - hip_right
+     - iliac_vena_left
+     - iliac_vena_right
+     - iliopsoas_left
+     - iliopsoas_right
+     - inferior_vena_cava
+     - intervertebral_discs
+     - lung_right
+     - portal_vein_and_splenic_vein
+     - sacrum
+     - small_bowel
+     - spinal_cord
+     - stomach
+     - vertebrae
+    
+    """
     filename = remove_extension(str.split('/')[-1])
     dirs = [dir.lower() for dir in str.split('/')[:-1:]]
     dir_path = ''
@@ -200,7 +278,26 @@ def get_seg_info(str):
     return seg_info
 
 def get_suffix(str):
-    filename = remove_extension(str.split('/')[-1])
+    """
+    Returns the suffix for the new path, should contain information about the imaging sequance and/or the type of signal
+
+    Possible suffixes:
+     - ct
+     - physiolog
+     - interoperability
+     - bold
+     - t2_spc_zoomit
+     - t2_space
+     - t2_tse
+     - t2_trufi3d
+     - t2_gre
+     - t1_tfe
+     - b_ffe
+     - t2_3d_tra_vista
+     - t2w_ffe
+     - ffe
+    """
+    filename = remove_extension(str.split('/')[-1]).lower()
     keywords = [keyword.lower() for keyword in filename.split('_')]
     extension = extract_extension(str)
 
@@ -234,7 +331,7 @@ def get_suffix(str):
     ]
 
     for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename.lower():
+        if filename_expression in filename:
             return filename_expression
 
     return ''
@@ -245,6 +342,7 @@ def get_suffix(str):
 def is_date(str):
     """
     Returns True if the input string is a date (with the common typo 2025 -> 205 taken into account)
+    
     Returns False otherwise
     """
     if str.isdecimal():   
@@ -300,39 +398,79 @@ def is_a_previous_version(str):
 ################### INFO DICT ###########################################################################################
 
 
-def create_filename_dict(str, participants_dict):
+def create_filename_dict(str, participants_dict, **kwargs):
+    """
+    Inputs:
+     - str, path to the original file
+     - participants_dict, new sub name given the former one (e.g. participants_dict['REEVOID_PILOT_01'] = 'sub-pilot')
+    Output:
+     - out, dict with information and the new path for the original file
+    Kwargs:
+     - sub: precises the sub name
+     - type: precises if it is 'anat', 'func', etc.
+     - category
+     - seg_info: possible information if it is segmentation (zone targeted, mask, ...)
+     - is_localizer (Bool)
+     - is_other (Bool)
+     - is_a_previous_version (Bool)
+     - is_derivative (Bool)
+    
+    """
     out = {}
     out["old_path"] = str
     id = extract_id(str)
     out["id"] = id
-    try:
-        sub = extract_sub(str, participants_dict)
-    except AssertionError:
-        sub= ''
+
+    if 'sub' not in kwargs.keys():
+        try:
+            sub = extract_sub(str, participants_dict)
+        except AssertionError:
+            sub= 'sub'
+    else:
+        sub = kwargs['sub']
     out["sub"] = sub
     
-    type = extract_type(str)
+    if 'type' not in kwargs.keys():
+        type = extract_type(str)
+    else:
+        type = kwargs['type']
     out['type'] = type
 
     extension = extract_extension(str)
     out['extension'] = extension
-
-    category = get_category(str)
+    
+    if 'category' not in kwargs.keys():
+        category = get_category(str)
+    else:
+        category = kwargs['category']
     out['category'] = category
 
-    if 'segmentation' in type:
-        seg_info = get_seg_info(str)
+    if 'seg_info' not in kwargs.keys():
+        if 'segmentation' in type:
+            seg_info = get_seg_info(str)
+            out['seg_info'] = seg_info
+        else :
+            seg_info = ''
+    else:
+        seg_info = kwargs['seg_info']
         out['seg_info'] = seg_info
-    else :
-        seg_info = ''
     
-    is_localizer_bool = is_localizer(str)
+    if 'is_localizer' not in kwargs.keys():
+        is_localizer_bool = is_localizer(str)
+    else:
+        is_localizer_bool = kwargs['is_localizer']
     out['is_localizer'] = is_localizer_bool
 
-    is_other_bool = is_other(str)
+    if 'is_other' not in kwargs.keys():
+        is_other_bool = is_other(str)
+    else:
+        is_other_bool = kwargs['is_other']
     out['is_other'] = is_other_bool
 
-    is_a_previous_version_bool = is_a_previous_version(str)
+    if 'is_a_previous_version' not in kwargs.keys():
+        is_a_previous_version_bool = is_a_previous_version(str)
+    else:
+        is_a_previous_version_bool = kwargs['is_a_previous_version']
     out['is_a_previous_version'] = is_a_previous_version_bool
 
     suffix = get_suffix(str)
@@ -342,7 +480,12 @@ def create_filename_dict(str, participants_dict):
 
     new_path = ''
 
-    if is_derivative(type):
+    if 'is_derivative' not in kwargs.keys():
+        is_derivative_bool = is_derivative(type)
+    else:
+        is_derivative_bool = kwargs['is_derivative']
+
+    if is_derivative_bool:
         new_path += 'derivatives/'
         if 'segmentation' in type:
             new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
@@ -358,7 +501,10 @@ def create_filename_dict(str, participants_dict):
     elif is_a_previous_version_bool:
         new_path += '_previous_version/'
     
-    id_element = 'id-' +id
+    if id != '':
+        id_element = 'id-' +id
+    else:
+        id_element = ''
 
     elements = [sub, category, id_element, seg_info, suffix]
 
