@@ -1,0 +1,54 @@
+{
+    "/source/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.nii.gz": {
+        "old_path": "/source/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.nii.gz",
+        "id": "7",
+        "sub": "sub_pilot",
+        "type": "func",
+        "extension": ".nii.gz",
+        "category": "resting_state",
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "bold",
+        "new_path": "sub_pilot/func/sub_pilot_resting_state_id-7_bold.nii.gz"
+    },
+    "/source/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.json": {
+        "old_path": "/source/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.json",
+        "id": "7",
+        "sub": "sub_pilot",
+        "type": "func",
+        "extension": ".json",
+        "category": "resting_state",
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "bold",
+        "new_path": "sub_pilot/func/sub_pilot_resting_state_id-7_bold.json"
+    },
+    "/source/Reevoid_Martin_fMRI_interoperability.zip": {
+        "old_path": "/source/Reevoid_Martin_fMRI_interoperability.zip",
+        "id": "",
+        "sub": "sub_pilot",
+        "type": "func",
+        "extension": ".zip",
+        "category": "resting_state",
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "interoperability",
+        "new_path": "sub_pilot/func/sub_pilot_resting_state_interoperability.zip"
+    },
+    "/source/PhysioLogFiles_fMRI_Martin.zip": {
+        "old_path": "/source/PhysioLogFiles_fMRI_Martin.zip",
+        "id": "",
+        "sub": "sub_pilot",
+        "type": "func",
+        "extension": ".zip",
+        "category": "resting_state",
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "physiolog",
+        "new_path": "sub_pilot/func/sub_pilot_resting_state_physiolog.zip"
+    }
+}
