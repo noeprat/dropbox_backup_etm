@@ -1,0 +1,4 @@
+~/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.nii.gz, ~/sub_pilot/func/sub_pilot_resting_state_id-7_bold.nii.gz
+~/REEVOID_PILOT_01_MRI_NIFTI/Resting_State/REEVOID_PILOT_01_MRI_RestingState_Lumbar_20250528145351_7.json, ~/sub_pilot/func/sub_pilot_resting_state_id-7_bold.json
+~/PhysioLogFiles_fMRI_Martin.zip, ~/sub_pilot/func/sub_pilot_resting_state_physiolog.zip
+~/Reevoid_Martin_fMRI_interoperability.zip, ~/sub_pilot/func/sub_pilot_resting_state_interoperability.zip
