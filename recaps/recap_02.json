@@ -1,0 +1,16 @@
+{
+    "sub_pilot": {
+        "func": [
+            "sub_pilot/func/sub_pilot_resting_state_physiolog.zip",
+            "sub_pilot/func/sub_pilot_resting_state_interoperability.zip"
+        ]
+    },
+    "sub-test":{
+        "anat":[
+            "sub-test_id-1_t2.nii.gz"
+        ],
+        "ct":[
+            "ct.nii.gz"
+        ]
+    }
+}
