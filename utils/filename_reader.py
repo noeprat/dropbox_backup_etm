@@ -3,13 +3,22 @@
 
 def extract_extension(str):
     """
-    Returns the extension of the filename / path string, dot included
+    Returns the extension of the filename / path string, dot included,
+    returns an empty string if there is no extension (folders or specific files)
 
-    Returns an empty string if there is no extension (folders or specific files)
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+            
+            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
 
-    Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
-
-    Example:
+    Returns
+    --------
+        ext: str,
+            the extension extracted in str, dot included
+    Examples
+    --------
     ext = extract_extension('folder/file.nii.gz')
     >>> ext
     '.nii.gz'
@@ -27,6 +36,18 @@ def extract_extension(str):
 def remove_extension(str):
     """
     Removes the extension of a path string
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+            
+            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
+
+    Returns
+    --------
+        new_str: str,
+            the new path without the extension
     """
     ext = extract_extension(str)
     if len(ext)>0:
@@ -37,6 +58,16 @@ def remove_extension(str):
 def extract_id(str):
     """
     Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        id_elt: str,
+            the id of the specified filename
     """
     filename = remove_extension(str).split('/')[-1]
     split = filename.split("_")
@@ -50,14 +81,24 @@ def extract_id(str):
         for split_elt in split[id_index:]:
             if not split_elt.isalpha():
                 id_elt = id_elt + split_elt.lower()
-    else:
-        id_elt = ''
     return id_elt
 
 
 def extract_sub(str, participants_dict):
     """
     Returns the participant code of a string, raises an assertion error if it cannot find it in the filename
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+        participants_dict : dict
+            participants[old_name] = new_name, e.g. participants_dict['REEVOID_001'] = 'sub-01'
+    
+    Returns
+    --------
+        new_name: str,
+            the new participant code ('sub-*')
     """
     filename = str.split("/")[-1]
     split = filename.split("_")
@@ -80,6 +121,16 @@ def extract_type(str):
      - ct_segmentation
      - func
      - simulation
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        type: str,
+            the type of the specified file
     """
     filename = remove_extension(str.split('/')[-1])
     extension = extract_extension(str)
@@ -122,6 +173,16 @@ def get_category(str):
      - resting_state
      - total_spineseg
      - lumbar
+    
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        category: str,
+            the category of the specified file
     """
     if is_localizer(str):
         return 'localizer'
@@ -173,7 +234,7 @@ def get_category(str):
 
 def get_seg_info(str):
     """
-    Returns additional information about a segmentation (if it is a mask, the part that was targeted, the tools used to segment, ...)
+    Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
     Possible seg_info (so far):
      - segmentator_tissues
@@ -212,6 +273,14 @@ def get_seg_info(str):
      - stomach
      - vertebrae
     
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        seg_info: str,
     """
     filename = remove_extension(str.split('/')[-1])
     dirs = [dir.lower() for dir in str.split('/')[:-1:]]
@@ -296,6 +365,15 @@ def get_suffix(str):
      - t2_3d_tra_vista
      - t2w_ffe
      - ffe
+    
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        suffix: str,
     """
     filename = remove_extension(str.split('/')[-1]).lower()
     keywords = [keyword.lower() for keyword in filename.split('_')]
@@ -342,8 +420,17 @@ def get_suffix(str):
 def is_date(str):
     """
     Returns True if the input string is a date (with the common typo 2025 -> 205 taken into account)
-    
+
     Returns False otherwise
+
+    Parameters
+    --------
+        str : str,
+            a string supposedly containing a date (between 2000 and 2025)
+    
+    Returns
+    --------
+        is_date_bool: bool,
     """
     if str.isdecimal():   
         if len(str)==14: #correctly formatted date
@@ -364,9 +451,32 @@ def is_date(str):
         return False
 
 def is_derivative(type):
+    """
+    Parameters
+    --------
+        type : str,
+            a type, like 'anat' or 'modelling'
+    
+    Returns
+    --------
+        is_derivative_bool: bool,
+    """
     return 'segmentation' in type or (type in ['modelling', 'simulation', 'misc'])
 
 def is_localizer(str):
+    """
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        is_localizer_bool: bool,
+            True iff the file is in a localizer subdirectory
+    
+    Errors for json files will be handled thanks to functions in utils.save_loges
+    """
     try:
         last_dir = str.split('/')[-2].lower()
         return 'localizer' in last_dir
@@ -374,6 +484,17 @@ def is_localizer(str):
         return False
 
 def is_other(str):
+    """
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        is_other_bool: bool,
+            True iff the file is in an "other" subdirectory
+    """
     try:
         last_dir = str.split('/')[-2].lower()
         return 'other' in last_dir and (not 'localizer_other' in last_dir)
@@ -381,6 +502,17 @@ def is_other(str):
         return False
     
 def is_a_previous_version(str):
+    """
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        is_a_previous_version_bool: bool,
+            True iff the file is in a 'previous_version' subdirectory
+    """
     i = -2
     try:
         last_dir = str.split('/')[i].lower()
@@ -400,21 +532,34 @@ def is_a_previous_version(str):
 
 def create_filename_dict(str, participants_dict, **kwargs):
     """
-    Inputs:
-     - str, path to the original file
-     - participants_dict, new sub name given the former one (e.g. participants_dict['REEVOID_PILOT_01'] = 'sub-pilot')
-    Output:
-     - out, dict with information and the new path for the original file
-    Kwargs:
-     - sub: precises the sub name
-     - type: precises if it is 'anat', 'func', etc.
-     - category
-     - seg_info: possible information if it is segmentation (zone targeted, mask, ...)
-     - is_localizer (Bool)
-     - is_other (Bool)
-     - is_a_previous_version (Bool)
-     - is_derivative (Bool)
+    Returns a dict containing information and sorting instructions ("new_path") given a path string and the participants dict.
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+        participants_dict : dict,
+            new sub name given to the former one (e.g. participants_dict['REEVOID_PILOT_01'] = 'sub-pilot')
     
+    Returns
+    --------
+        out : dict,
+            information and new path for the original file
+    
+    Kwargs
+    --------
+        sub : str,
+            precises the sub name
+        type : str,
+            precises if it is 'anat', 'func', etc.
+        category : str,
+            additional information
+        seg_info : str,
+            possible information if it is segmentation (zone targeted, mask, ...)
+        is_localizer : Bool,
+        is_other : Bool,
+        is_a_previous_version : Bool,
+        is_derivative : Bool,
     """
     out = {}
     out["old_path"] = str

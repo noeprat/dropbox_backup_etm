@@ -3,6 +3,40 @@ from .filename_reader import create_filename_dict, remove_extension
 import os
 
 def save_file_infos(input_files, participants_dict, out_path, **kwargs):
+    """
+    Saves a json in `out_path` containing information and sorting instructions ("new_path") for all files in `input_files`
+
+    Kwargs can be used to pre-determine some information
+
+    Parameters
+    --------
+        input_files : list(str),
+            a list of path strings
+        participants_dict : dict,
+            new sub name given to the former one (e.g. participants_dict['REEVOID_PILOT_01'] = 'sub-pilot')
+        out_path : str,
+            the path where the file infos will be saved (usually of the type `/file_infos/subdir/file_infos-[n].json`)
+    
+    Saves
+    --------
+        out_path, json file
+            information about a file can be found as follows: out_path_dict[file]['new_path'] or out_path_dict[file]['type'] etc.
+
+    Kwargs
+    --------
+        sub : str,
+            precises the sub name
+        type : str,
+            precises if it is 'anat', 'func', etc.
+        category : str,
+            additional information
+        seg_info : str,
+            possible information if it is segmentation (zone targeted, mask, ...)
+        is_localizer : Bool,
+        is_other : Bool,
+        is_a_previous_version : Bool,
+        is_derivative : Bool,
+    """
     final_data= {}
     for file in input_files:
         print(file)
@@ -14,6 +48,23 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
 
 
 def save_jsons_to_data(file_infos_path, jsons_to_data_path):
+    """
+    Saves a json in `jsons_to_data_path` matching metadata files with their respective data
+
+
+    Parameters
+    --------
+        file_infos_path : str,
+            path to fileinfos
+        jsons_to_data_path : str,
+            the path where the matches will be saved (usually of the type `/file_infos/jsons_to_data/subdir/file_infos-[n].json`)
+    
+    Saves
+    --------
+        jsons_to_data_path, json file
+            metadata-data connections can be found as follows: jsons_to_data_path_dict[json_file] = list(possible matching data files)
+
+    """
     jsons_dict = {}
 
     data_dict = {}
@@ -42,6 +93,26 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path):
 
 
 def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_path, corrected_file_infos_path):
+    """
+    Saves a json in `corrected_file_infos_path` correcting the metadata file infos
+
+    If no correction is required, it will save a renamed copy of the initial file
+
+
+    Parameters
+    --------
+        file_infos_path : str,
+            path to fileinfos
+        jsons_to_data_path : str,
+            path to metadata-data matching file
+        corrected_file_infos_path : str,
+            the path where the corrected file infos will be saved (usually of the type `/file_infos/subdir/file_infos-[n]_corrected.json`)
+    
+    Saves
+    --------
+        corrected_file_infos_path, json file
+            information about a file can be found as follows: corrected_file_infos_path_dict[file]['new_path'] or corrected_file_infos_path_dict[file]['type'] etc.
+    """
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
 
@@ -66,25 +137,83 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
 
 
 def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
+    """
+    Saves a txt in `out_path` logging the sorting instructions in `file_infos_path`, where each line is of the sort ~/old/path/to/file, ~/new/path/to/file
 
+    Prefixes can be specified to be added before the old and new paths
+
+    **Overwrites the file in `out_path`**
+
+    Parameters
+    --------
+        file_infos_path : str,
+            path to fileinfos
+        out_path : str,
+            path to where the logs will be saved (must end in .txt)
+        old_prefix = '' : str,
+            the prefix that will be added to the left hand paths in the file
+        new_prefix = '' : str,
+            the prefix that will be added to the right hand paths in the file
+    
+    Saves
+    --------
+        out_path, txt file
+            logs of the changes proposed in `file_infos_path`
+
+            each line is of the sort: ~/old/path/to/file, ~/new/path/to/file
+    """
     with open(file_infos_path,'r') as f:
         data = json.load(f)
     
     out_dirs = '/'.join(out_path.split('/')[:-1])
+    corrected_old_prefix = old_prefix
+    corrected_new_prefix = new_prefix
+    if old_prefix != '':
+        if corrected_old_prefix[-1]=='/':
+            corrected_old_prefix = corrected_old_prefix[:-1]
+        if corrected_old_prefix[0] != '/':
+            corrected_old_prefix = '/' + corrected_old_prefix
+    if new_prefix != '':
+        if corrected_new_prefix[-1]!='/':
+            corrected_new_prefix +='/'
+        if corrected_new_prefix[0] =='/':
+            corrected_new_prefix = corrected_new_prefix[1:]
+    
     try:
         os.makedirs(out_dirs)
         with open(out_path,'w') as f:
             for file in data.keys():
-                f.write('~' + old_prefix + data[file]['old_path'] + ', ~/' + new_prefix + data[file]['new_path'])
+                f.write('~' + corrected_old_prefix + data[file]['old_path'] + ', ~/' + corrected_new_prefix + data[file]['new_path'])
                 f.write('\n')
     except:
-        with open(out_path,'a') as f:
+        with open(out_path,'w') as f:
             for file in data.keys():
-                f.write('~' + data[file]['old_path'] + ', ~/' + data[file]['new_path'])
+                f.write('~' + corrected_old_prefix + data[file]['old_path'] + ', ~/' + corrected_new_prefix + data[file]['new_path'])
                 f.write('\n')
 
 
 def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
+    """
+    Saves a json in `out_path` listing the types of data available for each sub: `out_path_dict[sub][type]` is a list of the new paths of the data on the specified type and sub
+
+    Prefixes can be specified to be added before the new paths
+
+    **Overwrites the file in `out_path`**
+
+    Parameters
+    --------
+        file_infos_path : str,
+            path to fileinfos
+        out_path : str,
+            path to where the recap will be saved (must end in .json)
+        new_prefix = '' : str,
+            the prefix that will be added to the right hand paths in the file
+    
+    Saves
+    --------
+        out_path, json file
+            recap of the available data for each sub
+    """
     with open(file_infos_path,'r') as f:
         file_infos = json.load(f)
     
@@ -123,6 +252,23 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
         
 
 def merge_general_recaps(input_files, out_path):
+    """
+    Merges the json recaps listed in `input_files` and saves the result in `out_path`
+
+    **Overwrites the file in `out_path`**
+
+    Parameters
+    --------
+        input_file : list(str),
+            list of paths to json recaps to be merged
+        out_path : str,
+            path to where the merged recap will be saved (must end in .json)
+   
+    Saves
+    --------
+        out_path, json file
+            merged recap of the available data for each sub
+    """
     out_data = {}
     for file in input_files:
         with open(file, 'r') as f:
