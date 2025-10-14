@@ -65,6 +65,6 @@ def sort_source_to_target(file_infos_path, TOKEN):
 
     for file in file_infos.keys():
         dbx.files_copy(
-        from_path= file_infos[file]["old_path"],
-        to_path= '/target/' + file_infos[file]["new_path"]
-    )
+            from_path= '/source' + file_infos[file]["old_path"],
+            to_path= '/target/' + file_infos[file]["new_path"]
+        )
