@@ -3,8 +3,8 @@
         "func": [
             "sub_pilot/func/sub_pilot_resting_state_id-7_bold.nii.gz",
             "sub_pilot/func/sub_pilot_resting_state_id-7_bold.json",
-            "sub_pilot/func/sub_pilot_resting_state_physiolog.zip",
-            "sub_pilot/func/sub_pilot_resting_state_interoperability.zip"
+            "sub_pilot/func/sub_pilot_resting_state_interoperability.zip",
+            "sub_pilot/func/sub_pilot_resting_state_physiolog.zip"
         ]
     },
     "sub-test": {
