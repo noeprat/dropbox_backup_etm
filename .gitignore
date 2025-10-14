@@ -1,6 +1,13 @@
 tokens.txt
 tokens.py
 
+paths/
+
+file_infos/
+
+recaps/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
