@@ -18,7 +18,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
      - recursive=True: bool, allows recursive calls to explore all the subdirectories, 
      will only show subdirs otherwise
      - remove_source=True: bool, 
-     will remove the specified dir in the returned paths iff True,
+     will remove '/source' in the returned paths iff True,
      must be set to True for the other functions to work
     
     Returns:
@@ -34,7 +34,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
         # Check that the access token is valid
         try:
             dbx.users_get_current_account()
-            print('Access token is valid')
+            #print('Access token is valid')
         except AuthError:
             sys.exit("ERROR: Invalid access token; try re-generating an "
                 "access token from the app console on the web.")
@@ -43,10 +43,10 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
     for entry in dbx.files_list_folder(dir).entries:
         if recursive:    
             if type(entry) == dropbox.files.FolderMetadata:
-                all_paths += get_all_paths(entry.path_display, TOKEN)
+                all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source)
             else:
                 if remove_source:
-                    new_path = entry.path_display[len(dir):]
+                    new_path = entry.path_display[len('/source'):]
                     if new_path[0] != '/':
                         new_path = '/' + new_path
                     all_paths.append(new_path)
