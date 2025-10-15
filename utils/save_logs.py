@@ -39,12 +39,18 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
     """
     final_data= {}
     for file in input_files:
-        print(file)
+        #print(file)
         final_data[file] = create_filename_dict(file, participants_dict, **kwargs)
     print('done')
 
-    with open(out_path, 'w') as f:
-        json.dump(final_data, f, indent=4)
+    try:
+        dirs = '/'.join(out_path.split('/')[:-1])
+        os.makedirs(dirs, exist_ok=True)
+        with open(out_path, 'w') as f:
+            json.dump(final_data, f, indent=4)
+    except:
+        with open(out_path, 'w') as f:
+            json.dump(final_data, f, indent=4)
 
 
 def save_jsons_to_data(file_infos_path, jsons_to_data_path):
@@ -125,6 +131,7 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
             matching_file = jsons_to_data[json_file][0]
             json_file_infos = file_infos[matching_file].copy()
             json_file_infos['extension'] = '.json'
+            json_file_infos['old_path'] = file_infos[json_file]['old_path']
             data_new_path = json_file_infos['new_path']
             json_new_path = remove_extension(data_new_path) + '.json'
 
@@ -151,9 +158,9 @@ def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
         out_path : str,
             path to where the logs will be saved (must end in .txt)
         old_prefix = '' : str,
-            the prefix that will be added to the left hand paths in the file
+            the prefix that will be added to the left hand paths in the file, redundant dashes will be corrected
         new_prefix = '' : str,
-            the prefix that will be added to the right hand paths in the file
+            the prefix that will be added to the right hand paths in the file, redundant dashes will be corrected
     
     Saves
     --------
