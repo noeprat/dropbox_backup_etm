@@ -698,7 +698,7 @@ def create_filename_dict(str, participants_dict, **kwargs):
     new_path = ''
 
     if is_tmp_bool:
-        new_path = '/tmp' + str
+        new_path = 'tmp' + str
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'

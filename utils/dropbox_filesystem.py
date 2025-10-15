@@ -41,7 +41,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
                 "access token from the app console on the web.")
             
     all_paths = []
-    for entry in tqdm(dbx.files_list_folder(dir).entries):
+    for entry in dbx.files_list_folder(dir).entries:
         if recursive:    
             if type(entry) == dropbox.files.FolderMetadata:
                 all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source)
@@ -116,10 +116,15 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
         
         from_path = correct_source_dir + file_infos[file]["old_path"]
         to_path = correct_target_dir + file_infos[file]["new_path"]
-        print('Copying from: \n', from_path)
-        print('to: \n', to_path)
-        dbx.files_copy(
-            from_path= from_path,
-            to_path= to_path
-        )
-        print('\n')
+        #print('Copying from: \n', from_path)
+        #print('to: \n', to_path)
+        try:
+            dbx.files_copy(
+                from_path= from_path,
+                to_path= to_path
+            )
+        except:
+            print('Failed to copy')
+            print('from: \n', from_path)
+            print('to: \n', to_path)
+        #print('\n')

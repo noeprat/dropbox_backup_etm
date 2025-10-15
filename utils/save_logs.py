@@ -227,35 +227,22 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
     out_dirs = '/'.join(out_path.split('/')[:-1])
     out_data = {}
 
-    try:
-        with open(out_path,'w') as f:
-            for file in file_infos.keys():
-                type = file_infos[file]['type']
-                new_path = new_prefix + file_infos[file]['new_path']
-                sub = file_infos[file]['sub']
+    os.makedirs(out_dirs, exist_ok=True)
+
+    with open(out_path,'w') as f:
+        for file in file_infos.keys():
+            type = file_infos[file]['type']
+            new_path = new_prefix + file_infos[file]['new_path']
+            is_tmp_bool = file_infos[file]['is_tmp']
+            sub = file_infos[file]['sub']
+            if not is_tmp_bool:
                 if sub not in out_data.keys():
                     out_data[sub] = {}
-                if type in out_data[sub].keys():
+                elif type in out_data[sub].keys():
                     out_data[sub][type].append(new_path)
                 else:
                     out_data[sub][type] = [new_path]
-            json.dump(out_data, f, indent=4)
-    except:
-        try:
-            os.makedirs(out_dirs)
-        finally:
-            with open(out_path,'w') as f:
-                for file in file_infos.keys():
-                    type = file_infos[file]['type']
-                    new_path = new_prefix + file_infos[file]['new_path']
-                    sub = file_infos[file]['sub']
-                    if sub not in out_data.keys():
-                        out_data[sub] = {}
-                    if type in out_data[sub].keys():
-                        out_data[sub][type].append(new_path)
-                    else:
-                        out_data[sub][type] = [new_path]
-                json.dump(out_data, f, indent=4)
+        json.dump(out_data, f, indent=4)
         
 
 def merge_general_recaps(input_files, out_path):
@@ -292,11 +279,8 @@ def merge_general_recaps(input_files, out_path):
                         for new_path in file_data[sub][file_type]:
                             if new_path not in out_data[sub][file_type]:
                                 out_data[sub][file_type].append(new_path)
-    try:
-        with open(out_path, 'w') as f:
-            json.dump(out_data, f, indent=4)
-    except:
-        out_dirs = '/'.join(out_path.split('/')[:-1])
-        os.makedirs(out_dirs)
-        with open(out_path, 'w') as f:
-            json.dump(out_data, f, indent=4)
+    
+    out_dirs = '/'.join(out_path.split('/')[:-1])
+    os.makedirs(out_dirs, exist_ok=True)
+    with open(out_path, 'w') as f:
+        json.dump(out_data, f, indent=4)
