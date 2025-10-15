@@ -579,7 +579,7 @@ def is_tmp(str):
     Returns
     --------
         is_tmp_bool: bool,
-            True iff the file is a temporary file
+            True iff the file is suspected to be a temporary file (contains 'tmp' in its path)
     """
     is_tmp_bool = 'tmp' in str.lower()
     return is_tmp_bool
@@ -594,6 +594,7 @@ def is_tmp(str):
 def create_filename_dict(str, participants_dict, **kwargs):
     """
     Returns a dict containing information and sorting instructions ("new_path") given a path string and the participants dict.
+    Handles suspected tmp files (contain 'tmp' in their path)
 
     Parameters
     --------
