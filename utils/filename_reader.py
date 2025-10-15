@@ -152,6 +152,8 @@ def extract_type(str):
             type = 'anat_segmentation'
         else:
             type = 'anat'
+    else:
+        type = ''
     
     return type
 
@@ -293,7 +295,19 @@ def get_seg_info(str):
         'segmentator_tissues'
     ]
 
-    expressions_to_search_in_filename = [
+    expressions_to_search_in_filename = [ # the largest expressions first
+        'seg_model_9_roots_as_one_entity_small',
+        'seg_model_9_roots_as_one_entity',
+        'seg_model_9',
+        'seg_Model_10_roots_by_spinal_levels_small',
+        'seg_Model_10_roots_by_spinal_levels',
+        'seg_Model_10',
+        "csf_s4l_mask",
+        "csf_s4l",
+        "roots_mask",
+        "roots",
+        "wm_mask",
+        'wm',
         "step1_canal",
         "step1_cord",
         "step1_levels",
@@ -314,6 +328,10 @@ def get_seg_info(str):
         'autochthon_right',
         'colon',
         'gluteus_maximus_left',
+        'gluteus_maximus_right',
+        'gluteus_medius_left',
+        'gluteus_medius_right',
+        'hip_left',
         'hip_right',
         'iliac_vena_left',
         'iliac_vena_right',
@@ -321,11 +339,16 @@ def get_seg_info(str):
         'iliopsoas_right',
         'inferior_vena_cava',
         'intervertebral_discs',
+        'kidney_left',
+        'kidney_right',
+        'liver',
+        'lung_left',
         'lung_right',
         'portal_vein_and_splenic_vein',
         'sacrum',
         'small_bowel',
         'spinal_cord',
+        'spleen',
         'stomach',
         'vertebrae'
     ]
