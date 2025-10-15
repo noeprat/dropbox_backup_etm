@@ -165,6 +165,8 @@ def get_category(str):
      - ssl_tissues_post_pro_step_02
      - ssl_tissues_post_pro_step_01
      - ssl_tissues
+     - axobl_sacrum_deepseg
+     - ax_lspine_deepseg
      - deepseg
      - for_making_levels
      - lumbar
@@ -188,13 +190,11 @@ def get_category(str):
     """
     if is_localizer(str):
         return 'localizer'
-    filename = remove_extension(str.split('/')[-1])
+    filename = remove_extension(str.split('/')[-1]).lower()
     
-    dirs = [dir.lower() for dir in str.split('/')[:-1:]]
-    dir_path = ''
-    if len(dirs) >1:
-        for dir in dirs:
-            dir_path = '/' + dir
+    
+    dir_path = '/'.join(str.split('/')[:-1:]).lower()
+    
     categories = []
     
     # make sure to have the expressions containing the ones before first
@@ -202,6 +202,8 @@ def get_category(str):
         'ssl_tissues_post_pro_step_02',
         'ssl_tissues_post_pro_step_01',
         'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
+        'axobl_sacrum_deepseg',
+        'ax_lspine_deepseg'
         'deepseg',
         'for_making_levels',
         'lumbar',
@@ -307,24 +309,38 @@ def get_seg_info(str):
      - stomach
      - vertebrae
     """
-    filename = remove_extension(str.split('/')[-1])
-    dirs = [dir.lower() for dir in str.split('/')[:-1:]]
-    dir_path = ''
-    if len(dirs) >1:
-        for dir in dirs:
-            dir_path = '/' + dir
+    filename = remove_extension(str.split('/')[-1]).lower()
+    
+    dir_path = '/'.join(str.split('/')[:-1]).lower()
+
+    
+    if len(filename.split('_'))>6:
+        end_of_filename = '_'.join(filename.split('_')[-6:])
+    else:
+        end_of_filename= filename
     
     expressions_to_search_in_dirs = [
-        'segmentator_tissues'
-    ]
-
-    expressions_to_search_in_filename = [ # the largest expressions first
+        'segmentator_tissues',
         'seg_model_9_roots_as_one_entity_small',
         'seg_model_9_roots_as_one_entity',
         'seg_model_9',
         'seg_Model_10_roots_by_spinal_levels_small',
         'seg_Model_10_roots_by_spinal_levels',
         'seg_Model_10',
+    ]
+
+    expressions_to_search_in_filename = [
+         # the largest expressions first
+        'seg_model_9_roots_as_one_entity_small',
+        'seg_model_9_roots_as_one_entity',
+        'seg_model_9',
+        'seg_Model_10_roots_by_spinal_levels_small',
+        'seg_Model_10_roots_by_spinal_levels',
+        'seg_Model_10'
+    ]
+    
+
+    expressions_to_search_at_end_of_filename = [
         "csf_s4l_mask",
         "csf_s4l",
         "roots_mask",
@@ -379,15 +395,22 @@ def get_seg_info(str):
     seg_infos = []
     for dir_expression in expressions_to_search_in_dirs:
         if dir_expression in dir_path:
+            
             seg_infos.append(dir_expression)
             break
 
     
 
     for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename.lower():
-            seg_infos.append(filename_expression)
-            break
+        if filename_expression in filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
+                break
+    
+    for filename_expression in expressions_to_search_at_end_of_filename:
+        if filename_expression in end_of_filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
 
     seg_info = '_'.join(seg_infos)
     return seg_info
