@@ -238,8 +238,31 @@ def get_seg_info(str):
     """
     Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
-    Possible seg_info (so far):
+    
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        seg_info: str,
+    
+    Possible seg_info (so far)
+    --------
      - segmentator_tissues
+     - seg_model_9_roots_as_one_entity_small
+     - seg_model_9_roots_as_one_entity
+     - seg_model_9
+     - seg_Model_10_roots_by_spinal_levels_small
+     - seg_Model_10_roots_by_spinal_levels
+     - seg_Model_10
+     - csf_s4l_mask
+     - csf_s4l
+     - roots_mask
+     - roots
+     - wm_mask
+     - wm
      - step1_canal
      - step1_cord
      - step1_levels
@@ -260,6 +283,10 @@ def get_seg_info(str):
      - autochthon_right
      - colon
      - gluteus_maximus_left
+     - gluteus_maximus_right
+     - gluteus_medius_left
+     - gluteus_medius_right
+     - hip_left
      - hip_right
      - iliac_vena_left
      - iliac_vena_right
@@ -267,22 +294,18 @@ def get_seg_info(str):
      - iliopsoas_right
      - inferior_vena_cava
      - intervertebral_discs
+     - kidney_left
+     - kidney_right
+     - liver
+     - lung_left
      - lung_right
      - portal_vein_and_splenic_vein
      - sacrum
      - small_bowel
      - spinal_cord
+     - spleen
      - stomach
      - vertebrae
-    
-    Parameters
-    --------
-        str : str,
-            a path/filename string
-    
-    Returns
-    --------
-        seg_info: str,
     """
     filename = remove_extension(str.split('/')[-1])
     dirs = [dir.lower() for dir in str.split('/')[:-1:]]
@@ -437,8 +460,8 @@ def get_suffix(str):
 
     return ''
     
-
-################################ Booleans ###################################################################
+##################################################################################################################################################
+################################ Booleans ########################################################################################################
 
 def is_date(str):
     """
@@ -498,7 +521,7 @@ def is_localizer(str):
         is_localizer_bool: bool,
             True iff the file is in a localizer subdirectory
     
-    Errors for json files will be handled thanks to functions in utils.save_loges
+    Errors for json files will be handled thanks to functions in utils.save_logs
     """
     try:
         last_dir = str.split('/')[-2].lower()
@@ -545,6 +568,21 @@ def is_a_previous_version(str):
         return True
     except:
         return False
+
+def is_tmp(str):
+    """
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        is_tmp_bool: bool,
+            True iff the file is a temporary file
+    """
+    is_tmp_bool = 'tmp' in str.lower()
+    return is_tmp_bool
 
 
 
@@ -623,6 +661,9 @@ def create_filename_dict(str, participants_dict, **kwargs):
         seg_info = kwargs['seg_info']
         out['seg_info'] = seg_info
     
+    is_tmp_bool = is_tmp(str)
+    out['is_tmp'] = is_tmp_bool
+
     if 'is_localizer' not in kwargs.keys():
         is_localizer_bool = is_localizer(str)
     else:
@@ -644,39 +685,47 @@ def create_filename_dict(str, participants_dict, **kwargs):
     suffix = get_suffix(str)
     out['suffix'] = suffix
 
-    ############### creates the new path
-
-    new_path = ''
 
     if 'is_derivative' not in kwargs.keys():
         is_derivative_bool = is_derivative(type)
     else:
         is_derivative_bool = kwargs['is_derivative']
-
-    if is_derivative_bool:
-        new_path += 'derivatives/'
-        if 'segmentation' in type:
-            new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
-        else:
-            new_path += type +'/' + sub + '/'
-    else:
-        new_path += sub + '/' + type + '/'
-
-    if is_localizer_bool:
-        new_path+= '_localizer/'
-    elif is_other_bool:
-        new_path += '_other/'
-    elif is_a_previous_version_bool:
-        new_path += '_previous_version/'
     
-    if id != '':
-        id_element = 'id-' +id
+
+    ############### creates the new path
+
+    new_path = ''
+
+    if is_tmp_bool:
+        new_path = '/tmp' + str
     else:
-        id_element = ''
+        if is_derivative_bool:
+            new_path += 'derivatives/'
+            if 'segmentation' in type:
+                new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
+            else:
+                new_path += type +'/' + sub + '/'
+        else:
+            new_path += sub + '/' + type + '/'
 
-    elements = [sub, category, id_element, seg_info, suffix]
+        if is_localizer_bool:
+            new_path+= '_localizer/'
+        elif is_other_bool:
+            new_path += '_other/'
+        elif is_a_previous_version_bool:
+            new_path += '_previous_version/'
+        
+        if id != '':
+            id_element = 'id-' +id
+        else:
+            id_element = ''
+        
+        
 
-    new_path += '_'.join([element for element in elements if element!= '']) + extension
+        elements = [sub, category, id_element, seg_info, suffix]
+
+        new_path += '_'.join([element for element in elements if element!= '']) + extension
+    
     out['new_path'] = new_path
 
     return out

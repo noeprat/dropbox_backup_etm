@@ -63,7 +63,7 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path):
         file_infos_path : str,
             path to fileinfos
         jsons_to_data_path : str,
-            the path where the matches will be saved (usually of the type `/file_infos/jsons_to_data/subdir/file_infos-[n].json`)
+            the path where the matches will be saved (usually of the type `/file_infos/subdir/jsons_to_data-[n].json`)
     
     Saves
     --------
@@ -156,7 +156,7 @@ def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
         file_infos_path : str,
             path to fileinfos
         out_path : str,
-            path to where the logs will be saved (must end in .txt)
+            path to where the logs will be saved (must end in .txt), usually of the type `/paths/subdir/paths-[n].txt`
         old_prefix = '' : str,
             the prefix that will be added to the left hand paths in the file, redundant dashes will be corrected
         new_prefix = '' : str,
@@ -212,7 +212,7 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
         file_infos_path : str,
             path to fileinfos
         out_path : str,
-            path to where the recap will be saved (must end in .json)
+            path to where the recap will be saved (must end in .json), usually of the type `/recaps/subdir/recap-[n].json`
         new_prefix = '' : str,
             the prefix that will be added to the right hand paths in the file
     
