@@ -324,9 +324,9 @@ def get_seg_info(str):
         'seg_model_9_roots_as_one_entity_small',
         'seg_model_9_roots_as_one_entity',
         'seg_model_9',
-        'seg_Model_10_roots_by_spinal_levels_small',
-        'seg_Model_10_roots_by_spinal_levels',
-        'seg_Model_10',
+        'seg_model_10_roots_by_spinal_levels_small',
+        'seg_model_10_roots_by_spinal_levels',
+        'seg_model_10',
     ]
 
     expressions_to_search_in_filename = [
@@ -334,9 +334,9 @@ def get_seg_info(str):
         'seg_model_9_roots_as_one_entity_small',
         'seg_model_9_roots_as_one_entity',
         'seg_model_9',
-        'seg_Model_10_roots_by_spinal_levels_small',
-        'seg_Model_10_roots_by_spinal_levels',
-        'seg_Model_10'
+        'seg_model_10_roots_by_spinal_levels_small',
+        'seg_model_10_roots_by_spinal_levels',
+        'seg_model_10'
     ]
     
 
