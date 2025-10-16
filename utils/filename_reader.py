@@ -198,10 +198,10 @@ def get_category(str):
     if is_localizer(str):
         return 'localizer'
     filename = remove_extension(str.split('/')[-1]).lower()
-    print('filename: ', filename)
+    #print('filename: ', filename)
     
     dir_path = '/'.join(str.split('/')[:-1:]).lower()
-    print('dir_path',dir_path)
+    #print('dir_path',dir_path)
     
     categories = []
     
@@ -248,7 +248,7 @@ def get_category(str):
     for dir_expression in expressions_to_search_in_dirs:
         if dir_expression in dir_path:
             categories.append(dir_expression)
-            print('found dir expression: ', dir_expression)
+            #print('found dir expression: ', dir_expression)
             break
 
     
@@ -256,7 +256,7 @@ def get_category(str):
     for filename_expression in expressions_to_search_in_filename:
         if (filename_expression in filename) and (filename_expression not in categories):
             categories.append(filename_expression)
-            print('found filename expression', filename_expression)
+            #print('found filename expression', filename_expression)
             break
     
     category = '_'.join(categories)
@@ -639,8 +639,68 @@ def is_tmp(str):
 
 
 
+
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
+
+def generate_new_path(old_path, sub, id, type, category, seg_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+    """
+    Returns a new_path string given all the information in the arguments
+
+    Parameters
+    --------
+        old_path : str,
+        sub : str,
+        id : str,
+        type : str,
+        category : str,
+        seg_info : str,
+        suffix : str,
+        extension : str,
+        is_tmp_bool : bool,
+        is_derivative_bool : bool,
+        is_localizer_bool : bool,
+        is_other_bool : bool,
+        is_a_previous_version_bool : bool,
+    
+    Returns
+    --------
+        new_path : str,
+            new path for the original file
+    """
+    new_path = ''
+
+    if is_tmp_bool:
+        new_path = 'tmp' + old_path
+    else:
+        if is_derivative_bool:
+            new_path += 'derivatives/'
+            if 'segmentation' in type:
+                new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
+            else:
+                new_path += type +'/' + sub + '/'
+        else:
+            new_path += sub + '/' + type + '/'
+
+        if is_localizer_bool:
+            new_path+= '_localizer/'
+        elif is_other_bool:
+            new_path += '_other/'
+        elif is_a_previous_version_bool:
+            new_path += '_previous_version/'
+        
+        if id != '':
+            id_element = 'id-' +id
+        else:
+            id_element = ''
+        
+        
+
+        elements = [sub, category, id_element, seg_info, suffix]
+
+        new_path += '_'.join([element for element in elements if element!= '']) + extension
+    
+    return new_path
 
 
 def create_filename_dict(str, participants_dict, **kwargs):
@@ -745,39 +805,22 @@ def create_filename_dict(str, participants_dict, **kwargs):
         is_derivative_bool = kwargs['is_derivative']
     
 
-    ############### creates the new path
 
-    new_path = ''
-
-    if is_tmp_bool:
-        new_path = 'tmp' + str
-    else:
-        if is_derivative_bool:
-            new_path += 'derivatives/'
-            if 'segmentation' in type:
-                new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
-            else:
-                new_path += type +'/' + sub + '/'
-        else:
-            new_path += sub + '/' + type + '/'
-
-        if is_localizer_bool:
-            new_path+= '_localizer/'
-        elif is_other_bool:
-            new_path += '_other/'
-        elif is_a_previous_version_bool:
-            new_path += '_previous_version/'
-        
-        if id != '':
-            id_element = 'id-' +id
-        else:
-            id_element = ''
-        
-        
-
-        elements = [sub, category, id_element, seg_info, suffix]
-
-        new_path += '_'.join([element for element in elements if element!= '']) + extension
+    new_path = generate_new_path(
+        str,
+        sub,
+        id,
+        type,
+        category,
+        seg_info,
+        suffix,
+        extension,
+        is_tmp_bool,
+        is_derivative_bool,
+        is_localizer_bool,
+        is_other_bool,
+        is_a_previous_version_bool
+    )
     
     out['new_path'] = new_path
 

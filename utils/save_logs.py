@@ -1,5 +1,5 @@
 import json
-from .filename_reader import create_filename_dict, remove_extension
+from .filename_reader import create_filename_dict, remove_extension, generate_new_path, is_derivative
 import os
 
 def save_file_infos(input_files, participants_dict, out_path, **kwargs):
@@ -51,6 +51,36 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
     except:
         with open(out_path, 'w') as f:
             json.dump(final_data, f, indent=4)
+
+def refresh_new_paths(file_infos_path, new_file_infos_path):
+    with open(file_infos_path, 'r') as f:
+        file_infos = json.load(f)
+    new_file_infos = file_infos.copy()
+    for file in file_infos.keys():
+        #print(file_infos[file].keys()) # to debug
+        try:
+            seg_info = file_infos[file]['seg_info']
+        except KeyError:
+            seg_info = ''
+        new_path = generate_new_path(
+            old_path= file_infos[file]['old_path'],
+            sub = file_infos[file]['sub'],
+            id = file_infos[file]['id'],
+            type = file_infos[file]['id'],
+            category = file_infos[file]['category'],
+            seg_info = seg_info,
+            suffix = file_infos[file]['suffix'],
+            extension = file_infos[file]['extension'],
+            is_tmp_bool = file_infos[file]['is_tmp'],
+            is_derivative_bool = is_derivative(file_infos[file]['type']),
+            is_localizer_bool = file_infos[file]['is_localizer'],
+            is_other_bool = file_infos[file]['is_other'],
+            is_a_previous_version_bool = file_infos[file]['is_a_previous_version']
+        )
+        new_file_infos[file]['new_path'] = new_path
+    
+    with open(new_file_infos_path, 'w') as f:
+        json.dump(new_file_infos, f, indent=4)
 
 
 def save_jsons_to_data(file_infos_path, jsons_to_data_path):
