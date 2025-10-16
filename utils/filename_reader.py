@@ -1,6 +1,3 @@
-
-
-
 def extract_extension(str):
     """
     Returns the extension of the filename / path string, dot included,
@@ -69,7 +66,7 @@ def extract_id(str):
         id_elt: str,
             the id of the specified filename
     """
-    filename = remove_extension(str).split('/')[-1]
+    filename = remove_extension(str).split('/')[-1].lower()
     split = filename.split("_")
     id_index = None
     for i,elt in enumerate(split):
@@ -77,9 +74,17 @@ def extract_id(str):
             id_index = i+1
             break
     id_elt = ''
+
+    strs_to_ignore = [
+        'model_9',
+        'model_10'
+    ]
+    for s in strs_to_ignore:
+        filename = filename.replace(s, '')
+
     if id_index is not None:
         for split_elt in split[id_index:]:
-            if not split_elt.isalpha():
+            if (not split_elt.isalpha()) and (not split_elt in ['s4l', ]):
                 id_elt = id_elt + split_elt.lower()
     return id_elt
 
@@ -166,7 +171,9 @@ def get_category(str):
      - ssl_tissues_post_pro_step_01
      - ssl_tissues
      - axobl_sacrum_deepseg
+     - axobl_sacrum
      - ax_lspine_deepseg
+     - ax_lspine
      - deepseg
      - for_making_levels
      - lumbar
@@ -191,9 +198,10 @@ def get_category(str):
     if is_localizer(str):
         return 'localizer'
     filename = remove_extension(str.split('/')[-1]).lower()
-    
+    print('filename: ', filename)
     
     dir_path = '/'.join(str.split('/')[:-1:]).lower()
+    print('dir_path',dir_path)
     
     categories = []
     
@@ -203,7 +211,9 @@ def get_category(str):
         'ssl_tissues_post_pro_step_01',
         'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
         'axobl_sacrum_deepseg',
+        'axobl_sacrum'
         'ax_lspine_deepseg'
+        'ax_lspine',
         'deepseg',
         'for_making_levels',
         'lumbar',
@@ -215,6 +225,21 @@ def get_category(str):
     ]
 
     expressions_to_search_in_filename = [
+        'ssl_tissues_post_pro_step_02',
+        'ssl_tissues_post_pro_step_01',
+        'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
+        'axobl_sacrum_deepseg',
+        'axobl_sacrum',
+        'ax_lspine_deepseg',
+        'ax_lspine',
+        'deepseg',
+        'for_making_levels',
+        'lumbar',
+        'ax_lspine',
+        'ax_obl_sacrum',
+        'bladder',
+        'individual_spinal_levels',
+        'resting_state'
         'total_spineseg',
         'lumbar',
 
@@ -223,14 +248,17 @@ def get_category(str):
     for dir_expression in expressions_to_search_in_dirs:
         if dir_expression in dir_path:
             categories.append(dir_expression)
+            print('found dir expression: ', dir_expression)
             break
 
     
 
     for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename.lower() and (filename_expression not in categories):
+        if (filename_expression in filename) and (filename_expression not in categories):
             categories.append(filename_expression)
+            print('found filename expression', filename_expression)
             break
+    
     category = '_'.join(categories)
     return category
 
@@ -411,6 +439,7 @@ def get_seg_info(str):
         if filename_expression in end_of_filename:
             if filename_expression not in seg_infos:
                 seg_infos.append(filename_expression)
+                break
 
     seg_info = '_'.join(seg_infos)
     return seg_info
