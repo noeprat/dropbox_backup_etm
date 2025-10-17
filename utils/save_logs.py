@@ -53,6 +53,23 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
             json.dump(final_data, f, indent=4)
 
 def refresh_new_paths(file_infos_path, new_file_infos_path):
+    """
+    Saves a json in `new_file_infos_path` which is a copy of `file_infos_path` with consistent new filenames
+
+    **Overwrites the file in `out_path`**
+
+    Parameters
+    --------
+        file_infos_path : str,
+            path to fileinfos
+        new_file_infos_path : str,
+            path to updated fileinfos (can be the same as the original fileinfos, which will update it)
+    
+    Saves
+    --------
+        new_file_infos_path, json file
+            updated fileinfos
+    """
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
     new_file_infos = file_infos.copy()
