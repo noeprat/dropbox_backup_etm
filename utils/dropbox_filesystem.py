@@ -9,7 +9,7 @@ import numpy as np
 
     
     
-def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, exceptions=True):
+def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, exceptions=True, verbose = True):
     """
     Returns all file paths within a specified directory
 
@@ -30,13 +30,15 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
         sys.exit("ERROR: Looks like you didn't add your access token.")
 
         # Create an instance of a Dropbox class, which can make requests to the API.
-    #print("Creating a Dropbox object...")
+    if verbose: 
+        print("Creating a Dropbox object...")
     with dropbox.Dropbox(TOKEN) as dbx:
 
         # Check that the access token is valid
         try:
             dbx.users_get_current_account()
-            #print('Access token is valid')
+            if verbose:
+                print('Access token is valid')
         except AuthError:
             sys.exit("ERROR: Invalid access token; try re-generating an "
                 "access token from the app console on the web.")
@@ -47,6 +49,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
         stop_flags = [
             "_results",
             ".feat",
+            "scripts"
         ]
     for entry in dbx.files_list_folder(dir).entries:
         if recursive:  
@@ -60,7 +63,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
                     else:
                         all_paths.append(entry.path_display)
                 else:
-                    all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source, exceptions)
+                    all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source, exceptions, verbose=False)
 
             else:
                 if remove_source:
@@ -105,6 +108,7 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
         # Check that the access token is valid
         try:
             dbx.users_get_current_account()
+            print("Access token is valid")
         except AuthError:
             sys.exit("ERROR: Invalid access token; try re-generating an "
                 "access token from the app console on the web.")
