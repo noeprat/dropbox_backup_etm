@@ -79,6 +79,17 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
             seg_info = file_infos[file]['seg_info']
         except KeyError:
             seg_info = ''
+        try:
+            func_info = file_infos[file]['func_info']
+        except KeyError:
+            func_info = ''
+        try:
+            func_task = file_infos[file]['func_task']
+        except KeyError:
+            func_task = ''
+        
+        
+
         new_path = generate_new_path(
             old_path= file_infos[file]['old_path'],
             sub = file_infos[file]['sub'],
@@ -86,6 +97,8 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
             type = file_infos[file]['id'],
             category = file_infos[file]['category'],
             seg_info = seg_info,
+            func_task= func_task,
+            func_info= func_info,
             suffix = file_infos[file]['suffix'],
             extension = file_infos[file]['extension'],
             is_tmp_bool = file_infos[file]['is_tmp'],

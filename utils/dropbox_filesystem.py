@@ -4,11 +4,12 @@ import dropbox
 from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
 from tqdm import tqdm
+import numpy as np
 
 
     
     
-def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
+def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, exceptions=True):
     """
     Returns all file paths within a specified directory
 
@@ -41,10 +42,26 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
                 "access token from the app console on the web.")
             
     all_paths = []
+
+    if exceptions:
+        stop_flags = [
+            "_results",
+            ".feat",
+        ]
     for entry in dbx.files_list_folder(dir).entries:
-        if recursive:    
+        if recursive:  
             if type(entry) == dropbox.files.FolderMetadata:
-                all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source)
+                if exceptions and np.array([stop_flag in entry.path_display for stop_flag in stop_flags]).any():
+                    if remove_source:
+                        new_path = entry.path_display[len('/source'):]
+                        if new_path[0] != '/':
+                            new_path = '/' + new_path
+                        all_paths.append(new_path)
+                    else:
+                        all_paths.append(entry.path_display)
+                else:
+                    all_paths += get_all_paths(TOKEN, entry.path_display, recursive, remove_source, exceptions)
+
             else:
                 if remove_source:
                     new_path = entry.path_display[len('/source'):]
@@ -55,7 +72,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True):
                     all_paths.append(entry.path_display)
         else:
             if remove_source:
-                new_path = entry.path_display[len(dir):]
+                new_path = entry.path_display[len('/source'):]
                 if new_path[0] != '/':
                     new_path = '/' + new_path
                 all_paths.append(new_path)

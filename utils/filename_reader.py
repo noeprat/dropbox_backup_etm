@@ -150,15 +150,21 @@ def extract_type(str):
             type = 'ct'
     elif extension == '.smash':
         type = 'simulation'
-    elif 'restingstate' in keywords or 'fmri' in keywords:
+    elif 'segmentation_functional' in str.lower() or extension == '.feat':
+        type = "func_segmentation"
+    elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower():
         type = 'func'
+    elif 'structural' in keywords or 'structural' in root_dirs_keywords:
+        type = 'anat'
     elif 'mri' in keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords:
             type = 'anat_segmentation'
         else:
             type = 'anat'
+    elif extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords :
+        type = 'code'
     else:
-        type = ''
+        type = 'misc'
     
     return type
 
@@ -207,6 +213,9 @@ def get_category(str):
     
     # make sure to have the expressions containing the ones before first
     expressions_to_search_in_dirs = [
+        'for_3d_import',
+        'not_for_import',
+        'for_import',
         'ssl_tissues_post_pro_step_02',
         'ssl_tissues_post_pro_step_01',
         'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
@@ -221,7 +230,8 @@ def get_category(str):
         'ax_obl_sacrum',
         'bladder',
         'individual_spinal_levels',
-        'resting_state'
+        'resting_state',
+        'mp2rage'
     ]
 
     expressions_to_search_in_filename = [
@@ -242,7 +252,8 @@ def get_category(str):
         'resting_state'
         'total_spineseg',
         'lumbar',
-
+        'cs4p6',
+        'wip19_mp2rage'
     ]
 
     for dir_expression in expressions_to_search_in_dirs:
@@ -444,7 +455,195 @@ def get_seg_info(str):
     seg_info = '_'.join(seg_infos)
     return seg_info
 
-def get_suffix(str):
+def get_func_task(str):
+    """
+    Returns the task performed for fMRI
+    
+    
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        func_task: str,
+    
+    Possible func_task (so far)
+    --------
+    'right_ankle'
+    'left_angle'
+    'right_knee'
+    'left_knee'
+    'right_hip'
+    'left_hip'
+    'right_grasp'
+    'left_grasp'
+    
+    """
+    filename = remove_extension(str.split('/')[-1]).lower()
+    
+    dir_path = '/'.join(str.split('/')[:-1]).lower()
+
+    
+    if len(filename.split('_'))>6:
+        end_of_filename = '_'.join(filename.split('_')[-6:])
+    else:
+        end_of_filename= filename
+    
+    expressions_to_search_in_dirs = [
+        'right_ankle',
+        'left_angle',
+        'right_knee',
+        'left_knee',
+        'right_hip',
+        'left_hip',
+        'right_grasp',
+        'left_grasp'
+    ]
+
+    expressions_to_search_in_filename = [
+         # the largest expressions first
+        'right_ankle',
+        'left_angle',
+        'right_knee',
+        'left_knee',
+        'right_hip',
+        'left_hip',
+        'right_grasp',
+        'left_grasp'
+    ]
+    
+
+    expressions_to_search_at_end_of_filename = []
+
+    seg_infos = []
+    for dir_expression in expressions_to_search_in_dirs:
+        if dir_expression in dir_path:
+            
+            seg_infos.append(dir_expression)
+            break
+
+    
+
+    for filename_expression in expressions_to_search_in_filename:
+        if filename_expression in filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
+                break
+    
+    for filename_expression in expressions_to_search_at_end_of_filename:
+        if filename_expression in end_of_filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
+                break
+
+    seg_info = '_'.join(seg_infos)
+    return seg_info
+
+
+def get_func_info(str):
+    """
+    Returns additional information about fMRI 
+    
+    
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+    
+    Returns
+    --------
+        func_info: str,
+    
+    Possible func_info (so far)
+    --------
+    'brain_wm_gm',
+    'left_cerebellum_gm',
+    'left_cerebellum_wm',
+    'right_cerebellum_gm',
+    'right_cerebellum_wm',
+    'cerebellum_gm',
+    'cerebellum_wm',
+    'csf',
+    'full_wm_gm',
+    'full_gm',
+    'full_wm',
+    'left_gm',
+    'left_wm',
+    'right_gm',
+    'right_wm',
+    'gm',
+    'wm'
+    """
+    filename = remove_extension(str.split('/')[-1]).lower()
+    
+    dir_path = '/'.join(str.split('/')[:-1]).lower()
+
+    
+    if len(filename.split('_'))>6:
+        end_of_filename = '_'.join(filename.split('_')[-6:])
+    else:
+        end_of_filename= filename
+    
+    expressions_to_search_in_dirs = [
+        
+    ]
+
+    expressions_to_search_in_filename = [
+         # the largest expressions first
+        
+    ]
+    
+
+    expressions_to_search_at_end_of_filename = [
+        'brain_wm_gm',
+        'left_cerebellum_gm',
+        'left_cerebellum_wm',
+        'right_cerebellum_gm',
+        'right_cerebellum_wm',
+        'cerebellum_gm',
+        'cerebellum_wm',
+        'csf',
+        'full_wm_gm',
+        'full_gm',
+        'full_wm',
+
+        'left_gm',
+        'left_wm',
+        'right_gm',
+        'right_wm',
+
+        'gm',
+        'wm'
+    ]
+
+    seg_infos = []
+    for dir_expression in expressions_to_search_in_dirs:
+        if dir_expression in dir_path:
+            
+            seg_infos.append(dir_expression)
+            break
+
+    
+
+    for filename_expression in expressions_to_search_in_filename:
+        if filename_expression in filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
+                break
+    
+    for filename_expression in expressions_to_search_at_end_of_filename:
+        if filename_expression in end_of_filename:
+            if filename_expression not in seg_infos:
+                seg_infos.append(filename_expression)
+                break
+
+    seg_info = '_'.join(seg_infos)
+    return seg_info
+
+
+def get_suffix(str, debug=False):
     """
     Returns the suffix for the new path, should contain information about the imaging sequance and/or the type of signal
 
@@ -487,6 +686,8 @@ def get_suffix(str):
             return 'physiolog'
         elif 'interoperability' in filename:
             return 'interoperability'
+        elif 'timings' in filename:
+            return 'timings'
         else:
             return 'bold'
 
@@ -500,14 +701,19 @@ def get_suffix(str):
         't2_trufi3d',
         't2_gre',
         't1_tfe',
+        't1_spc3d',
         'b_ffe',
         't2_3d_tra_vista',
         't2w_ffe',
         'ffe'  # must be after 'b_ffe' etc.
     ]
-
+    if debug:
+        print(filename)
     for filename_expression in expressions_to_search_in_filename:
+        if debug:
+            print('expression',filename_expression)
         if filename_expression in filename:
+            
             return filename_expression
 
     return ''
@@ -643,7 +849,7 @@ def is_tmp(str):
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
 
-def generate_new_path(old_path, sub, id, type, category, seg_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
 
@@ -655,6 +861,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, suffix, exten
         type : str,
         category : str,
         seg_info : str,
+        func_task : str,
+        func_info : str,
         suffix : str,
         extension : str,
         is_tmp_bool : bool,
@@ -672,6 +880,9 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, suffix, exten
 
     if is_tmp_bool:
         new_path = 'tmp' + old_path
+
+    elif type in ['code','misc']:
+        new_path = type + old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
@@ -694,9 +905,14 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, suffix, exten
         else:
             id_element = ''
         
-        
-
-        elements = [sub, category, id_element, seg_info, suffix]
+        if 'func' in type:
+            if func_task != '':
+                task_elt = 'task-' + func_task
+            else:
+                task_elt = ''
+            elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix]  
+        else:
+            elements = [sub, category, id_element, seg_info, suffix]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
     
@@ -774,6 +990,20 @@ def create_filename_dict(str, participants_dict, **kwargs):
         seg_info = kwargs['seg_info']
         out['seg_info'] = seg_info
     
+    if 'func_task' not in kwargs.keys():
+        func_task = get_func_task(str)
+    else:
+        func_task = kwargs['func_task']        
+    
+    if 'func_info' not in kwargs.keys():
+        func_info = get_func_info(str)
+    else:
+        func_info = kwargs['func_info']
+    
+    if 'func' in type:
+        out['func_task'] = func_task
+        out['func_info'] = func_info
+    
     is_tmp_bool = is_tmp(str)
     out['is_tmp'] = is_tmp_bool
 
@@ -813,6 +1043,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
         type,
         category,
         seg_info,
+        func_task,
+        func_info,
         suffix,
         extension,
         is_tmp_bool,
