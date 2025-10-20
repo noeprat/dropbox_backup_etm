@@ -150,6 +150,8 @@ def extract_type(str):
             type = 'ct'
     elif extension == '.smash':
         type = 'simulation'
+    elif extension == '.feat':
+        type = 'func_derivatives'
     elif 'segmentation_functional' in str.lower() or extension == '.feat':
         type = "func_segmentation"
     elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower():
@@ -163,8 +165,6 @@ def extract_type(str):
         type = 'code'
     else:
         type = 'misc'
-    
-    # INCLUDE type= 'func_derivatives' for .feat folders
     
     return type
 
@@ -723,7 +723,7 @@ def get_suffix(str, debug=False):
     if 'ct' in type:
         return 'ct'
     
-    elif 'func' in type:
+    elif 'func' in type and type != 'func_derivatives':
         if 'physiolog' in filename:
             return 'physiolog'
         elif 'interoperability' in filename:
@@ -807,7 +807,7 @@ def is_derivative(type):
     --------
         is_derivative_bool: bool,
     """
-    return 'segmentation' in type or (type in ['modelling', 'simulation', 'misc'])
+    return 'segmentation' in type or (type in ['modelling', 'simulation', 'misc']) or 'derivative' in type
 
 def is_localizer(str):
     """
@@ -930,6 +930,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             new_path += 'derivatives/'
             if 'segmentation' in type:
                 new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
+            elif type =='func_derivatives':
+                new_path += 'func/' + sub +'/'
             else:
                 new_path += type +'/' + sub + '/'
         else:
@@ -957,8 +959,6 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             elements = [sub, category, id_element, seg_info, suffix]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
-
-    # INCLUDE type= 'func_derivatives' for .feat folders
     
     return new_path
 
@@ -1099,7 +1099,5 @@ def create_filename_dict(str, participants_dict, **kwargs):
     )
     
     out['new_path'] = new_path
-
-    # INCLUDE type= 'func_derivatives' for .feat folders
 
     return out
