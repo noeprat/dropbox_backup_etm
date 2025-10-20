@@ -10,6 +10,8 @@ file_infos/
 recaps/*
 recaps/
 
+participants.csv
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
