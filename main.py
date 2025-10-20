@@ -8,10 +8,10 @@ from tokens import ACCESS_TOKEN
 import csv
 
 if __name__ == '__main__':
-    s= "Should the Dropbox token be refreshed ? [y/n]"
+    s= input("Should the Dropbox token be refreshed ? [y/n]")
 
     if s=='y':
-        ACCESS_TOKEN = input('new access token:')
+        ACCESS_TOKEN = input('new access token: \n')
 
 
     input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
@@ -21,8 +21,8 @@ if __name__ == '__main__':
                             )
     print('Done reading files from Dropbox \n')
 
-    subdir = input('subdir')
-    n = input('n')
+    subdir = input('subdir: ')
+    n = input('n: ')
 
     file_infos_path = 'file_infos/'+ subdir +'/file_infos-' + n + '.json'
 
@@ -40,10 +40,10 @@ if __name__ == '__main__':
     json_recap_path = 'recaps/' + subdir + '/recap-' + n + '.json'
 
 
-    old_prefix = input('old_prefix')
-    new_prefix = input('new_prefix')
+    old_prefix = input('old_prefix: \n')
+    new_prefix = input('new_prefix: \n')
 
-    sub = input('sub (like "sub-01" or "")')
+    sub = input('sub (like "sub-01" or ""): \n')
     
     if sub=='':
         participants_dict = {}
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         file_infos_path = file_infos_path,
         jsons_to_data_path= jsons_to_data_path)
     
-    input('Manually correct the json in `jsons_to_data_path` to match each json to its correct data file (type enter when done to continue)')
+    input('Manually correct the json in ' +jsons_to_data_path+ ' to match each json to its correct data file (type enter when done to continue)')
 
     correct_file_infos_with_matching_metadata(
                     file_infos_path = file_infos_path,
@@ -98,8 +98,8 @@ if __name__ == '__main__':
                 )
     
 
-    print('Check and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing')
-    s = input('Do you want to refresh the new paths ? [y/n]')
+    print('Check and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
+    s = input('Do you want to refresh the new paths ? [y/n] \n')
 
     if s == 'y':
         refresh_new_paths(
@@ -143,6 +143,8 @@ if __name__ == '__main__':
         file_infos_path= renamed_duplicates_file_infos_path,
         TOKEN=ACCESS_TOKEN
         )
+    
+    print('Files copied in target directory')
     
 
     
