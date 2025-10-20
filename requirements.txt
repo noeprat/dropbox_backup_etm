@@ -2,3 +2,4 @@ dropbox
 ipykernel
 matplotlib
 tqdm
+numpy
