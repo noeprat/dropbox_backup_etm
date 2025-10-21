@@ -1,5 +1,5 @@
 from utils.dropbox_filesystem import get_all_paths, sort_source_to_target
-from utils.save_logs import save_file_infos, save_jsons_to_data, correct_file_infos_with_matching_metadata 
+from utils.save_logs import save_file_infos, save_file_list, read_file_list, save_jsons_to_data, correct_file_infos_with_matching_metadata 
 from utils.save_logs import write_paths_file, write_general_recap_file, merge_general_recaps, refresh_new_paths
 from utils.handle_duplicates import flag_potential_duplicates, rename_duplicates
 
@@ -8,21 +8,16 @@ from tokens import ACCESS_TOKEN
 import csv
 
 if __name__ == '__main__':
-    s= input("Should the Dropbox token be refreshed ? [y/n]")
 
-    if s=='y':
-        ACCESS_TOKEN = input('new access token: \n')
+    
 
 
-    input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
-                            dir= '/source', 
-                            recursive=True, 
-                            remove_source=True
-                            )
-    print('Done reading files from Dropbox \n')
+    
 
     subdir = input('subdir: ')
     n = input('n: ')
+
+    file_list_path = 'file_list/' + subdir + '/file_list-' + n + '.json'
 
     file_infos_path = 'file_infos/'+ subdir +'/file_infos-' + n + '.json'
 
@@ -44,6 +39,29 @@ if __name__ == '__main__':
     new_prefix = input('new_prefix: \n')
 
     sub = input('sub (like "sub-01" or ""): \n')
+
+    s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
+
+    if s0 == 'y':
+
+        s= input("Should the Dropbox token be refreshed ? [y/n]")
+
+        if s=='y':
+            ACCESS_TOKEN = input('new access token: \n')
+
+        input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
+                                dir= '/source', 
+                                recursive=True, 
+                                remove_source=True
+                                )
+        print('Done reading files from Dropbox \n')
+
+        save_file_list(input_files, file_list_path)
+    
+    else:
+        print('Reading file list from ' + file_list_path)
+
+        input_files = read_file_list(file_list_path)
     
     if sub=='':
         participants_dict = {}

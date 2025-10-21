@@ -2,6 +2,45 @@ import json
 from .filename_reader import create_filename_dict, remove_extension, generate_new_path, is_derivative
 import os
 
+def save_file_list(input_files, file_list_path):
+    """
+    Saves a json in `file_list_path` containing all files in the source directory in the dropbox
+
+    Parameters
+    --------
+        input_files : list(str),
+            a list of path strings
+        file_list_path : str,
+            the path where the file list will be saved (usually of the type `/file_list/subdir/file_list-[n].json`)
+    
+    Saves
+    --------
+        file_list_path, json file
+            the file list can be found as follows: input_files = file_list_path_dict['input_files']
+    """
+
+    data = {
+        "input_files": input_files
+    }
+
+    try:
+        dirs = '/'.join(file_list_path.split('/')[:-1])
+        os.makedirs(dirs, exist_ok=True)
+        with open(file_list_path, 'w') as f:
+            json.dump(data, f, indent=4)
+    except:
+        with open(file_list_path, 'w') as f:
+            json.dump(data, f, indent=4)
+
+
+def read_file_list(file_list_path):
+    with open(file_list_path, 'r') as f:
+        data = json.load(f)
+    input_files = data['input_files']
+    return input_files
+
+
+
 def save_file_infos(input_files, participants_dict, out_path, **kwargs):
     """
     Saves a json in `out_path` containing information and sorting instructions ("new_path") for all files in `input_files`
