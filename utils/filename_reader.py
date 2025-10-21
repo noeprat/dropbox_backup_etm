@@ -120,7 +120,7 @@ def extract_sub(str, participants_dict):
         old_name += '_' + split[i]
         i+=1
     if old_name not in participants_dict.keys():
-        raise AssertionError
+        return ''
     else:
         return participants_dict[old_name]
 
@@ -145,6 +145,7 @@ def extract_type(str):
             the type of the specified file
     """
     filename = remove_extension(str.split('/')[-1]).lower()
+    dirs = '/'.join(str.split('/')[:-1]).lower()
     extension = extract_extension(str)
     keywords = [keyword.lower() for keyword in filename.split('_')]
     root_dirs_keywords = []
@@ -174,6 +175,14 @@ def extract_type(str):
             type = 'anat_segmentation'
         else:
             type = 'anat'
+
+    #special to T2G, rules may not apply to later dirs
+    elif 'spinal_level' in dirs or filename in ['roots_out','roots_rootlets', 'roots_seg_to_centerline'] or ('intersections' in filename):
+        type = 'anat_segmentation'
+
+    elif extension in ['.stl', '.blend'] or filename in ['3d_generation', '_all_stls']:
+        type = 'modelling'
+
     elif extension=='.nii.gz':
         type = 'anat'
     
@@ -245,7 +254,8 @@ def get_category(str):
         'bladder',
         'individual_spinal_levels',
         'resting_state',
-        'mp2rage'
+        'mp2rage',
+        'model_spine'
     ]
 
     expressions_to_search_in_filename = [
@@ -419,6 +429,26 @@ def get_seg_info(str):
         "step1_levels",
         "step1_output",
         "step2_output",
+
+        'spinal_level_t8l3_wm',
+        'spinal_level_t8l3',
+        'spinal_level_l1',
+        'spinal_level_l2',
+        'spinal_level_l3',
+        'spinal_level_l4',
+        'spinal_level_l5',
+        'spinal_level_more_caudal',
+        'spinal_level_more_rostral',
+        'spinal_level_s1',
+        'spinal_level_s2',
+        'spinal_level_s3',
+        'spinal_level_s4',
+        'spinal_level_t11',
+        'spinal_level_t12',
+
+        't8l3_wm',
+        't8l3',
+        'l1',
         'l2',
         'l3',
         'l4',
@@ -429,6 +459,8 @@ def get_seg_info(str):
         's2',
         's3',
         's4',
+        't11',
+        't12',
         'aorta',
         'autochthon_left',
         'autochthon_right',
@@ -789,7 +821,16 @@ def get_suffix(str, debug=False):
         't2_3d_tra_vista',
         't2w_ffe',
         'ffe',  # must be after 'b_ffe' etc.
-        'brain_aahead_scout'
+        'brain_aahead_scout',
+        'roots_out',
+        'roots_rootlets', 
+        'roots_seg_to_centerline',
+        'trufi3d',
+        'intersections_voxel_mod',
+        'intersections_voxel',
+        'intersections_world',
+        'root_segments_mod',
+        'root_segments'
     ]
     if debug:
         print(filename)
@@ -964,6 +1005,12 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
 
     elif type in ['code','misc']:
         new_path = type + old_path
+    
+    elif type == 'modelling':
+        if sub =='':
+            new_path = 'derivatives/modelling/' + old_path
+        else:
+            new_path = 'derivatives/modelling/' + sub + '/' + old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
