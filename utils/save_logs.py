@@ -94,7 +94,7 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
             old_path= file_infos[file]['old_path'],
             sub = file_infos[file]['sub'],
             id = file_infos[file]['id'],
-            type = file_infos[file]['id'],
+            type = file_infos[file]['type'],
             category = file_infos[file]['category'],
             seg_info = seg_info,
             func_task= func_task,
@@ -102,7 +102,7 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
             suffix = file_infos[file]['suffix'],
             extension = file_infos[file]['extension'],
             is_tmp_bool = file_infos[file]['is_tmp'],
-            is_derivative_bool = is_derivative(file_infos[file]['type']),
+            is_derivative_bool = file_infos[file]['is_derivative'],
             is_localizer_bool = file_infos[file]['is_localizer'],
             is_other_bool = file_infos[file]['is_other'],
             is_a_previous_version_bool = file_infos[file]['is_a_previous_version']
@@ -186,8 +186,10 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
         jsons_to_data = json.load(f)
 
     for json_file in jsons_to_data.keys():
-        assert len(jsons_to_data[json_file])<=1
-        if len(jsons_to_data[json_file])==1:
+        if len(jsons_to_data[json_file])<=1:
+            print('found several matching data files for: ', json_file)
+            print('By default, this file will be considered as the matching data file: \n   ', jsons_to_data[json_file][0])
+        if len(jsons_to_data[json_file])>=1:
             matching_file = jsons_to_data[json_file][0]
             json_file_infos = file_infos[matching_file].copy()
             json_file_infos['extension'] = '.json'

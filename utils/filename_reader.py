@@ -52,7 +52,7 @@ def remove_extension(str):
     else:
         return str
     
-def extract_id(str):
+def extract_id(str, debug=False):
     """
     Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
 
@@ -67,20 +67,27 @@ def extract_id(str):
             the id of the specified filename
     """
     filename = remove_extension(str).split('/')[-1].lower()
-    split = filename.split("_")
     id_index = None
+
+    # curate filename to avoid confusions
+    strs_to_ignore = [
+        'model_9',
+        'model_10',
+        'fat_candidate_1',
+        'fat_candidate_2',
+        'fat_candidate_3',
+    ]
+    
+    for s in strs_to_ignore:
+        filename = filename.replace(s, '')
+    
+
+    split = filename.split("_")
     for i,elt in enumerate(split):
         if is_date(elt):
             id_index = i+1
             break
     id_elt = ''
-
-    strs_to_ignore = [
-        'model_9',
-        'model_10'
-    ]
-    for s in strs_to_ignore:
-        filename = filename.replace(s, '')
 
     if id_index is not None:
         for split_elt in split[id_index:]:
@@ -137,22 +144,28 @@ def extract_type(str):
         type: str,
             the type of the specified file
     """
-    filename = remove_extension(str.split('/')[-1])
+    filename = remove_extension(str.split('/')[-1]).lower()
     extension = extract_extension(str)
     keywords = [keyword.lower() for keyword in filename.split('_')]
     root_dirs_keywords = []
     for dir in str.split('/')[:-1:]:
         root_dirs_keywords+= [keyword.lower() for keyword in dir.split('_')]
-    if 'ct' in keywords:
+    
+    
+    if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
+        type = 'code'
+    elif extension in ['.avi', '.png', '.pdf']:
+        type = 'misc'
+    elif 'ct' in keywords:
         if 'seg' in keywords:
             type = 'ct_segmentation'
         else:
             type = 'ct'
     elif extension == '.smash':
         type = 'simulation'
-    elif extension == '.feat':
+    elif extension == '.feat' or 'normalization' in  root_dirs_keywords or 'thresh_zstat1_reg' in filename or 'acompcor' in filename:
         type = 'func_derivatives'
-    elif 'segmentation_functional' in str.lower() or extension == '.feat':
+    elif 'segmentation_functional' in str.lower() or ('functional' in root_dirs_keywords and 'seg' in filename):
         type = "func_segmentation"
     elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower():
         type = 'func'
@@ -161,8 +174,9 @@ def extract_type(str):
             type = 'anat_segmentation'
         else:
             type = 'anat'
-    elif extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords :
-        type = 'code'
+    elif extension=='.nii.gz':
+        type = 'anat'
+    
     else:
         type = 'misc'
     
@@ -380,11 +394,21 @@ def get_seg_info(str):
         'seg_model_9',
         'seg_model_10_roots_by_spinal_levels_small',
         'seg_model_10_roots_by_spinal_levels',
-        'seg_model_10'
+        'seg_model_10',
+        't12_s1',
+        't8_l3'
     ]
     
 
     expressions_to_search_at_end_of_filename = [
+        "seg_masked_fat_candidate_1",
+        "seg_masked_fat_candidate_2",
+        "seg_masked_fat_candidate_3",
+        "seg_masked_wm",
+        "seg_masked_roots",
+        "seg_masked_csf_s4l",
+        "seg_discs",
+
         "csf_s4l_mask",
         "csf_s4l",
         "roots_mask",
@@ -634,11 +658,26 @@ def get_func_info(str):
 
     expressions_to_search_in_filename = [
          # the largest expressions first
+        'output_smooth_5mm_no_reg',
+        'output_smooth_3mm',
+        'thresh_zstat1_reg_03',
+        'thresh_zstat1_reg_04',
+        'thresh_zstat1_reg_05',
+        'thresh_zstat1_reg_06',
+        'thresh_zstat1_reg_07',
+        'thresh_zstat1_reg',
+        'func_mean_seg',
+        'func_mean_reg',
+        'func_mean',
+        'warp_anat2fmri',
+        'warp_fmri2anat',
+
         
     ]
     
 
     expressions_to_search_at_end_of_filename = [
+        'brain_wm_gm_reg',
         'brain_wm_gm',
         'left_cerebellum_gm',
         'left_cerebellum_wm',
@@ -730,6 +769,8 @@ def get_suffix(str, debug=False):
             return 'interoperability'
         elif 'timings' in filename:
             return 'timings'
+        elif 'acompcor' in filename:
+            return 'acompcor'
         else:
             return 'bold'
 
@@ -747,7 +788,8 @@ def get_suffix(str, debug=False):
         'b_ffe',
         't2_3d_tra_vista',
         't2w_ffe',
-        'ffe'  # must be after 'b_ffe' etc.
+        'ffe',  # must be after 'b_ffe' etc.
+        'brain_aahead_scout'
     ]
     if debug:
         print(filename)
@@ -829,7 +871,7 @@ def is_localizer(str):
     except:
         return False
 
-def is_other(str):
+def is_other(str, debug=False):
     """
     Parameters
     --------
@@ -843,7 +885,12 @@ def is_other(str):
     """
     try:
         last_dir = str.split('/')[-2].lower()
-        return 'other' in last_dir and (not 'localizer_other' in last_dir)
+        if debug:
+            print(last_dir)
+            print('other' in last_dir)
+            print((not 'localizer_other' in last_dir))
+            print((not 'localizers_other' in last_dir))
+        return 'other' in last_dir and (not 'localizer_other' in last_dir) and (not 'localizers_other' in last_dir)
     except:
         return False
     
@@ -857,17 +904,9 @@ def is_a_previous_version(str):
     Returns
     --------
         is_a_previous_version_bool: bool,
-            True iff the file is in a 'previous_version' subdirectory
+            True iff the file is a previous version
     """
-    i = -2
-    try:
-        last_dir = str.split('/')[i].lower()
-        while 'previous_version' not in last_dir:
-            i-=1
-            last_dir = str.split('/')[i].lower()
-        return True
-    except:
-        return False
+    return 'previous_version' in str.lower() or 'version_2024' in str.lower()
 
 def is_tmp(str):
     """
@@ -954,6 +993,10 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 task_elt = 'task-' + func_task
             else:
                 task_elt = ''
+            if seg_info in func_info:
+                seg_info= ''
+            elif func_info in seg_info:
+                func_info= ''
             elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix]  
         else:
             elements = [sub, category, id_element, seg_info, suffix]
@@ -1077,6 +1120,7 @@ def create_filename_dict(str, participants_dict, **kwargs):
         is_derivative_bool = is_derivative(type)
     else:
         is_derivative_bool = kwargs['is_derivative']
+    out['is_derivative'] = is_derivative_bool
     
 
 

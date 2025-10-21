@@ -54,7 +54,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
     for entry in dbx.files_list_folder(dir).entries:
         if recursive:  
             if type(entry) == dropbox.files.FolderMetadata:
-                if exceptions and np.array([stop_flag in entry.path_display for stop_flag in stop_flags]).any():
+                if exceptions and np.array([stop_flag in entry.path_display.lower() for stop_flag in stop_flags]).any():
                     if remove_source:
                         new_path = entry.path_display[len('/source'):]
                         if new_path[0] != '/':

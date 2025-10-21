@@ -98,7 +98,7 @@ if __name__ == '__main__':
                 )
     
 
-    print('Check and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
+    print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
     s = input('Do you want to refresh the new paths ? [y/n] \n')
 
     if s == 'y':
@@ -107,16 +107,19 @@ if __name__ == '__main__':
                     renamed_duplicates_file_infos_path
                 )
     
-    flag_potential_duplicates(
-                    file_infos_path=renamed_duplicates_file_infos_path,
-                    flagged_path= flagged_path
-                )
-    
-    rename_duplicates(
-                    renamed_duplicates_file_infos_path,
-                    flagged_path,
-                    renamed_duplicates_file_infos_path
-                )
+        flag_potential_duplicates(
+                        file_infos_path=renamed_duplicates_file_infos_path,
+                        flagged_path= flagged_path
+                    )
+        
+        rename_duplicates(
+                        renamed_duplicates_file_infos_path,
+                        flagged_path,
+                        renamed_duplicates_file_infos_path
+                    )
+
+    print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
+    input('Type enter to continue')
 
     # Save paths.txt and recap.json
 
