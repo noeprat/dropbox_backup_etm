@@ -49,7 +49,10 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
         stop_flags = [
             "_results",
             ".feat",
-            "scripts"
+            "scripts",
+            "_all_stls",
+            "3d_generation",
+            "roots_out"
         ]
 
         exact_stop_flags = [
@@ -58,7 +61,7 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             'roots_out'
         ]
     for entry in dbx.files_list_folder(dir).entries:
-        last_folder = entry.path_display.split('/')[-1].lower()
+        last_folder = (entry.path_display).split('/')[-1].lower()
         if recursive:  
             if type(entry) == dropbox.files.FolderMetadata:
                 if exceptions and (np.array([stop_flag in entry.path_display.lower() for stop_flag in stop_flags]).any() or last_folder in exact_stop_flags ):
