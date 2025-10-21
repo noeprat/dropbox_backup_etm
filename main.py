@@ -6,16 +6,39 @@ from utils.handle_duplicates import flag_potential_duplicates, rename_duplicates
 from tokens import ACCESS_TOKEN
 
 import csv
+import json
+
+def input_with_default(input_name):
+    try:
+        with open('inputs.json', 'r') as f:
+            default_inputs = json.load(f)
+    except:
+        default_inputs = {}
+    new_inputs = default_inputs.copy()
+
+    if input_name in default_inputs.keys():
+        res = input(input_name + ': (default: ' + default_inputs[input_name] +') \n')
+        if res == '':
+            to_return = default_inputs[input_name]
+        else:
+            to_return = res
+            new_inputs[input_name] = res
+    else:
+        to_return = input(input_name + ': \n')
+        new_inputs[input_name] = to_return
+    try:
+        with open('inputs.json', 'w')as f:
+            json.dump(new_inputs, f, indent=4)
+    except:
+        print('could not update inputs.json')
+    return to_return
+
+
 
 if __name__ == '__main__':
 
-    
-
-
-    
-
-    subdir = input('subdir: ')
-    n = input('n: ')
+    subdir = input_with_default('subdir')
+    n = input_with_default('n')
 
     file_list_path = 'file_list/' + subdir + '/file_list-' + n + '.json'
 
@@ -35,10 +58,10 @@ if __name__ == '__main__':
     json_recap_path = 'recaps/' + subdir + '/recap-' + n + '.json'
 
 
-    old_prefix = input('old_prefix: \n')
-    new_prefix = input('new_prefix: \n')
+    old_prefix = input_with_default('old_prefix')
+    new_prefix = input_with_default('new_prefix')
 
-    sub = input('sub (like "sub-01" or ""): \n')
+    sub = input_with_default('sub')
 
     s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
 
