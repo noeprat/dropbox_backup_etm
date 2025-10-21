@@ -336,13 +336,12 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
             new_path = new_prefix + file_infos[file]['new_path']
             is_tmp_bool = file_infos[file]['is_tmp']
             sub = file_infos[file]['sub']
-            if not is_tmp_bool:
+            if (not is_tmp_bool) and (type != 'misc'):
                 if sub not in out_data.keys():
                     out_data[sub] = {}
-                elif type in out_data[sub].keys():
-                    out_data[sub][type].append(new_path)
-                else:
-                    out_data[sub][type] = [new_path]
+                if type not in out_data[sub].keys():
+                    out_data[sub][type] = []
+                out_data[sub][type].append(new_path)
         json.dump(out_data, f, indent=4)
         
 
