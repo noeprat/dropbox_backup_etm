@@ -51,10 +51,17 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             ".feat",
             "scripts"
         ]
+
+        exact_stop_flags = [
+            '3d_generation',
+            '_all_stls',
+            'roots_out'
+        ]
     for entry in dbx.files_list_folder(dir).entries:
+        last_folder = entry.path_display.split('/')[-1].lower()
         if recursive:  
             if type(entry) == dropbox.files.FolderMetadata:
-                if exceptions and np.array([stop_flag in entry.path_display.lower() for stop_flag in stop_flags]).any():
+                if exceptions and (np.array([stop_flag in entry.path_display.lower() for stop_flag in stop_flags]).any() or last_folder in exact_stop_flags ):
                     if remove_source:
                         new_path = entry.path_display[len('/source'):]
                         if new_path[0] != '/':
