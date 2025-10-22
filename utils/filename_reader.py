@@ -380,6 +380,15 @@ def get_seg_info(str):
     """
     filename = remove_extension(str.split('/')[-1]).lower()
     
+    # curate filename to avoid confusions
+    strs_to_ignore = [
+        'root_segments'
+    ]
+    
+    for s in strs_to_ignore:
+        filename = filename.replace(s, '')
+    
+    
     dir_path = '/'.join(str.split('/')[:-1]).lower()
 
     
@@ -1011,9 +1020,9 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
     
     elif type == 'modelling':
         if sub =='':
-            new_path = 'derivatives/modelling/' + old_path
+            new_path = 'derivatives/modelling' + old_path
         else:
-            new_path = 'derivatives/modelling/' + sub + '/' + old_path
+            new_path = 'derivatives/modelling/' + sub + old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
