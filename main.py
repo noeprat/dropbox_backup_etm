@@ -70,7 +70,7 @@ if __name__ == '__main__':
         s= input("Should the Dropbox token be refreshed ? [y/n]")
 
         if s=='y':
-            ACCESS_TOKEN = input('new access token: \n')
+            ACCESS_TOKEN = input_with_default('access token')
 
         input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
                                 dir= '/source', 
