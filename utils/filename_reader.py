@@ -124,7 +124,7 @@ def extract_sub(str, participants_dict):
     else:
         return participants_dict[old_name]
 
-def extract_type(str):
+def extract_type(str, debug=False):
     """
     Possible types (so far):
      - anat
@@ -151,6 +151,9 @@ def extract_type(str):
     root_dirs_keywords = []
     for dir in str.split('/')[:-1:]:
         root_dirs_keywords+= [keyword.lower() for keyword in dir.split('_')]
+
+    if debug:
+        print(root_dirs_keywords)
     
     
     if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
@@ -164,13 +167,13 @@ def extract_type(str):
             type = 'ct'
     elif extension == '.smash':
         type = 'simulation'
-    elif extension == '.feat' or 'normalization' in  root_dirs_keywords or 'thresh_zstat1_reg' in filename or 'acompcor' in filename:
+    elif extension == '.feat' or 'normalization' in  root_dirs_keywords or 'thresh_zstat1_reg' in filename or 'acompcor' in filename or 'rmsctp0fmri' in filename:
         type = 'func_derivatives'
     elif 'segmentation_functional' in str.lower() or ('functional' in root_dirs_keywords and 'seg' in filename):
         type = "func_segmentation"
     elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower():
         type = 'func'
-    elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords:
+    elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords:
             type = 'anat_segmentation'
         else:
@@ -242,7 +245,11 @@ def get_category(str):
         'for_import',
         'ssl_tissues_post_pro_step_02',
         'ssl_tissues_post_pro_step_01',
+        'ssl_tissues_post_pro_02',
+        'ssl_tissues_post_pro_01',
         'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
+        'tissues_sct',
+        'tissues'
         'axobl_sacrum_deepseg',
         'axobl_sacrum'
         'ax_lspine_deepseg'
@@ -256,12 +263,15 @@ def get_category(str):
         'individual_spinal_levels',
         'resting_state',
         'mp2rage',
-        'model_spine'
+        'model_spine',
+        'for_ilaria'
     ]
 
     expressions_to_search_in_filename = [
         'ssl_tissues_post_pro_step_02',
         'ssl_tissues_post_pro_step_01',
+        'ssl_tissues_post_pro_02',
+        'ssl_tissues_post_pro_01',
         'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
         'axobl_sacrum_deepseg',
         'axobl_sacrum',
@@ -405,6 +415,8 @@ def get_seg_info(str):
         'seg_model_10_roots_by_spinal_levels_small',
         'seg_model_10_roots_by_spinal_levels',
         'seg_model_10',
+        'seg_model_5',
+        'seg_model_1'
     ]
 
     expressions_to_search_in_filename = [
@@ -415,8 +427,9 @@ def get_seg_info(str):
         'seg_model_10_roots_by_spinal_levels_small',
         'seg_model_10_roots_by_spinal_levels',
         'seg_model_10',
+        't8_l3',
         't12_s1',
-        't8_l3'
+
     ]
     
 
@@ -424,10 +437,14 @@ def get_seg_info(str):
         "seg_masked_fat_candidate_1",
         "seg_masked_fat_candidate_2",
         "seg_masked_fat_candidate_3",
+        "seg_masked_fat",
         "seg_masked_wm",
         "seg_masked_roots",
         "seg_masked_csf_s4l",
+        "seg_masked_csf",
         "seg_discs",
+        "seg_masked",
+        "seg",
 
         "csf_s4l_mask",
         "csf_s4l",
@@ -458,6 +475,8 @@ def get_seg_info(str):
 
         't8l3_wm',
         't8l3',
+        't8_l3',
+        't12_s1',
         'l1',
         'l2',
         'l3',
@@ -611,7 +630,8 @@ def get_func_task(str, debug=False):
         'right_hip',
         'left_hip',
         'right_grasp',
-        'left_grasp'
+        'left_grasp',
+        'restingstate'
     ]
     
     if debug:
@@ -713,8 +733,8 @@ def get_func_info(str):
         'func_mean',
         'warp_anat2fmri',
         'warp_fmri2anat',
-
-        
+        'lumbar',
+        'rmsctp0fmri'
     ]
     
 
@@ -823,6 +843,9 @@ def get_suffix(str, debug=False):
     expressions_to_search_in_filename = [
         't2_space',
         't2_tse',
+        't2_trufi3d_comp',
+        't2_trufi3d_t8',
+        't2_trufi3d_t12',
         't2_trufi3d',
         't2_gre',
         't1_tfe',
@@ -842,18 +865,27 @@ def get_suffix(str, debug=False):
         'root_segments_mod',
         'root_segments',
         'dl',
-        'dr'
+        'dr',
     ]
     if debug:
         print(filename)
+    
+    suffix = ''
     for filename_expression in expressions_to_search_in_filename:
         if debug:
             print('expression',filename_expression)
-        if filename_expression in filename:
-            
-            return filename_expression
+        if filename_expression in filename and filename_expression not in suffix:
+            if suffix == '':
+                suffix = filename_expression
+            else:
+                suffix = suffix + '_' + filename_expression
+    if 'corrected' in str.lower():
+        if suffix == '':
+            suffix = 'corrected'
+        else:
+            suffix = suffix + '_corrected'
 
-    return ''
+    return suffix
     
 ##################################################################################################################################################
 ################################ Booleans ########################################################################################################
