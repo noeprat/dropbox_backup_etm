@@ -52,7 +52,8 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             "scripts",
             "_all_stls",
             "3d_generation",
-            "roots_out"
+            "roots_out",
+            "physiolog"
         ]
 
         exact_stop_flags = [

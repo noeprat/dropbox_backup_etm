@@ -177,7 +177,7 @@ def extract_type(str):
             type = 'anat'
 
     #special to T2G, rules may not apply to later dirs
-    elif extension in ['.stl', '.blend'] or filename in ['3d_generation', '_all_stls']:
+    elif extension in ['.stl', '.blend', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls']:
         type = 'modelling'
     elif 'spinal_level' in dirs or filename in ['roots_out','roots_rootlets', 'roots_seg_to_centerline'] or ('intersections' in filename):
         type = 'anat_segmentation'
