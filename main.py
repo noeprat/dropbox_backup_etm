@@ -17,7 +17,10 @@ def input_with_default(input_name):
     new_inputs = default_inputs.copy()
 
     if input_name in default_inputs.keys():
-        res = input(input_name + ': (default: ' + default_inputs[input_name] +') \n')
+        if len(default_inputs[input_name]) < 100:
+            res = input(input_name + ': (default: ' + default_inputs[input_name] +') \n')
+        else:
+            res = input(input_name + ': (default: ' + default_inputs[input_name][:100] +'...) \n')
         if res == '':
             to_return = default_inputs[input_name]
         else:
@@ -67,10 +70,8 @@ if __name__ == '__main__':
 
     if s0 == 'y':
 
-        s= input("Should the Dropbox token be refreshed ? [y/n]")
-
-        if s=='y':
-            ACCESS_TOKEN = input_with_default('access token')
+        
+        ACCESS_TOKEN = input_with_default('access token')
 
         input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
                                 dir= '/source', 
