@@ -53,7 +53,8 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             "_all_stls",
             "3d_generation",
             "roots_out",
-            "physiolog"
+            "physiolog",
+            "tmp"
         ]
 
         exact_stop_flags = [
