@@ -152,7 +152,7 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
         json.dump(new_file_infos, f, indent=4)
 
 
-def save_jsons_to_data(file_infos_path, jsons_to_data_path):
+def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
     """
     Saves a json in `jsons_to_data_path` matching metadata files with their respective data
 
@@ -184,13 +184,22 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path):
                 jsons_dict[file] = file_infos[file]
             else:
                 data_dict[file] = file_infos[file]
+    if debug:
+        c=0
 
     for json_file in jsons_dict.keys():
         json_filename = json_file.split('/')[-1][:-len('.json')]
         out_dict[json_file] = []
         for data_file in data_dict.keys():
             filename = data_file.split('/')[-1]
-            if json_filename in filename:
+            curated_json_filename = json_filename.replace('.','')
+            curated_filename = remove_extension(filename).replace('.','')
+
+            if debug and c<10:
+                print('file: \n    ', filename)
+                print('curated json filename: \n    ', curated_json_filename)
+                c += 1
+            if curated_json_filename == curated_filename or json_filename == filename:
                 out_dict[json_file].append(data_file)
 
     with open(jsons_to_data_path, 'w') as f:
