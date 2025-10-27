@@ -264,7 +264,8 @@ def get_category(str):
         'resting_state',
         'mp2rage',
         'model_spine',
-        'for_ilaria'
+        'for_ilaria',
+        'segmentation_sct_poly_0'
     ]
 
     expressions_to_search_in_filename = [
@@ -618,7 +619,8 @@ def get_func_task(str, debug=False):
         'right_hip',
         'left_hip',
         'right_grasp',
-        'left_grasp'
+        'left_grasp',
+        'functional_rest'
     ]
 
     expressions_to_search_in_filename = [
@@ -734,6 +736,9 @@ def get_func_info(str):
         'warp_anat2fmri',
         'warp_fmri2anat',
         'lumbar',
+        'mean_for_seg_seg',
+        'mean_for_seg',
+        'rmsctp0fmri_mean_all',
         'rmsctp0fmri'
     ]
     
@@ -822,23 +827,23 @@ def get_suffix(str, debug=False):
     type = extract_type(str)
 
     if 'ct' in type:
-        return 'ct'
+        suffix = 'ct'
     
     elif 'func' in type and type != 'func_derivatives':
         if 'physiolog' in filename:
-            return 'physiolog'
+            suffix = 'physiolog'
         elif 'interoperability' in filename:
-            return 'interoperability'
+            suffix = 'interoperability'
         elif 'timings' in filename:
-            return 'timings'
+            suffix = 'timings'
         elif 'acompcor' in filename:
-            return 'acompcor'
+            suffix = 'acompcor'
         else:
-            return 'bold'
+            suffix = 'bold'
 
 
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
-        return 't2_spc_zoomit'
+        suffix = 't2_spc_zoomit'
 
     expressions_to_search_in_filename = [
         't2_space',
@@ -884,6 +889,12 @@ def get_suffix(str, debug=False):
             suffix = 'corrected'
         else:
             suffix = suffix + '_corrected'
+    
+    if 'version_2024' in str.lower():
+        if suffix == '':
+            suffix = 'version-2024'
+        else:
+            suffix = suffix + '_version-2024'
 
     return suffix
     
