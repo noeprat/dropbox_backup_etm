@@ -171,7 +171,7 @@ def extract_type(str, debug=False):
         type = 'func_derivatives'
     elif 'segmentation_functional' in str.lower() or ('functional' in root_dirs_keywords and 'seg' in filename):
         type = "func_segmentation"
-    elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower():
+    elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower() or 'physiolog' in filename:
         type = 'func'
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords:
@@ -264,7 +264,6 @@ def get_category(str):
         'resting_state',
         'mp2rage',
         'model_spine',
-        'for_ilaria',
         'segmentation_sct_poly_0'
     ]
 
@@ -844,6 +843,9 @@ def get_suffix(str, debug=False):
 
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
         suffix = 't2_spc_zoomit'
+    
+    else:
+        suffix = ''
 
     expressions_to_search_in_filename = [
         't2_space',
@@ -872,10 +874,10 @@ def get_suffix(str, debug=False):
         'dl',
         'dr',
     ]
+
     if debug:
         print(filename)
     
-    suffix = ''
     for filename_expression in expressions_to_search_in_filename:
         if debug:
             print('expression',filename_expression)
