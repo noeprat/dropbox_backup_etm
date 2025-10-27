@@ -1,7 +1,7 @@
 from utils.dropbox_filesystem import get_all_paths, sort_source_to_target
 from utils.save_logs import save_file_infos, save_file_list, read_file_list, save_jsons_to_data, correct_file_infos_with_matching_metadata 
-from utils.save_logs import write_paths_file, write_general_recap_file, merge_general_recaps, refresh_new_paths
-from utils.handle_duplicates import flag_potential_duplicates, rename_duplicates
+from utils.save_logs import write_paths_file, write_general_recap_file, refresh_new_paths
+from utils.handle_duplicates import flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos
 
 from tokens import ACCESS_TOKEN
 
@@ -53,6 +53,8 @@ if __name__ == '__main__':
 
     flagged_path = 'file_infos/'+ subdir +'/potential_duplicates-' + n + '.json'
 
+    actual_duplicates_path = 'file_infos/'+ subdir +'/actual_duplicates-' + n + '.json'
+
     renamed_duplicates_file_infos_path = corrected_file_infos_path[:-len('.json')] +'_renamed_duplicates.json'
 
 
@@ -66,12 +68,15 @@ if __name__ == '__main__':
 
     sub = input_with_default('sub')
 
+    print('Need an access token for Dropbox')
+    ACCESS_TOKEN = input_with_default('access token')
+
     s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
 
     if s0 == 'y':
 
         
-        ACCESS_TOKEN = input_with_default('access token')
+        
 
         input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
                                 dir= '/source', 
@@ -132,6 +137,27 @@ if __name__ == '__main__':
                     file_infos_path=corrected_file_infos_path,
                     flagged_path= flagged_path
                 )
+    print('Flagged duplicates in '+ flagged_path)
+    s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n] \n')
+    
+    if s == 'y':
+        compare_potential_duplicates(
+            flagged_path=flagged_path,
+            actual_duplicates_path=actual_duplicates_path,
+            TOKEN= ACCESS_TOKEN,
+            verbose= True
+        )
+
+        handle_duplicates_in_file_infos(
+            actual_duplicates_path=actual_duplicates_path,
+            file_infos_path= corrected_file_infos_path,
+            new_file_infos_path= corrected_file_infos_path
+        )
+
+        flag_potential_duplicates(
+                        file_infos_path=corrected_file_infos_path,
+                        flagged_path= flagged_path
+                    )
     
     rename_duplicates(
                     corrected_file_infos_path,
@@ -160,7 +186,7 @@ if __name__ == '__main__':
                         renamed_duplicates_file_infos_path
                     )
 
-    print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
+    print('\nLast chance to correct ' + renamed_duplicates_file_infos_path + ' before saving logs and copying files in Dropbox \n')
     input('Type enter to continue')
 
     # Save paths.txt and recap.json
@@ -189,10 +215,4 @@ if __name__ == '__main__':
         TOKEN=ACCESS_TOKEN
         )
     
-    print('Files copied in target directory')
-    
-
-    
-
-
-    
+    print('Files successfully copied in target directory')
