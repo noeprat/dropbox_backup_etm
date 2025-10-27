@@ -234,7 +234,9 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
         jsons_to_data = json.load(f)
 
     for json_file in jsons_to_data.keys():
-        if len(jsons_to_data[json_file])<=1:
+        if len(jsons_to_data[json_file])==0:
+            print('found no matching data file for: ', json_file)
+        if len(jsons_to_data[json_file])>1:
             print('found several matching data files for: ', json_file)
             print('By default, this file will be considered as the matching data file: \n   ', jsons_to_data[json_file][0])
         if len(jsons_to_data[json_file])>=1:
