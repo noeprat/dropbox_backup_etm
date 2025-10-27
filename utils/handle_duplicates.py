@@ -2,6 +2,16 @@ from .filename_reader import remove_extension, extract_extension
 import json
 import os
 
+import nibabel as nib
+import numpy as np
+import sys
+
+import json
+import dropbox
+from dropbox.files import WriteMode
+from dropbox.exceptions import ApiError, AuthError
+from tqdm import tqdm
+
 def flag_potential_duplicates(file_infos_path, flagged_path):
     """
     Saves a json in `flagged_path` flagging different files that may have the same name after sorting
@@ -90,3 +100,96 @@ def rename_duplicates(file_infos_path, flagged_path, new_file_infos_path):
     
     with open(new_file_infos_path, 'w') as f:
         json.dump(file_infos, f, indent=4)
+    
+def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, verbose=True, debug=False):
+    verbose = True
+    if (len(TOKEN) == 0):
+        sys.exit("ERROR: Looks like you didn't add your access token.")
+        # Create an instance of a Dropbox class, which can make requests to the API.
+    if verbose: 
+        print("Creating a Dropbox object...")
+    with dropbox.Dropbox(TOKEN) as dbx:
+        # Check that the access token is valid
+        try:
+            dbx.users_get_current_account()
+            if verbose:
+                print('Access token is valid')
+        except AuthError:
+            sys.exit("ERROR: Invalid access token; try re-generating an "
+                "access token from the app console on the web.")
+    
+    os.makedirs('tmp_dir', exist_ok=True)
+
+    for file in os.listdir('tmp_dir/'):
+        if debug:
+            print(file)
+        os.remove('tmp_dir/' + file)
+        
+    actual_duplicates = {}
+
+    with open(flagged_path, 'r') as f:
+        flagged_duplicates = json.load(f)
+
+    for key in tqdm(flagged_duplicates.keys()):
+        n = len(flagged_duplicates[key])
+        if debug:
+            print('comparing potential duplicates for ' + key)
+        for file1_idx in range(n-1):
+            from_path1 = '/source' + flagged_duplicates[key][file1_idx]
+            from_path1_without_source = flagged_duplicates[key][file1_idx]
+            to_path1 = 'tmp_dir/file1.nii.gz'
+
+            actual_duplicates[from_path1_without_source] = [from_path1_without_source]
+            
+            dbx.files_download_to_file(to_path1, from_path1)
+
+            for file2_idx in range(file1_idx+1, n):
+                from_path2 = '/source' + flagged_duplicates[key][file2_idx]
+                from_path2_without_source = flagged_duplicates[key][file2_idx]
+                to_path2 = 'tmp_dir/file2.nii.gz'
+
+                if debug:    
+                    print(from_path1)
+                    print(from_path2)
+
+                
+                dbx.files_download_to_file(to_path2, from_path2)
+
+                if extract_extension(from_path1) == '.nii.gz' and extract_extension(from_path2) == '.nii.gz':
+
+                    img1 = nib.load(to_path1)
+                    img2 = nib.load(to_path2)
+
+                    data1 = img1.get_fdata()
+                    data2 = img2.get_fdata()
+
+                    if data1.shape == data2.shape:
+                        if (data1==data2).all():
+                            if debug:
+                                print(from_path1 + '\n    is the same as: \n' + from_path2)
+                            actual_duplicates[from_path1_without_source].append(from_path2_without_source)
+                os.remove(to_path2)
+            os.remove(to_path1)
+
+    with open(actual_duplicates_path, 'w') as f:
+        json.dump(actual_duplicates, f, indent=4)
+
+def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new_file_infos_path):             
+    with open(file_infos_path, 'r') as f1:
+        file_infos = json.load(f1)
+    
+    with open(actual_duplicates_path, 'r') as f2:
+        actual_duplicates = json.load(f2)
+
+    new_file_infos = file_infos.copy()
+    
+    for key in actual_duplicates.keys():
+        duplicate_files = actual_duplicates[key]
+        if len(duplicate_files) >1:
+            for file_to_discard in duplicate_files[1:]:
+                old_path = file_infos[file_to_discard]['old_path']
+                new_file_infos[file_to_discard]['new_path'] = 'duplicates' + old_path
+                new_file_infos[file_to_discard]['is_duplicate'] = True
+        
+    with open(new_file_infos_path, 'w') as f:
+        json.dump(new_file_infos, f, indent=4)

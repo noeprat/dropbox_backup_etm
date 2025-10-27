@@ -127,26 +127,30 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
         except KeyError:
             func_task = ''
         
+        should_be_refreshed = True
+        if 'is_duplicate' in file_infos[file].keys():
+            if file_infos[file]['is_duplicate']:
+                should_be_refreshed = False
         
-
-        new_path = generate_new_path(
-            old_path= file_infos[file]['old_path'],
-            sub = file_infos[file]['sub'],
-            id = file_infos[file]['id'],
-            type = file_infos[file]['type'],
-            category = file_infos[file]['category'],
-            seg_info = seg_info,
-            func_task= func_task,
-            func_info= func_info,
-            suffix = file_infos[file]['suffix'],
-            extension = file_infos[file]['extension'],
-            is_tmp_bool = file_infos[file]['is_tmp'],
-            is_derivative_bool = file_infos[file]['is_derivative'],
-            is_localizer_bool = file_infos[file]['is_localizer'],
-            is_other_bool = file_infos[file]['is_other'],
-            is_a_previous_version_bool = file_infos[file]['is_a_previous_version']
-        )
-        new_file_infos[file]['new_path'] = new_path
+        if should_be_refreshed:
+            new_path = generate_new_path(
+                old_path= file_infos[file]['old_path'],
+                sub = file_infos[file]['sub'],
+                id = file_infos[file]['id'],
+                type = file_infos[file]['type'],
+                category = file_infos[file]['category'],
+                seg_info = seg_info,
+                func_task= func_task,
+                func_info= func_info,
+                suffix = file_infos[file]['suffix'],
+                extension = file_infos[file]['extension'],
+                is_tmp_bool = file_infos[file]['is_tmp'],
+                is_derivative_bool = file_infos[file]['is_derivative'],
+                is_localizer_bool = file_infos[file]['is_localizer'],
+                is_other_bool = file_infos[file]['is_other'],
+                is_a_previous_version_bool = file_infos[file]['is_a_previous_version']
+            )
+            new_file_infos[file]['new_path'] = new_path
     
     with open(new_file_infos_path, 'w') as f:
         json.dump(new_file_infos, f, indent=4)
@@ -298,15 +302,26 @@ def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
         if corrected_new_prefix[0] =='/':
             corrected_new_prefix = corrected_new_prefix[1:]
     
-    try:
-        os.makedirs(out_dirs)
-        with open(out_path,'w') as f:
-            for file in data.keys():
-                f.write('~' + corrected_old_prefix + data[file]['old_path'] + ', ~/' + corrected_new_prefix + data[file]['new_path'])
+    
+    
+    os.makedirs(out_dirs, exist_ok=True)
+    with open(out_path,'w') as f:
+        for file in data.keys():
+            try:
+                is_duplicate_bool = data[file]['is_duplicate']
+            except:
+                is_duplicate_bool= False
+            is_tmp_bool = data[file]['is_tmp']
+            
+            if is_tmp_bool:
+                f.write('# ~' + corrected_old_prefix + data[file]['old_path'] + ' was not copied (TMP)')
                 f.write('\n')
-    except:
-        with open(out_path,'w') as f:
-            for file in data.keys():
+            
+            elif is_duplicate_bool:
+                f.write('# ~' + corrected_old_prefix + data[file]['old_path'] + ' was not copied (duplicate)')
+                f.write('\n')
+
+            else:
                 f.write('~' + corrected_old_prefix + data[file]['old_path'] + ', ~/' + corrected_new_prefix + data[file]['new_path'])
                 f.write('\n')
 
@@ -346,8 +361,13 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
             type = file_infos[file]['type']
             new_path = new_prefix + file_infos[file]['new_path']
             is_tmp_bool = file_infos[file]['is_tmp']
+            try:
+                is_duplicate_bool = file_infos[file]['is_duplicate']
+            except:
+                is_duplicate_bool= False
+
             sub = file_infos[file]['sub']
-            if (not is_tmp_bool) and (type != 'misc'):
+            if (not is_tmp_bool) and (type != 'misc') and (not is_duplicate_bool):
                 if sub not in out_data.keys():
                     out_data[sub] = {}
                 if type not in out_data[sub].keys():
