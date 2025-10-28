@@ -132,8 +132,8 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
             func_task = ''
         
         should_be_refreshed = True
-        if 'is_duplicate' in file_infos[file].keys():
-            if file_infos[file]['is_duplicate']:
+        if 'confirmed_duplicate' in file_infos[file].keys():
+            if file_infos[file]['confirmed_duplicate']:
                 should_be_refreshed = False
         
         if should_be_refreshed:
@@ -312,9 +312,9 @@ def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
     with open(out_path,'w') as f:
         for file in data.keys():
             try:
-                is_duplicate_bool = data[file]['is_duplicate']
+                is_duplicate_bool = data[file]['confirmed_duplicate']
             except:
-                is_duplicate_bool= False
+                is_duplicate_bool= 'confirmed_duplicates' in data[file]['new_path']
             is_tmp_bool = data[file]['is_tmp']
             
             if is_tmp_bool:
@@ -366,9 +366,9 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
             new_path = new_prefix + file_infos[file]['new_path']
             is_tmp_bool = file_infos[file]['is_tmp']
             try:
-                is_duplicate_bool = file_infos[file]['is_duplicate']
+                is_duplicate_bool = file_infos[file]['confirmed_duplicate']
             except:
-                is_duplicate_bool= False
+                is_duplicate_bool= 'confirmed_duplicates' in new_path
 
             sub = file_infos[file]['sub']
             if (not is_tmp_bool) and (type != 'misc') and (not is_duplicate_bool):

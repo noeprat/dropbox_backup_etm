@@ -161,7 +161,7 @@ def extract_type(str, debug=False):
     elif extension in ['.avi', '.png', '.pdf']:
         type = 'misc'
     elif 'ct' in keywords:
-        if 'seg' in keywords:
+        if 'seg' in keywords or 'seg' in root_dirs_keywords:
             type = 'ct_segmentation'
         else:
             type = 'ct'
@@ -329,7 +329,7 @@ def get_seg_info(str):
     --------
         seg_info: str,
     
-    Possible seg_info (so far)
+    Example seg_info (so far)
     --------
      - segmentator_tissues
      - seg_model_9_roots_as_one_entity_small
@@ -338,55 +338,6 @@ def get_seg_info(str):
      - seg_Model_10_roots_by_spinal_levels_small
      - seg_Model_10_roots_by_spinal_levels
      - seg_Model_10
-     - csf_s4l_mask
-     - csf_s4l
-     - roots_mask
-     - roots
-     - wm_mask
-     - wm
-     - step1_canal
-     - step1_cord
-     - step1_levels
-     - step1_output
-     - step2_output
-     - l2
-     - l3
-     - l4
-     - l5
-     - more_caudal
-     - more_rostral
-     - s1
-     - s2
-     - s3
-     - s4
-     - aorta
-     - autochthon_left
-     - autochthon_right
-     - colon
-     - gluteus_maximus_left
-     - gluteus_maximus_right
-     - gluteus_medius_left
-     - gluteus_medius_right
-     - hip_left
-     - hip_right
-     - iliac_vena_left
-     - iliac_vena_right
-     - iliopsoas_left
-     - iliopsoas_right
-     - inferior_vena_cava
-     - intervertebral_discs
-     - kidney_left
-     - kidney_right
-     - liver
-     - lung_left
-     - lung_right
-     - portal_vein_and_splenic_vein
-     - sacrum
-     - small_bowel
-     - spinal_cord
-     - spleen
-     - stomach
-     - vertebrae
     """
     filename = remove_extension(str.split('/')[-1]).lower()
     
@@ -445,7 +396,8 @@ def get_seg_info(str):
         "seg_discs",
         "seg_masked",
         "seg_canal",
-        "canal",
+        "seg_bin",
+        "seg_multi",
         "seg",
 
         "csf_s4l_mask",
@@ -542,7 +494,9 @@ def get_seg_info(str):
         "wm_padded",
         "wm",
         "gm",
-        "csf"
+        "csf",
+        "ctd",
+        "canal"
     ]
 
     seg_infos = []
@@ -827,10 +781,15 @@ def get_suffix(str, debug=False):
 
     type = extract_type(str)
 
-    if 'ct' in type:
-        suffix = 'ct'
+    # curate filename to avoid confusions
+    strs_to_ignore = [
+        "dlir"
+    ]
     
-    elif 'func' in type and type != 'func_derivatives':
+    for s in strs_to_ignore:
+        filename = filename.replace(s, '')
+
+    if 'func' in type and type != 'func_derivatives':
         if 'physiolog' in filename:
             suffix = 'physiolog'
         elif 'interoperability' in filename:
@@ -873,6 +832,7 @@ def get_suffix(str, debug=False):
         'intersections_world',
         'root_segments_mod',
         'root_segments',
+        'ct',
         'dl',
         'dr',
     ]
