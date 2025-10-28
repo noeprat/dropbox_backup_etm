@@ -188,8 +188,8 @@ def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new
         if len(duplicate_files) >1:
             for file_to_discard in duplicate_files[1:]:
                 old_path = file_infos[file_to_discard]['old_path']
-                new_file_infos[file_to_discard]['new_path'] = 'duplicates' + old_path
-                new_file_infos[file_to_discard]['is_duplicate'] = True
+                new_file_infos[file_to_discard]['new_path'] = 'confirmed_duplicates' + old_path
+                new_file_infos[file_to_discard]['confirmed_duplicate'] = True
         
     with open(new_file_infos_path, 'w') as f:
         json.dump(new_file_infos, f, indent=4)

@@ -444,6 +444,8 @@ def get_seg_info(str):
         "seg_masked_csf",
         "seg_discs",
         "seg_masked",
+        "seg_canal",
+        "canal",
         "seg",
 
         "csf_s4l_mask",
@@ -540,7 +542,7 @@ def get_seg_info(str):
         "wm_padded",
         "wm",
         "gm",
-        "csf",
+        "csf"
     ]
 
     seg_infos = []
