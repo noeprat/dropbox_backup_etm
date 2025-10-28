@@ -79,7 +79,11 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
     final_data= {}
     for file in input_files:
         #print(file)
-        final_data[file] = create_filename_dict(file, participants_dict, **kwargs)
+        file_infos = create_filename_dict(file, participants_dict, **kwargs)
+        is_tmp_bool = file_infos['is_tmp']
+
+        if (not is_tmp_bool):
+            final_data[file] = file_infos
     print('done')
 
     try:
