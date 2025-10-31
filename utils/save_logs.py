@@ -184,11 +184,20 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
 
     out_dict = {}
 
+    strs_to_remove = [
+        '.',
+        'dicoms_',
+        't2g002_',
+        'brain_',
+        'nonanonymous_',
+        'ct_'
+    ]
+
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
         all_files = file_infos.keys()
         for file in all_files:
-            if file_infos[file]['extension'] == '.json':
+            if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
                 jsons_dict[file] = file_infos[file]
             else:
                 data_dict[file] = file_infos[file]
@@ -196,25 +205,55 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
         c=0
 
     for json_file in jsons_dict.keys():
-        json_filename = json_file.split('/')[-1][:-len('.json')]
+        json_filename = json_file.split('/')[-1][:-len('.json')].lower()
         out_dict[json_file] = []
         for data_file in data_dict.keys():
-            filename = data_file.split('/')[-1]
-            curated_json_filename = json_filename.replace('.','')
-            curated_filename = remove_extension(filename).replace('.','')
+            filename = data_file.split('/')[-1].lower()
+
+            curated_filename = remove_extension(filename)
+            curated_json_filename = json_filename
+            for s in strs_to_remove:
+                curated_json_filename = curated_json_filename.replace(s,'')
+                curated_filename = curated_filename.replace(s,'')
 
             if debug and c<10:
                 print('file: \n    ', filename)
                 print('curated json filename: \n    ', curated_json_filename)
                 c += 1
-            if curated_json_filename == curated_filename or json_filename == filename:
+            
+            condition3 = False
+            if filename == 'fmri.nii.gz':
+                tasks_json = [
+                    side + part
+                    for side in ['l','r']
+                    for part in ['ankle','knee', 'hip', 'grasp']
+                ]
+                tasks_json.append('restingstate')
+
+                tasks_nifti = [
+                    side +'_'+ part
+                    for side in ['left','right']
+                    for part in ['ankle','knee', 'hip', 'grasp']
+                ]
+                tasks_nifti.append('rest')
+                for idx, task in enumerate(tasks_json):
+                    if task in json_file.lower() and tasks_nifti[idx] in data_file.lower():
+                        condition3 = True
+
+
+
+
+            condition1 = curated_json_filename == curated_filename
+            condition2 = json_filename == filename
+
+            if condition1 or condition2 or condition3:
                 out_dict[json_file].append(data_file)
 
     with open(jsons_to_data_path, 'w') as f:
         json.dump(out_dict, f, indent=4)
 
 
-def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_path, corrected_file_infos_path):
+def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_path, corrected_file_infos_path, verbose=False, debug=False):
     """
     Saves a json in `corrected_file_infos_path` correcting the metadata file infos
 
@@ -244,22 +283,49 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
     for json_file in jsons_to_data.keys():
         if len(jsons_to_data[json_file])==0:
             print('found no matching data file for: ', json_file)
-        if len(jsons_to_data[json_file])>1:
+        if len(jsons_to_data[json_file])>1 and verbose:
             print('found several matching data files for: ', json_file)
             print('By default, this file will be considered as the matching data file: \n   ', jsons_to_data[json_file][0])
         if len(jsons_to_data[json_file])>=1:
             matching_file = jsons_to_data[json_file][0]
+            matching_file_infos = file_infos[matching_file].copy()
             json_file_infos = file_infos[matching_file].copy()
             json_file_infos['extension'] = '.json'
             json_file_infos['old_path'] = file_infos[json_file]['old_path']
-            data_new_path = json_file_infos['new_path']
-            json_new_path = remove_extension(data_new_path) + '.json'
 
-            json_file_infos['new_path'] = json_new_path
+            if debug:
+                print('json_file', json_file)
+                print('matching_file', matching_file)
+            
+            for key in ['id', 'suffix', 'seg_info', 'func_info', 'func_task']:
+                try:
+                    old_json_value = file_infos[json_file][key]
+                except:
+                    old_json_value = ''
+                try:
+                    matching_file_value = file_infos[matching_file][key]
+                except:
+                    matching_file_value = ''
+                
+                if debug:
+                    print('key',key)
+                    print('matching_file_value', matching_file_value)
+                    print('old_json_value', old_json_value)
+
+                if matching_file_value == '' and old_json_value !='':
+                    json_file_infos[key] = old_json_value
+                    matching_file_infos[key] = old_json_value
+            for key in matching_file_infos.keys():
+                if key not in ['old_path', 'extension', 'new_path']:
+                    json_file_infos[key] = matching_file_infos[key]
+
             file_infos[json_file] = json_file_infos
+            file_infos[matching_file] = matching_file_infos
 
     with open(corrected_file_infos_path, 'w') as f:
         json.dump(file_infos, f, indent=4)
+    
+    refresh_new_paths(corrected_file_infos_path, corrected_file_infos_path)
 
 
 
