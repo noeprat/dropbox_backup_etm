@@ -54,13 +54,15 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             "3d_generation",
             "roots_out",
             "physiolog",
+            "blender",
             "tmp"
         ]
 
         exact_stop_flags = [
             '3d_generation',
             '_all_stls',
-            'roots_out'
+            'roots_out',
+            'screenshots'
         ]
     for entry in dbx.files_list_folder(dir).entries:
         last_folder = (entry.path_display).split('/')[-1].lower()
