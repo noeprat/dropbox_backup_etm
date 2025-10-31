@@ -1,7 +1,7 @@
 from utils.dropbox_filesystem import get_all_paths, sort_source_to_target
 from utils.save_logs import save_file_infos, save_file_list, read_file_list, save_jsons_to_data, correct_file_infos_with_matching_metadata 
 from utils.save_logs import write_paths_file, write_general_recap_file, refresh_new_paths
-from utils.handle_duplicates import flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos
+from utils.handle_duplicates import flag_same_new_paths, flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos
 
 from tokens import ACCESS_TOKEN
 
@@ -51,7 +51,9 @@ if __name__ == '__main__':
 
     corrected_file_infos_path = file_infos_path[:-len('.json')] +'_corrected.json'
 
-    flagged_path = 'file_infos/'+ subdir +'/potential_duplicates-' + n + '.json'
+    same_new_paths_path = 'file_infos/'+ subdir +'/same_new_paths-' + n + '.json'
+
+    potential_duplicates_path = 'file_infos/'+ subdir +'/potential_duplicates-' + n + '.json'
 
     actual_duplicates_path = 'file_infos/'+ subdir +'/actual_duplicates-' + n + '.json'
 
@@ -74,10 +76,6 @@ if __name__ == '__main__':
     s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
 
     if s0 == 'y':
-
-        
-        
-
         input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
                                 dir= '/source', 
                                 recursive=True, 
@@ -135,14 +133,14 @@ if __name__ == '__main__':
 
     flag_potential_duplicates(
                     file_infos_path=corrected_file_infos_path,
-                    flagged_path= flagged_path
+                    flagged_path= potential_duplicates_path
                 )
-    print('Flagged duplicates in '+ flagged_path)
+    print('Flagged potential duplicates in '+ potential_duplicates_path)
     s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n] \n')
     
     if s == 'y':
         compare_potential_duplicates(
-            flagged_path=flagged_path,
+            flagged_path=potential_duplicates_path,
             actual_duplicates_path=actual_duplicates_path,
             TOKEN= ACCESS_TOKEN,
             verbose= True
@@ -154,14 +152,14 @@ if __name__ == '__main__':
             new_file_infos_path= corrected_file_infos_path
         )
 
-        flag_potential_duplicates(
+    flag_same_new_paths(
                         file_infos_path=corrected_file_infos_path,
-                        flagged_path= flagged_path
+                        flagged_path= same_new_paths_path
                     )
     
     rename_duplicates(
                     corrected_file_infos_path,
-                    flagged_path,
+                    same_new_paths_path,
                     renamed_duplicates_file_infos_path
                 )
     
@@ -175,14 +173,14 @@ if __name__ == '__main__':
                     renamed_duplicates_file_infos_path
                 )
     
-        flag_potential_duplicates(
+        flag_same_new_paths(
                         file_infos_path=renamed_duplicates_file_infos_path,
-                        flagged_path= flagged_path
+                        flagged_path= same_new_paths_path
                     )
         
         rename_duplicates(
                         renamed_duplicates_file_infos_path,
-                        flagged_path,
+                        same_new_paths_path,
                         renamed_duplicates_file_infos_path
                     )
 
