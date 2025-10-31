@@ -1,3 +1,6 @@
+from utils.misc import pick_largest_str_in_list
+
+
 def extract_extension(str):
     """
     Returns the extension of the filename / path string, dot included,
@@ -160,27 +163,39 @@ def extract_type(str, debug=False):
         type = 'code'
     elif extension in ['.avi', '.png', '.pdf']:
         type = 'misc'
-    elif 'ct' in keywords:
-        if 'seg' in keywords or 'seg' in root_dirs_keywords:
+    elif 'dti' in keywords or extension in ['.bval', '.bvec']:
+        type = 'dti'
+    elif 'ct' in keywords or 'ct' in root_dirs_keywords:
+        if 'seg' in keywords or 'seg' in root_dirs_keywords or 'tissues' in root_dirs_keywords:
             type = 'ct_segmentation'
+        elif 'bin' in keywords or 'metal' in keywords: 
+            ### this case might be specific to t2g_sub02 !!
+            type= 'ct_segmentation' 
         else:
             type = 'ct'
     elif extension == '.smash':
         type = 'simulation'
-    elif extension == '.feat' or 'normalization' in  root_dirs_keywords or 'thresh_zstat1_reg' in filename or 'acompcor' in filename or 'rmsctp0fmri' in filename:
+
+    elif 'restingstate' in keywords or 'fmri' in str.lower() or 'functional' in str.lower() or 'physiolog' in filename:
+        if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in str.lower():
+            type = 'func_segmentation'
+        else:
+            type = 'func'
+    
+    elif extension == '.feat' or 'thresh_zstat1_reg' in filename or 'acompcor' in filename or 'rmsctp0fmri' in filename:
         type = 'func_derivatives'
-    elif 'segmentation_functional' in str.lower() or ('functional' in root_dirs_keywords and 'seg' in filename):
-        type = "func_segmentation"
-    elif 'restingstate' in keywords or 'fmri' in keywords or 'functional' in str.lower() or 'physiolog' in filename:
-        type = 'func'
+    
+    
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
-        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords:
+        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords:
             type = 'anat_segmentation'
+        elif 'normalization' in root_dirs_keywords and ('betted' or 'transf' or 'template' in filename):
+            type = 'anat_derivatives'
         else:
             type = 'anat'
 
     #special to T2G, rules may not apply to later dirs
-    elif extension in ['.stl', '.blend', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls']:
+    elif extension in ['.stl', '.blend', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls', 'blender']:
         type = 'modelling'
     elif 'spinal_level' in dirs or filename in ['roots_out','roots_rootlets', 'roots_seg_to_centerline'] or ('intersections' in filename):
         type = 'anat_segmentation'
@@ -264,7 +279,14 @@ def get_category(str):
         'resting_state',
         'mp2rage',
         'model_spine',
-        'segmentation_sct_poly_0'
+        'segmentation_sct_poly_0',
+        'spine_post_op',
+        'brain_post_op_ct_304',
+        'brain_post_op_ct_302',
+        'brain_post_op',
+        'pre_op',
+        'post_op',
+        'normalization_experiments'
     ]
 
     expressions_to_search_in_filename = [
@@ -292,26 +314,24 @@ def get_category(str):
         'synthseg',
         "seg_post_pro",
         'post_pro',
-        'structural_tissues'
+        'structural_tissues',
+        'rachis_dorsal',
+        'cerveau_std',
+        'cerveau_massif',
+        'cerveau'
 
     ]
 
-    for dir_expression in expressions_to_search_in_dirs:
-        if dir_expression in dir_path:
-            categories.append(dir_expression)
-            #print('found dir expression: ', dir_expression)
-            break
+    dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
+    categories.append(pick_largest_str_in_list(dir_expressions))
 
-    
-
-    for filename_expression in expressions_to_search_in_filename:
-        if (filename_expression in filename) and (filename_expression not in categories):
-            categories.append(filename_expression)
-            #print('found filename expression', filename_expression)
-            break
+    filename_expressions = [filename_expression 
+                            for filename_expression in expressions_to_search_in_filename 
+                            if filename_expression in filename and (filename_expression not in categories)]
+    categories.append(pick_largest_str_in_list(filename_expressions))
     
     category = '_'.join(categories)
-    return category
+    return category.strip('_')
 
 
 
@@ -343,7 +363,9 @@ def get_seg_info(str):
     
     # curate filename to avoid confusions
     strs_to_ignore = [
-        'root_segments'
+        'root_segments',
+        'seg_post_pro',
+        'synthseg'
     ]
     
     for s in strs_to_ignore:
@@ -366,8 +388,13 @@ def get_seg_info(str):
         'seg_model_10_roots_by_spinal_levels_small',
         'seg_model_10_roots_by_spinal_levels',
         'seg_model_10',
+        'seg_model_5_roots_by_spinal_levels',
         'seg_model_5',
-        'seg_model_1'
+        'seg_model_3_individual_roots',
+        'seg_model_3',
+        'seg_model_1_roots_as_one_entity',
+        'seg_model_1',
+        'dl_vertebrae_seg'
     ]
 
     expressions_to_search_in_filename = [
@@ -398,7 +425,7 @@ def get_seg_info(str):
         "seg_canal",
         "seg_bin",
         "seg_multi",
-        "seg",
+        
 
         "csf_s4l_mask",
         "csf_s4l",
@@ -427,6 +454,17 @@ def get_seg_info(str):
         'spinal_level_t11',
         'spinal_level_t12',
 
+
+        'vertebrae_c1',
+        'vertebrae_c2',
+        'vertebrae_c3',
+        'vertebrae_c4',
+        'vertebrae_c5',
+        'vertebrae_c6',
+        'vertebrae_c7',
+        'vertebrae_t1',
+        'vertebrae',
+
         't8l3_wm',
         't8l3',
         't8_l3',
@@ -445,6 +483,8 @@ def get_seg_info(str):
         't11',
         't12',
         'aorta',
+        'adrenal_gland_left',
+        'adrenal_gland_right',
         'autochthon_left',
         'autochthon_right',
         'colon',
@@ -471,7 +511,38 @@ def get_seg_info(str):
         'spinal_cord',
         'spleen',
         'stomach',
-        'vertebrae',
+
+        "metal_ecog",
+        "metal_ecog_electrodes",
+        "metal_all",
+        "metal_ecog_clean",
+        "bin",
+
+        'ipg_electrodes_cables',
+        'electrodes_ipg',
+        'electrodes',
+        'ipg',
+
+        'body_complete_corrected',
+        'body_extremities_corrected',
+        'body_extremities',
+        'body',
+        'body_trunc',
+
+        'clavicula_left',
+        'clavicula_right',
+        'common_carotid_artery_left',
+        'common_carotid_artery_right',
+        'oesophagus',
+        'esophagus',
+        'rib_left',
+        'rib_right',
+        'scapula_right',
+        'scapula_left',
+        'skin_corrected',
+        'skull_no_ecog',
+        'thyroid_gland',
+        'trachea',
         
         "full_wm_gm",
         "full_gm",
@@ -494,32 +565,49 @@ def get_seg_info(str):
         "wm_padded",
         "wm",
         "gm",
+
+        'third_ventricle_csf',
+        'fourth_ventricle_csf',
+        'lateral_csf',
         "csf",
         "ctd",
-        "canal"
+        "canal",
+        'skull',
+        'skin',
+        'brain',
+
+        "bin_1500",
+        "bin_2000",
+        "bin_2800",
+
+        "mask_sc",
+        "mask_full",
+        "mask_lesion",
+
+        
+        "left_lateral_ventricle_csf",
+        "right_inferior_lateral_ventricle_csf",
+        "left_inferior_lateral_ventricle_csf",
+        "right_lateral_ventricle_csf",
     ]
 
     seg_infos = []
-    for dir_expression in expressions_to_search_in_dirs:
-        if dir_expression in dir_path:
-            
-            seg_infos.append(dir_expression)
-            break
 
-    for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                break
-    
-    for filename_expression in expressions_to_search_at_end_of_filename:
-        if filename_expression in end_of_filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                break
+    dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
+    seg_infos.append(pick_largest_str_in_list(dir_expressions))
+
+    filename_expressions = [filename_expression 
+                            for filename_expression in expressions_to_search_in_filename 
+                            if filename_expression in filename and (filename_expression not in seg_infos)]
+    seg_infos.append(pick_largest_str_in_list(filename_expressions))
+
+    end_of_filename_expressions = [filename_expression 
+                            for filename_expression in expressions_to_search_at_end_of_filename 
+                            if filename_expression in end_of_filename and (filename_expression not in seg_infos)]
+    seg_infos.append(pick_largest_str_in_list(end_of_filename_expressions))
 
     seg_info = '_'.join(seg_infos)
-    return seg_info
+    return seg_info.strip('_')
 
 
 
@@ -604,7 +692,8 @@ def get_func_task(str, debug=False):
             seg_infos.append(dir_expression)
             
             break
-
+    if 'rs_fmri' in dir_path.split('/'):
+        seg_infos.append('restingstate')
     
 
     for filename_expression in expressions_to_search_in_filename:
@@ -693,6 +782,7 @@ def get_func_info(str):
         'lumbar',
         'mean_for_seg_seg',
         'mean_for_seg',
+        'mean_fo'
         'rmsctp0fmri_mean_all',
         'rmsctp0fmri'
     ]
@@ -783,7 +873,8 @@ def get_suffix(str, debug=False):
 
     # curate filename to avoid confusions
     strs_to_ignore = [
-        "dlir"
+        "dlir",
+        'segmentation_sct_poly_0'
     ]
     
     for s in strs_to_ignore:
@@ -800,6 +891,9 @@ def get_suffix(str, debug=False):
             suffix = 'acompcor'
         else:
             suffix = 'bold'
+    
+    elif type == 'dti':
+        suffix = 'dti'
 
 
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
@@ -821,6 +915,12 @@ def get_suffix(str, debug=False):
         'b_ffe',
         't2_3d_tra_vista',
         't2w_ffe',
+        "t1_ts_exp_lq",
+        "t1_ts_exp_1",
+        "mp2rage_ts_exp_1",
+        "mp2rage_ts_exp_1",
+        "t1_ts_exp_2"
+        't1_ts',
         'ffe',  # must be after 'b_ffe' etc.
         'brain_aahead_scout',
         'roots_out',
@@ -832,13 +932,35 @@ def get_suffix(str, debug=False):
         'intersections_world',
         'root_segments_mod',
         'root_segments',
+        
+
+        "mp2rage_reg_template",
+        "mp2rage2template_nonlinear",
+        "nonlinear_betted_mp2rage2standard_transf",
+        "t1_reg_affine_template",
+        "nonlinear_nonbetted_mp2rage2standard_transf",
+        "mp2rage2template_fsl_nobet",
+        "mp2rage2template_fsl",
+        "mp2rage_reg_affine_template",
+        "mp2rage_reg_nonlinear_template",
+        "mp2rage2template_affine",
+        "mp2rage2template",
+        "affine_betted_t12standard_transf",
+        "t12template_affine",
+        "affine_nonbetted_mp2rage2standard_transf",
+        "affine_betted_mp2rage2standard_transf",
         'ct',
         'dl',
         'dr',
+        'nonbetted',
+        'betted',
+        
     ]
 
     if debug:
         print(filename)
+
+    suffixes = [suffix]
     
     for filename_expression in expressions_to_search_in_filename:
         if debug:
@@ -848,19 +970,23 @@ def get_suffix(str, debug=False):
                 suffix = filename_expression
             else:
                 suffix = suffix + '_' + filename_expression
-    if 'corrected' in str.lower():
-        if suffix == '':
-            suffix = 'corrected'
-        else:
-            suffix = suffix + '_corrected'
-    
-    if 'version_2024' in str.lower():
-        if suffix == '':
-            suffix = 'version-2024'
-        else:
-            suffix = suffix + '_version-2024'
 
-    return suffix
+    extras = [
+        'corrected',
+        'preprocessed',
+        'version-2024',
+        'fixed',
+        'new_inference'
+    ]
+
+    for extra in extras:
+        if extra in str.lower():
+            if suffix == '':
+                suffix = extra
+            else:
+                suffix = suffix + '_' + extra
+
+    return suffix.strip('_')
     
 ##################################################################################################################################################
 ################################ Booleans ########################################################################################################
@@ -1035,8 +1161,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             new_path += 'derivatives/'
             if 'segmentation' in type:
                 new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
-            elif type =='func_derivatives':
-                new_path += 'func/' + sub +'/'
+            elif 'derivatives' in type:
+                new_path += type.split('_')[0] + '/' + sub +'/'
             else:
                 new_path += type +'/' + sub + '/'
         else:
