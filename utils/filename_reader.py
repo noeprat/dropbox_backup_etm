@@ -189,7 +189,9 @@ def extract_type(str, debug=False):
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords:
             type = 'anat_segmentation'
-        elif 'normalization' in root_dirs_keywords and ('betted' or 'transf' or 'template' in filename):
+        elif 'normalization' in root_dirs_keywords and ('betted' in filename or 'transf' in filename or 'template' in filename):
+            if debug:
+                print(filename)
             type = 'anat_derivatives'
         else:
             type = 'anat'
@@ -243,15 +245,18 @@ def get_category(str):
         category: str,
             the category of the specified file
     """
+
+    categories = []
+
     if is_localizer(str):
-        return 'localizer'
+        categories.append("localizer")
     filename = remove_extension(str.split('/')[-1]).lower()
     #print('filename: ', filename)
     
     dir_path = '/'.join(str.split('/')[:-1:]).lower()
     #print('dir_path',dir_path)
     
-    categories = []
+    
     
     # make sure to have the expressions containing the ones before first
     expressions_to_search_in_dirs = [
@@ -286,7 +291,8 @@ def get_category(str):
         'brain_post_op',
         'pre_op',
         'post_op',
-        'normalization_experiments'
+        'normalization_experiments',
+        'mri_bones',
     ]
 
     expressions_to_search_in_filename = [
@@ -318,7 +324,8 @@ def get_category(str):
         'rachis_dorsal',
         'cerveau_std',
         'cerveau_massif',
-        'cerveau'
+        'cerveau',
+        'post_op'
 
     ]
 
@@ -365,7 +372,8 @@ def get_seg_info(str):
     strs_to_ignore = [
         'root_segments',
         'seg_post_pro',
-        'synthseg'
+        'synthseg',
+        'cs4p6'
     ]
     
     for s in strs_to_ignore:
@@ -663,7 +671,8 @@ def get_func_task(str, debug=False):
         'left_hip',
         'right_grasp',
         'left_grasp',
-        'functional_rest'
+        'functional_rest',
+        'rest'
     ]
 
     expressions_to_search_in_filename = [
@@ -782,7 +791,8 @@ def get_func_info(str):
         'lumbar',
         'mean_for_seg_seg',
         'mean_for_seg',
-        'mean_fo'
+        'mean_fo',
+        'rmsctp0fmri_mean_all_seg',
         'rmsctp0fmri_mean_all',
         'rmsctp0fmri'
     ]
@@ -836,7 +846,7 @@ def get_func_info(str):
     return seg_info
 
 
-def get_suffix(str, debug=False):
+def get_suffix(string, debug=False):
     """
     Returns the suffix for the new path, should contain information about the imaging sequance and/or the type of signal
 
@@ -858,27 +868,33 @@ def get_suffix(str, debug=False):
     
     Parameters
     --------
-        str : str,
+        string : str,
             a path/filename string
     
     Returns
     --------
         suffix: str,
     """
-    filename = remove_extension(str.split('/')[-1]).lower()
-    keywords = [keyword.lower() for keyword in filename.split('_')]
-    extension = extract_extension(str)
+    
 
-    type = extract_type(str)
+    type = extract_type(string)
 
     # curate filename to avoid confusions
-    strs_to_ignore = [
+    strings_to_ignore = [
         "dlir",
         'segmentation_sct_poly_0'
     ]
     
-    for s in strs_to_ignore:
+    
+
+    filename = remove_extension(string.split('/')[-1]).lower()
+
+    for s in strings_to_ignore:
         filename = filename.replace(s, '')
+
+    
+    keywords = [keyword.lower() for keyword in filename.split('_')]
+    extension = extract_extension(string)
 
     if 'func' in type and type != 'func_derivatives':
         if 'physiolog' in filename:
@@ -979,8 +995,10 @@ def get_suffix(str, debug=False):
         'new_inference'
     ]
 
+    extras += ['v0' + str(i) for i in range(10)]
+
     for extra in extras:
-        if extra in str.lower():
+        if extra in string.lower():
             if suffix == '':
                 suffix = extra
             else:
