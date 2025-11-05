@@ -13,6 +13,8 @@ from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
 from tqdm import tqdm
 
+MAX_FILE_SIZE_FOR_COMPARISON = (2**10)**3 # 1Go limit when downloading for comparison
+
 def flag_same_new_paths(file_infos_path, flagged_path):
     """
     Saves a json in `flagged_path` flagging different files that may have the same new path
@@ -129,7 +131,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
 
                 if file2 not in visited:
                     condition1 = file_infos[file1]['new_path']==file_infos[file2]['new_path']
-                    condition2 = filename1 == filename2
+                    condition2 = filename1 == filename2 and func_task1 == func_task2
                     condition3 = (type1==type2) and (id1==id2) and (seg_info1==seg_info2) and (func_task1==func_task2) and (func_info1==func_info2)
 
                     if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']):
@@ -187,8 +189,7 @@ def rename_duplicates(file_infos_path, flagged_path, new_file_infos_path):
     with open(new_file_infos_path, 'w') as f:
         json.dump(file_infos, f, indent=4)
     
-def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, verbose=True, debug=False):
-    verbose = True
+def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downloaded_path, TOKEN, verbose=True, debug=False):
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token.")
         # Create an instance of a Dropbox class, which can make requests to the API.
@@ -212,6 +213,9 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, ve
         os.remove('tmp_dir/' + file)
         
     actual_duplicates = {}
+    not_downloaded = {
+        "max_size (in octets)": MAX_FILE_SIZE_FOR_COMPARISON
+    }
 
     with open(flagged_path, 'r') as f:
         flagged_duplicates = json.load(f)
@@ -226,11 +230,16 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, ve
             to_path1 = 'tmp_dir/file1' + extract_extension(from_path1)
 
             try:
+                file1_size = dbx.files_get_metadata(from_path1).size
+                assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
                 dbx.files_download_to_file(to_path1, from_path1)
                 downloaded1 = True
             except:
                 downloaded1 = False
-                print('failed to download ' + from_path1)
+                not_downloaded[from_path1_without_source] = {
+                    'old_path': from_path1_without_source,
+                    'size': file1_size
+                }
 
 
             if downloaded1:
@@ -246,11 +255,16 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, ve
                         print(from_path2)
                     
                     try:
+                        file2_size = dbx.files_get_metadata(from_path2).size
+                        assert file2_size <= MAX_FILE_SIZE_FOR_COMPARISON
                         dbx.files_download_to_file(to_path2, from_path2)
                         downloaded2 = True
                     except:
                         downloaded2 = False
-                        print('failed to download ' + from_path2)
+                        not_downloaded[from_path2_without_source] = {
+                                'old_path': from_path2_without_source,
+                                'size': file2_size
+                            }
                     
                     if downloaded2:
 
@@ -275,7 +289,8 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, ve
                                 print(from_path1 + ' not compared')
 
                             if comp:
-                                print(from_path1 + '\n    is the same as: \n' + from_path2)
+                                if debug:
+                                    print(from_path1 + '\n    is the same as: \n' + from_path2)
                                 actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
 
                         os.remove(to_path2)
@@ -283,6 +298,9 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, TOKEN, ve
 
     with open(actual_duplicates_path, 'w') as f:
         json.dump(actual_duplicates, f, indent=4)
+    
+    with open(not_downloaded_path, 'w') as f:
+        json.dump(not_downloaded, f, indent=4)
 
 def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new_file_infos_path):             
     with open(file_infos_path, 'r') as f1:
