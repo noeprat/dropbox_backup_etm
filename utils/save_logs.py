@@ -41,9 +41,9 @@ def read_file_list(file_list_path):
 
 
 
-def save_file_infos(input_files, participants_dict, out_path, **kwargs):
+def save_file_infos(input_files, participants_dict, file_infos_path, tmpfile_infos_path, **kwargs):
     """
-    Saves a json in `out_path` containing information and sorting instructions ("new_path") for all files in `input_files`
+    Saves a json in `file_infos_path` containing information and sorting instructions ("new_path") for all files in `input_files`
 
     Kwargs can be used to pre-determine some information
 
@@ -53,13 +53,15 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
             a list of path strings
         participants_dict : dict,
             new sub name given to the former one (e.g. participants_dict['REEVOID_PILOT_01'] = 'sub-pilot')
-        out_path : str,
+        file_infos_path : str,
             the path where the file infos will be saved (usually of the type `/file_infos/subdir/file_infos-[n].json`)
+        tmpfile_infos_path : str,
+            the path where the file infos (for temporary files) will be saved (usually of the type `/file_infos/subdir/tmp_file_infos-[n].json`)
     
     Saves
     --------
-        out_path, json file
-            information about a file can be found as follows: out_path_dict[file]['new_path'] or out_path_dict[file]['type'] etc.
+        file_infos_path, json file
+            information about a file can be found as follows: file_infos_path[file]['new_path'] or out_path_dict[file]['type'] etc.
 
     Kwargs
     --------
@@ -77,6 +79,7 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
         is_derivative : Bool,
     """
     final_data= {}
+    tmp_files_infos = {}
     for file in input_files:
         #print(file)
         file_infos = create_filename_dict(file, participants_dict, **kwargs)
@@ -84,16 +87,24 @@ def save_file_infos(input_files, participants_dict, out_path, **kwargs):
 
         if (not is_tmp_bool):
             final_data[file] = file_infos
+        else:
+            tmp_files_infos[file] = file_infos
+
+
     print('done')
 
     try:
-        dirs = '/'.join(out_path.split('/')[:-1])
+        dirs = '/'.join(file_infos_path.split('/')[:-1])
         os.makedirs(dirs, exist_ok=True)
-        with open(out_path, 'w') as f:
+        with open(file_infos_path, 'w') as f:
             json.dump(final_data, f, indent=4)
+        with open(tmpfile_infos_path, 'w') as f:
+            json.dump(tmp_files_infos, f, indent=4)
     except:
-        with open(out_path, 'w') as f:
+        with open(file_infos_path, 'w') as f:
             json.dump(final_data, f, indent=4)
+        with open(tmpfile_infos_path, 'w') as f:
+            json.dump(tmp_files_infos, f, indent=4)
 
 def refresh_new_paths(file_infos_path, new_file_infos_path):
     """
@@ -196,11 +207,17 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
         all_files = file_infos.keys()
+
         for file in all_files:
-            if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
-                jsons_dict[file] = file_infos[file]
-            else:
-                data_dict[file] = file_infos[file]
+            try:
+                file_is_a_duplicate = file_infos[file]["confirmed_duplicate"]
+            except:
+                file_is_a_duplicate=False
+            if not file_is_a_duplicate:
+                if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
+                    jsons_dict[file] = file_infos[file]
+                else:
+                    data_dict[file] = file_infos[file]
     if debug:
         c=0
 
@@ -209,18 +226,15 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
         out_dict[json_file] = []
         for data_file in data_dict.keys():
             filename = data_file.split('/')[-1].lower()
-
             curated_filename = remove_extension(filename)
             curated_json_filename = json_filename
             for s in strs_to_remove:
                 curated_json_filename = curated_json_filename.replace(s,'')
                 curated_filename = curated_filename.replace(s,'')
-
             if debug and c<10:
                 print('file: \n    ', filename)
                 print('curated json filename: \n    ', curated_json_filename)
                 c += 1
-            
             condition3 = False
             if filename == 'fmri.nii.gz':
                 tasks_json = [
@@ -229,7 +243,6 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
                     for part in ['ankle','knee', 'hip', 'grasp']
                 ]
                 tasks_json.append('restingstate')
-
                 tasks_nifti = [
                     side +'_'+ part
                     for side in ['left','right']
@@ -239,10 +252,6 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
                 for idx, task in enumerate(tasks_json):
                     if task in json_file.lower() and tasks_nifti[idx] in data_file.lower():
                         condition3 = True
-
-
-
-
             condition1 = curated_json_filename == curated_filename
             condition2 = json_filename == filename
 
