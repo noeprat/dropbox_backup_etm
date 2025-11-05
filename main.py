@@ -47,6 +47,8 @@ if __name__ == '__main__':
 
     file_infos_path = 'file_infos/'+ subdir +'/file_infos-' + n + '.json'
 
+    tmpfile_infos_path = 'file_infos/'+ subdir +'/tmp_file_infos-' + n + '.json'
+
     jsons_to_data_path = 'file_infos/'+ subdir +'/jsons_to_data-' + n + '.json'
 
     corrected_file_infos_path = file_infos_path[:-len('.json')] +'_corrected.json'
@@ -57,10 +59,14 @@ if __name__ == '__main__':
 
     actual_duplicates_path = 'file_infos/'+ subdir +'/actual_duplicates-' + n + '.json'
 
+    not_downloaded_path = 'file_infos/'+ subdir +'/not_downloaded-' + n + '.json'
+
     renamed_duplicates_file_infos_path = corrected_file_infos_path[:-len('.json')] +'_renamed_duplicates.json'
 
 
     txt_logs_path = 'paths/' + subdir + '/paths-' + n + '.txt'
+
+    tmpfiles_txt_logs_path = 'paths/' + subdir + '/tmpfiles_paths-' + n + '.txt'
 
     json_recap_path = 'recaps/' + subdir + '/recap-' + n + '.json'
 
@@ -106,18 +112,50 @@ if __name__ == '__main__':
 
         finally:    
             save_file_infos(
-                input_files,
-                participants_dict=participants_dict,
-                out_path= file_infos_path
+                input_files= input_files,
+                participants_dict= participants_dict,
+                file_infos_path= file_infos_path,
+                tmpfile_infos_path= tmpfile_infos_path
                 )
     else:
         save_file_infos(
                 input_files,
                 participants_dict={},
-                out_path= file_infos_path,
+                file_infos_path= file_infos_path,
+                tmpfile_infos_path= tmpfile_infos_path,
                 sub=sub)
     
-    # handle duplicates
+    # handle duplicates    
+
+    flag_potential_duplicates(
+                    file_infos_path=file_infos_path,
+                    flagged_path= potential_duplicates_path
+                )
+    print('Flagged potential duplicates in '+ potential_duplicates_path)
+    s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
+    
+    if s == 'y':
+        compare_potential_duplicates(
+            flagged_path=potential_duplicates_path,
+            actual_duplicates_path=actual_duplicates_path,
+            not_downloaded_path=not_downloaded_path,
+            TOKEN= ACCESS_TOKEN,
+            verbose= True
+        )
+
+        handle_duplicates_in_file_infos(
+            actual_duplicates_path=actual_duplicates_path,
+            file_infos_path= file_infos_path,
+            new_file_infos_path= file_infos_path
+        )
+    elif s == 'use_previous':
+        actual_duplicates_path_user = input_with_default('actual_duplicates_path')
+        handle_duplicates_in_file_infos(
+            actual_duplicates_path=actual_duplicates_path_user,
+            file_infos_path= file_infos_path,
+            new_file_infos_path= file_infos_path
+        )
+
 
     save_jsons_to_data(
         file_infos_path = file_infos_path,
@@ -129,28 +167,7 @@ if __name__ == '__main__':
                     file_infos_path = file_infos_path,
                     jsons_to_data_path = jsons_to_data_path,
                     corrected_file_infos_path = corrected_file_infos_path
-                )    
-
-    flag_potential_duplicates(
-                    file_infos_path=corrected_file_infos_path,
-                    flagged_path= potential_duplicates_path
                 )
-    print('Flagged potential duplicates in '+ potential_duplicates_path)
-    s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n] \n')
-    
-    if s == 'y':
-        compare_potential_duplicates(
-            flagged_path=potential_duplicates_path,
-            actual_duplicates_path=actual_duplicates_path,
-            TOKEN= ACCESS_TOKEN,
-            verbose= True
-        )
-
-        handle_duplicates_in_file_infos(
-            actual_duplicates_path=actual_duplicates_path,
-            file_infos_path= corrected_file_infos_path,
-            new_file_infos_path= corrected_file_infos_path
-        )
 
     flag_same_new_paths(
                         file_infos_path=corrected_file_infos_path,
@@ -198,6 +215,13 @@ if __name__ == '__main__':
         new_prefix=new_prefix
         )
     
+    write_paths_file(
+        file_infos_path= tmpfile_infos_path,
+        out_path = tmpfiles_txt_logs_path,
+        old_prefix=old_prefix,
+        new_prefix=new_prefix
+        )
+
     print('Path log saved in ' + txt_logs_path)
     
     write_general_recap_file(
