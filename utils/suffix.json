@@ -1,0 +1,65 @@
+{
+    "to_ignore": [
+        "dlir",
+        "segmentation_sct_poly_0"
+    ],
+    "to_search_in_dirs": [
+    
+    ],
+    "to_search_in_filename": [
+        "t2_space",
+        "t2_tse",
+        "t2_trufi3d_comp",
+        "t2_trufi3d_t8",
+        "t2_trufi3d_t12",
+        "t2_trufi3d",
+        "t2_gre",
+        "t1_tfe",
+        "t1_spc3d",
+        "b_ffe",
+        "t2_3d_tra_vista",
+        "t2w_ffe",
+        "t1_ts_exp_lq",
+        "t1_ts_exp_1",
+        "mp2rage_ts_exp_1",
+        "mp2rage_ts_exp_1",
+        "t1_ts_exp_2",
+        "t1_ts",
+        "ffe",
+        "brain_aahead_scout",
+        "roots_out",
+        "roots_rootlets", 
+        "roots_seg_to_centerline",
+        "trufi3d",
+        "intersections_voxel_mod",
+        "intersections_voxel",
+        "intersections_world",
+        "root_segments_mod",
+        "root_segments",
+        
+
+        "mp2rage_reg_template",
+        "mp2rage2template_nonlinear",
+        "nonlinear_betted_mp2rage2standard_transf",
+        "t1_reg_affine_template",
+        "nonlinear_nonbetted_mp2rage2standard_transf",
+        "mp2rage2template_fsl_nobet",
+        "mp2rage2template_fsl",
+        "mp2rage_reg_affine_template",
+        "mp2rage_reg_nonlinear_template",
+        "mp2rage2template_affine",
+        "mp2rage2template",
+        "affine_betted_t12standard_transf",
+        "t12template_affine",
+        "affine_nonbetted_mp2rage2standard_transf",
+        "affine_betted_mp2rage2standard_transf",
+        "ct",
+        "dl",
+        "dr",
+        "nonbetted",
+        "betted"
+        
+    ],
+    "to_search_at_end_of_filename": [
+    ]
+}

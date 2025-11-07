@@ -1,0 +1,56 @@
+{
+    "to_ignore": [
+        "root_segments",
+        "seg_post_pro",
+        "synthseg",
+        "cs4p6",
+        "roots_rootlets"
+    ],
+    "to_search_in_dirs": [
+    
+    ],
+    "to_search_in_filename": [
+        "output_smooth_5mm_no_reg",
+        "output_smooth_3mm",
+        "thresh_zstat1_reg_03",
+        "thresh_zstat1_reg_04",
+        "thresh_zstat1_reg_05",
+        "thresh_zstat1_reg_06",
+        "thresh_zstat1_reg_07",
+        "thresh_zstat1_reg",
+        "func_mean_seg",
+        "func_mean_reg",
+        "func_mean",
+        "warp_anat2fmri",
+        "warp_fmri2anat",
+        "lumbar",
+        "mean_for_seg_seg",
+        "mean_for_seg",
+        "mean_fo",
+        "rmsctp0fmri_mean_all_seg",
+        "rmsctp0fmri_mean_all",
+        "rmsctp0fmri"
+    ],
+    "to_search_at_end_of_filename": [
+        "brain_wm_gm_reg",
+        "brain_wm_gm",
+        "left_cerebellum_gm",
+        "left_cerebellum_wm",
+        "right_cerebellum_gm",
+        "right_cerebellum_wm",
+        "cerebellum_gm",
+        "cerebellum_wm",
+        "csf",
+        "full_wm_gm",
+        "full_gm",
+        "full_wm",
+
+        "left_gm",
+        "left_wm",
+        "right_gm",
+        "right_wm",
+
+        "gm",
+        "wm"
+    ]
+}

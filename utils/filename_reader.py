@@ -1,4 +1,5 @@
-from utils.misc import pick_largest_str_in_list
+from utils.misc import pick_largest_str_in_list, get_path_info
+import json
 
 
 def extract_extension(str):
@@ -189,7 +190,7 @@ def extract_type(str, debug=False):
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords:
             type = 'anat_segmentation'
-        elif 'normalization' in root_dirs_keywords and ('betted' in filename or 'transf' in filename or 'template' in filename):
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename:
             if debug:
                 print(filename)
             type = 'anat_derivatives'
@@ -199,7 +200,7 @@ def extract_type(str, debug=False):
     #special to T2G, rules may not apply to later dirs
     elif extension in ['.stl', '.blend', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls', 'blender']:
         type = 'modelling'
-    elif 'spinal_level' in dirs or filename in ['roots_out','roots_rootlets', 'roots_seg_to_centerline'] or ('intersections' in filename):
+    elif 'spinal_level' in dirs or sum([word in filename for word in ['roots_out','roots_rootlets', 'roots_seg_to_centerline']])>=1 or ('intersections' in filename) :
         type = 'anat_segmentation'
 
     
@@ -212,7 +213,7 @@ def extract_type(str, debug=False):
     
     return type
 
-def get_category(str):
+def get_category(input_path):
     """
     Returns additional information on the data
 
@@ -246,103 +247,15 @@ def get_category(str):
             the category of the specified file
     """
 
-    categories = []
-
-    if is_localizer(str):
-        categories.append("localizer")
-    filename = remove_extension(str.split('/')[-1]).lower()
-    #print('filename: ', filename)
-    
-    dir_path = '/'.join(str.split('/')[:-1:]).lower()
-    #print('dir_path',dir_path)
-    
-    
-    
-    # make sure to have the expressions containing the ones before first
-    expressions_to_search_in_dirs = [
-        'for_3d_import',
-        'not_for_import',
-        'for_import',
-        'ssl_tissues_post_pro_step_02',
-        'ssl_tissues_post_pro_step_01',
-        'ssl_tissues_post_pro_02',
-        'ssl_tissues_post_pro_01',
-        'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
-        'tissues_sct',
-        'tissues'
-        'axobl_sacrum_deepseg',
-        'axobl_sacrum'
-        'ax_lspine_deepseg'
-        'ax_lspine',
-        'deepseg',
-        'for_making_levels',
-        'lumbar',
-        'ax_lspine',
-        'ax_obl_sacrum',
-        'bladder',
-        'individual_spinal_levels',
-        'resting_state',
-        'mp2rage',
-        'model_spine',
-        'segmentation_sct_poly_0',
-        'spine_post_op',
-        'brain_post_op_ct_304',
-        'brain_post_op_ct_302',
-        'brain_post_op',
-        'pre_op',
-        'post_op',
-        'normalization_experiments',
-        'mri_bones',
-    ]
-
-    expressions_to_search_in_filename = [
-        'ssl_tissues_post_pro_step_02',
-        'ssl_tissues_post_pro_step_01',
-        'ssl_tissues_post_pro_02',
-        'ssl_tissues_post_pro_01',
-        'ssl_tissues',  # must be after "ssl_tissues_post_pro_01"
-        'axobl_sacrum_deepseg',
-        'axobl_sacrum',
-        'ax_lspine_deepseg',
-        'ax_lspine',
-        'deepseg',
-        'for_making_levels',
-        'lumbar',
-        'ax_lspine',
-        'ax_obl_sacrum',
-        'bladder',
-        'individual_spinal_levels',
-        'resting_state'
-        'total_spineseg',
-        'lumbar',
-        'cs4p6',
-        'wip19_mp2rage',
-        'synthseg',
-        "seg_post_pro",
-        'post_pro',
-        'structural_tissues',
-        'rachis_dorsal',
-        'cerveau_std',
-        'cerveau_massif',
-        'cerveau',
-        'post_op'
-
-    ]
-
-    dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
-    categories.append(pick_largest_str_in_list(dir_expressions))
-
-    filename_expressions = [filename_expression 
-                            for filename_expression in expressions_to_search_in_filename 
-                            if filename_expression in filename and (filename_expression not in categories)]
-    categories.append(pick_largest_str_in_list(filename_expressions))
-    
-    category = '_'.join(categories)
-    return category.strip('_')
+    category = get_path_info(
+        path= input_path,
+        data_path='category.json'
+    )
+    return category
 
 
 
-def get_seg_info(str):
+def get_seg_info(input_path):
     """
     Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
@@ -366,260 +279,16 @@ def get_seg_info(str):
      - seg_Model_10_roots_by_spinal_levels
      - seg_Model_10
     """
-    filename = remove_extension(str.split('/')[-1]).lower()
+    seg_info = get_path_info(
+        path= input_path,
+        data_path= 'seg_info.json'
+    )
     
-    # curate filename to avoid confusions
-    strs_to_ignore = [
-        'root_segments',
-        'seg_post_pro',
-        'synthseg',
-        'cs4p6'
-    ]
-    
-    for s in strs_to_ignore:
-        filename = filename.replace(s, '')
-    
-    
-    dir_path = '/'.join(str.split('/')[:-1]).lower()
-
-    
-    if len(filename.split('_'))>6:
-        end_of_filename = '_'.join(filename.split('_')[-6:])
-    else:
-        end_of_filename= filename
-    
-    expressions_to_search_in_dirs = [
-        'segmentator_tissues',
-        'seg_model_9_roots_as_one_entity_small',
-        'seg_model_9_roots_as_one_entity',
-        'seg_model_9',
-        'seg_model_10_roots_by_spinal_levels_small',
-        'seg_model_10_roots_by_spinal_levels',
-        'seg_model_10',
-        'seg_model_5_roots_by_spinal_levels',
-        'seg_model_5',
-        'seg_model_3_individual_roots',
-        'seg_model_3',
-        'seg_model_1_roots_as_one_entity',
-        'seg_model_1',
-        'dl_vertebrae_seg'
-    ]
-
-    expressions_to_search_in_filename = [
-         # the largest expressions first
-        'seg_model_9_roots_as_one_entity_small',
-        'seg_model_9_roots_as_one_entity',
-        'seg_model_9',
-        'seg_model_10_roots_by_spinal_levels_small',
-        'seg_model_10_roots_by_spinal_levels',
-        'seg_model_10',
-        't8_l3',
-        't12_s1',
-
-    ]
-    
-
-    expressions_to_search_at_end_of_filename = [
-        "seg_masked_fat_candidate_1",
-        "seg_masked_fat_candidate_2",
-        "seg_masked_fat_candidate_3",
-        "seg_masked_fat",
-        "seg_masked_wm",
-        "seg_masked_roots",
-        "seg_masked_csf_s4l",
-        "seg_masked_csf",
-        "seg_discs",
-        "seg_masked",
-        "seg_canal",
-        "seg_bin",
-        "seg_multi",
-        
-
-        "csf_s4l_mask",
-        "csf_s4l",
-        "roots_mask",
-        "roots",
-        "wm_mask",
-        "step1_canal",
-        "step1_cord",
-        "step1_levels",
-        "step1_output",
-        "step2_output",
-
-        'spinal_level_t8l3_wm',
-        'spinal_level_t8l3',
-        'spinal_level_l1',
-        'spinal_level_l2',
-        'spinal_level_l3',
-        'spinal_level_l4',
-        'spinal_level_l5',
-        'spinal_level_more_caudal',
-        'spinal_level_more_rostral',
-        'spinal_level_s1',
-        'spinal_level_s2',
-        'spinal_level_s3',
-        'spinal_level_s4',
-        'spinal_level_t11',
-        'spinal_level_t12',
-
-
-        'vertebrae_c1',
-        'vertebrae_c2',
-        'vertebrae_c3',
-        'vertebrae_c4',
-        'vertebrae_c5',
-        'vertebrae_c6',
-        'vertebrae_c7',
-        'vertebrae_t1',
-        'vertebrae',
-
-        't8l3_wm',
-        't8l3',
-        't8_l3',
-        't12_s1',
-        'l1',
-        'l2',
-        'l3',
-        'l4',
-        'l5',
-        'more_caudal',
-        'more_rostral',
-        's1',
-        's2',
-        's3',
-        's4',
-        't11',
-        't12',
-        'aorta',
-        'adrenal_gland_left',
-        'adrenal_gland_right',
-        'autochthon_left',
-        'autochthon_right',
-        'colon',
-        'gluteus_maximus_left',
-        'gluteus_maximus_right',
-        'gluteus_medius_left',
-        'gluteus_medius_right',
-        'hip_left',
-        'hip_right',
-        'iliac_vena_left',
-        'iliac_vena_right',
-        'iliopsoas_left',
-        'iliopsoas_right',
-        'inferior_vena_cava',
-        'intervertebral_discs',
-        'kidney_left',
-        'kidney_right',
-        'liver',
-        'lung_left',
-        'lung_right',
-        'portal_vein_and_splenic_vein',
-        'sacrum',
-        'small_bowel',
-        'spinal_cord',
-        'spleen',
-        'stomach',
-
-        "metal_ecog",
-        "metal_ecog_electrodes",
-        "metal_all",
-        "metal_ecog_clean",
-        "bin",
-
-        'ipg_electrodes_cables',
-        'electrodes_ipg',
-        'electrodes',
-        'ipg',
-
-        'body_complete_corrected',
-        'body_extremities_corrected',
-        'body_extremities',
-        'body',
-        'body_trunc',
-
-        'clavicula_left',
-        'clavicula_right',
-        'common_carotid_artery_left',
-        'common_carotid_artery_right',
-        'oesophagus',
-        'esophagus',
-        'rib_left',
-        'rib_right',
-        'scapula_right',
-        'scapula_left',
-        'skin_corrected',
-        'skull_no_ecog',
-        'thyroid_gland',
-        'trachea',
-        
-        "full_wm_gm",
-        "full_gm",
-        "full_wm",
-        "left_gm",
-        "right_gm",
-        "left_wm",
-        "right_wm",
-        "brain_wm_gm_padded",
-        "brain_wm_gm",
-        "left_cerebellum_gm",
-        "right_cerebellum_gm",
-        "left_cerebellum_wm",
-        "right_cerebellum_wm",
-        "cerebellum_gm",
-        "cerebellum_wm",
-        "left_wm",
-        "right_gm",
-        "gm_padded",
-        "wm_padded",
-        "wm",
-        "gm",
-
-        'third_ventricle_csf',
-        'fourth_ventricle_csf',
-        'lateral_csf',
-        "csf",
-        "ctd",
-        "canal",
-        'skull',
-        'skin',
-        'brain',
-
-        "bin_1500",
-        "bin_2000",
-        "bin_2800",
-
-        "mask_sc",
-        "mask_full",
-        "mask_lesion",
-
-        
-        "left_lateral_ventricle_csf",
-        "right_inferior_lateral_ventricle_csf",
-        "left_inferior_lateral_ventricle_csf",
-        "right_lateral_ventricle_csf",
-    ]
-
-    seg_infos = []
-
-    dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
-    seg_infos.append(pick_largest_str_in_list(dir_expressions))
-
-    filename_expressions = [filename_expression 
-                            for filename_expression in expressions_to_search_in_filename 
-                            if filename_expression in filename and (filename_expression not in seg_infos)]
-    seg_infos.append(pick_largest_str_in_list(filename_expressions))
-
-    end_of_filename_expressions = [filename_expression 
-                            for filename_expression in expressions_to_search_at_end_of_filename 
-                            if filename_expression in end_of_filename and (filename_expression not in seg_infos)]
-    seg_infos.append(pick_largest_str_in_list(end_of_filename_expressions))
-
-    seg_info = '_'.join(seg_infos)
-    return seg_info.strip('_')
+    return seg_info
 
 
 
-def get_func_task(str, debug=False):
+def get_func_task(input_path, debug=False):
     """
     Returns the task performed for fMRI
     
@@ -633,7 +302,7 @@ def get_func_task(str, debug=False):
     --------
         func_task: str,
     
-    Possible func_task (so far)
+    Possible func_tasks 
     --------
     'right_ankle'
     'left_angle'
@@ -645,94 +314,22 @@ def get_func_task(str, debug=False):
     'left_grasp'
     
     """
-    filename = remove_extension(str.split('/')[-1]).lower()
     
-    dir_path = '/'.join(str.split('/')[:-1]).lower()
-    if debug:
-        print('filename, ', filename)
-        print('dir_path', dir_path)
+    func_task = get_path_info(
+        path= input_path,
+        data_path='func_task.json'
+    )
+    return func_task
 
 
-    
-    if len(filename.split('_'))>6:
-        end_of_filename = '_'.join(filename.split('_')[-6:])
-    else:
-        end_of_filename= filename
-    
-    if debug:
-        print('end_of_filename, ', end_of_filename)
-    
-    expressions_to_search_in_dirs = [
-        'right_ankle',
-        'left_ankle',
-        'right_knee',
-        'left_knee',
-        'right_hip',
-        'left_hip',
-        'right_grasp',
-        'left_grasp',
-        'functional_rest',
-        'rest'
-    ]
-
-    expressions_to_search_in_filename = [
-         # the largest expressions first
-        'right_ankle',
-        'left_ankle',
-        'right_knee',
-        'left_knee',
-        'right_hip',
-        'left_hip',
-        'right_grasp',
-        'left_grasp',
-        'restingstate'
-    ]
-    
-    if debug:
-        print('left_ankle' in dir_path)
-    expressions_to_search_at_end_of_filename = []
-
-    seg_infos = []
-    for dir_expression in expressions_to_search_in_dirs:
-        if debug:
-            print('dir_expression, ',dir_expression)
-        if dir_expression in dir_path:
-            
-            seg_infos.append(dir_expression)
-            
-            break
-    if 'rs_fmri' in dir_path.split('/'):
-        seg_infos.append('restingstate')
-    
-
-    for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                if debug:
-                    print('filename_exp, ', filename_expression)
-                break
-    
-    for filename_expression in expressions_to_search_at_end_of_filename:
-        if filename_expression in end_of_filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                if debug:
-                    print('eof_exp, ', filename_expression)
-                break
-
-    seg_info = '_'.join(seg_infos)
-    return seg_info
-
-
-def get_func_info(str):
+def get_func_info(input_path):
     """
     Returns additional information about fMRI 
     
     
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
     
     Returns
@@ -759,90 +356,11 @@ def get_func_info(str):
     'gm',
     'wm'
     """
-    filename = remove_extension(str.split('/')[-1]).lower()
-    
-    dir_path = '/'.join(str.split('/')[:-1]).lower()
 
-    
-    if len(filename.split('_'))>6:
-        end_of_filename = '_'.join(filename.split('_')[-6:])
-    else:
-        end_of_filename= filename
-    
-    expressions_to_search_in_dirs = [
-        
-    ]
-
-    expressions_to_search_in_filename = [
-         # the largest expressions first
-        'output_smooth_5mm_no_reg',
-        'output_smooth_3mm',
-        'thresh_zstat1_reg_03',
-        'thresh_zstat1_reg_04',
-        'thresh_zstat1_reg_05',
-        'thresh_zstat1_reg_06',
-        'thresh_zstat1_reg_07',
-        'thresh_zstat1_reg',
-        'func_mean_seg',
-        'func_mean_reg',
-        'func_mean',
-        'warp_anat2fmri',
-        'warp_fmri2anat',
-        'lumbar',
-        'mean_for_seg_seg',
-        'mean_for_seg',
-        'mean_fo',
-        'rmsctp0fmri_mean_all_seg',
-        'rmsctp0fmri_mean_all',
-        'rmsctp0fmri'
-    ]
-    
-
-    expressions_to_search_at_end_of_filename = [
-        'brain_wm_gm_reg',
-        'brain_wm_gm',
-        'left_cerebellum_gm',
-        'left_cerebellum_wm',
-        'right_cerebellum_gm',
-        'right_cerebellum_wm',
-        'cerebellum_gm',
-        'cerebellum_wm',
-        'csf',
-        'full_wm_gm',
-        'full_gm',
-        'full_wm',
-
-        'left_gm',
-        'left_wm',
-        'right_gm',
-        'right_wm',
-
-        'gm',
-        'wm'
-    ]
-
-    seg_infos = []
-    for dir_expression in expressions_to_search_in_dirs:
-        if dir_expression in dir_path:
-            
-            seg_infos.append(dir_expression)
-            break
-
-    
-
-    for filename_expression in expressions_to_search_in_filename:
-        if filename_expression in filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                break
-    
-    for filename_expression in expressions_to_search_at_end_of_filename:
-        if filename_expression in end_of_filename:
-            if filename_expression not in seg_infos:
-                seg_infos.append(filename_expression)
-                break
-
-    seg_info = '_'.join(seg_infos)
+    seg_info = get_path_info(
+        path= input_path,
+        data_path='func_info.json'
+    )
     return seg_info
 
 
@@ -879,11 +397,11 @@ def get_suffix(string, debug=False):
 
     type = extract_type(string)
 
+    with open('suffix.json', 'r') as f:
+        data = json.load(f)
+
     # curate filename to avoid confusions
-    strings_to_ignore = [
-        "dlir",
-        'segmentation_sct_poly_0'
-    ]
+    strings_to_ignore = data["to_ignore"]
     
     
 
@@ -918,65 +436,10 @@ def get_suffix(string, debug=False):
     else:
         suffix = ''
 
-    expressions_to_search_in_filename = [
-        't2_space',
-        't2_tse',
-        't2_trufi3d_comp',
-        't2_trufi3d_t8',
-        't2_trufi3d_t12',
-        't2_trufi3d',
-        't2_gre',
-        't1_tfe',
-        't1_spc3d',
-        'b_ffe',
-        't2_3d_tra_vista',
-        't2w_ffe',
-        "t1_ts_exp_lq",
-        "t1_ts_exp_1",
-        "mp2rage_ts_exp_1",
-        "mp2rage_ts_exp_1",
-        "t1_ts_exp_2"
-        't1_ts',
-        'ffe',  # must be after 'b_ffe' etc.
-        'brain_aahead_scout',
-        'roots_out',
-        'roots_rootlets', 
-        'roots_seg_to_centerline',
-        'trufi3d',
-        'intersections_voxel_mod',
-        'intersections_voxel',
-        'intersections_world',
-        'root_segments_mod',
-        'root_segments',
-        
-
-        "mp2rage_reg_template",
-        "mp2rage2template_nonlinear",
-        "nonlinear_betted_mp2rage2standard_transf",
-        "t1_reg_affine_template",
-        "nonlinear_nonbetted_mp2rage2standard_transf",
-        "mp2rage2template_fsl_nobet",
-        "mp2rage2template_fsl",
-        "mp2rage_reg_affine_template",
-        "mp2rage_reg_nonlinear_template",
-        "mp2rage2template_affine",
-        "mp2rage2template",
-        "affine_betted_t12standard_transf",
-        "t12template_affine",
-        "affine_nonbetted_mp2rage2standard_transf",
-        "affine_betted_mp2rage2standard_transf",
-        'ct',
-        'dl',
-        'dr',
-        'nonbetted',
-        'betted',
-        
-    ]
+    expressions_to_search_in_filename = data['to_search_in_filename']
 
     if debug:
         print(filename)
-
-    suffixes = [suffix]
     
     for filename_expression in expressions_to_search_in_filename:
         if debug:

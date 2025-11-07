@@ -1,0 +1,33 @@
+{
+    "to_ignore": [
+        "root_segments",
+        "seg_post_pro",
+        "synthseg",
+        "cs4p6",
+        "roots_rootlets"
+    ],
+    "to_search_in_dirs": [
+        "right_ankle",
+        "left_ankle",
+        "right_knee",
+        "left_knee",
+        "right_hip",
+        "left_hip",
+        "right_grasp",
+        "left_grasp",
+        "functional_rest",
+        "rest"
+    ],
+    "to_search_in_filename": [
+        "right_ankle",
+        "left_ankle",
+        "right_knee",
+        "left_knee",
+        "right_hip",
+        "left_hip",
+        "right_grasp",
+        "left_grasp",
+        "restingstate"
+    ],
+    "to_search_at_end_of_filename": []
+}
