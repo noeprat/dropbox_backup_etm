@@ -1,4 +1,4 @@
-from .filename_reader import remove_extension, extract_extension
+from .misc import remove_extension, extract_extension
 import json
 import os
 import filecmp

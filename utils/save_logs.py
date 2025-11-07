@@ -1,5 +1,6 @@
 import json
-from .filename_reader import create_filename_dict, remove_extension, generate_new_path, is_derivative
+from .filename_reader import create_filename_dict, generate_new_path, is_derivative
+from .misc import remove_extension
 import os
 
 def save_file_list(input_files, file_list_path):

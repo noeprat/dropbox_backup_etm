@@ -1,5 +1,58 @@
-from filename_reader import remove_extension
 import json
+
+def extract_extension(str):
+    """
+    Returns the extension of the filename / path string, dot included,
+    returns an empty string if there is no extension (folders or specific files)
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+            
+            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
+
+    Returns
+    --------
+        ext: str,
+            the extension extracted in str, dot included
+    Examples
+    --------
+    ext = extract_extension('folder/file.nii.gz')
+    >>> ext
+    '.nii.gz'
+    """
+    if str[-7:]==".nii.gz":
+        ext = ".nii.gz"
+    else:
+        ext =  str.split(".")[-1]
+        if len(ext) < len(str) and len(ext)<10:
+            ext = "." + ext
+        else:
+            ext=''
+    return ext
+
+def remove_extension(str):
+    """
+    Removes the extension of a path string
+
+    Parameters
+    --------
+        str : str,
+            a path/filename string
+            
+            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
+
+    Returns
+    --------
+        new_str: str,
+            the new path without the extension
+    """
+    ext = extract_extension(str)
+    if len(ext)>0:
+        return str[:-len(ext)]
+    else:
+        return str
 
 def pick_largest_str_in_list(str_list):
     res = ''

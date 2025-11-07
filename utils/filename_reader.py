@@ -1,60 +1,8 @@
-from utils.misc import pick_largest_str_in_list, get_path_info
+from .misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
 import json
 
 
-def extract_extension(str):
-    """
-    Returns the extension of the filename / path string, dot included,
-    returns an empty string if there is no extension (folders or specific files)
 
-    Parameters
-    --------
-        str : str,
-            a path/filename string
-            
-            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
-
-    Returns
-    --------
-        ext: str,
-            the extension extracted in str, dot included
-    Examples
-    --------
-    ext = extract_extension('folder/file.nii.gz')
-    >>> ext
-    '.nii.gz'
-    """
-    if str[-7:]==".nii.gz":
-        ext = ".nii.gz"
-    else:
-        ext =  str.split(".")[-1]
-        if len(ext) < len(str) and len(ext)<10:
-            ext = "." + ext
-        else:
-            ext=''
-    return ext
-
-def remove_extension(str):
-    """
-    Removes the extension of a path string
-
-    Parameters
-    --------
-        str : str,
-            a path/filename string
-            
-            Prerequisites: extension is either '.nii.gz' or '.[extension]' with less than 10 characters
-
-    Returns
-    --------
-        new_str: str,
-            the new path without the extension
-    """
-    ext = extract_extension(str)
-    if len(ext)>0:
-        return str[:-len(ext)]
-    else:
-        return str
     
 def extract_id(str, debug=False):
     """
@@ -249,7 +197,7 @@ def get_category(input_path):
 
     category = get_path_info(
         path= input_path,
-        data_path='category.json'
+        data_path='utils/category.json'
     )
     return category
 
@@ -281,7 +229,7 @@ def get_seg_info(input_path):
     """
     seg_info = get_path_info(
         path= input_path,
-        data_path= 'seg_info.json'
+        data_path='utils/seg_info.json'
     )
     
     return seg_info
@@ -317,7 +265,7 @@ def get_func_task(input_path, debug=False):
     
     func_task = get_path_info(
         path= input_path,
-        data_path='func_task.json'
+        data_path='utils/func_task.json'
     )
     return func_task
 
@@ -359,7 +307,7 @@ def get_func_info(input_path):
 
     seg_info = get_path_info(
         path= input_path,
-        data_path='func_info.json'
+        data_path='utils/func_info.json'
     )
     return seg_info
 
@@ -397,7 +345,7 @@ def get_suffix(string, debug=False):
 
     type = extract_type(string)
 
-    with open('suffix.json', 'r') as f:
+    with open('utils/suffix.json', 'r') as f:
         data = json.load(f)
 
     # curate filename to avoid confusions
