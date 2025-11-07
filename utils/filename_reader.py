@@ -203,7 +203,7 @@ def get_category(input_path):
 
 
 
-def get_seg_info(input_path):
+def get_seg_info(input_path, debug=False):
     """
     Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
@@ -229,7 +229,8 @@ def get_seg_info(input_path):
     """
     seg_info = get_path_info(
         path= input_path,
-        data_path='utils/seg_info.json'
+        data_path='utils/seg_info.json',
+        debug=debug
     )
     
     return seg_info
@@ -407,6 +408,7 @@ def get_suffix(string, debug=False):
     ]
 
     extras += ['v0' + str(i) for i in range(10)]
+    extras += ['v' + str(i) for i in range(10)]
 
     for extra in extras:
         if extra in string.lower():
