@@ -565,14 +565,23 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
     if is_tmp_bool:
         new_path = 'tmp' + old_path
 
-    elif type in ['code','misc']:
-        new_path = type + old_path
-    
-    elif type == 'modelling':
-        if sub =='':
-            new_path = 'derivatives/modelling' + old_path
+    elif type =='code':
+        try:
+            simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]) + '/' + old_path.lower().split('/')[-1]
+        except:
+            simplified_old_path = old_path.lower()
+        if sub == '':
+            new_path = 'code' + simplified_old_path
         else:
-            new_path = 'derivatives/modelling/' + sub + old_path
+            new_path = sub + '/code' + simplified_old_path
+    
+    elif type in ['misc','modelling']:
+        new_path = 'derivatives/' + type
+        
+        if sub =='':
+            new_path += old_path.lower()
+        else:
+            new_path += sub + old_path.lower()
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
