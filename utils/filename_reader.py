@@ -136,8 +136,10 @@ def extract_type(input_path, debug=False):
     elif extension == '.smash':
         type = 'simulation'
 
-    elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename:
-        if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in str.lower():
+
+
+    elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
+        if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
             type = 'func_segmentation'
         else:
             type = 'func'
@@ -165,7 +167,10 @@ def extract_type(input_path, debug=False):
     
 
     elif extension=='.nii.gz':
-        type = 'anat'
+        if get_seg_info(input_path) != '':
+            type = 'anat_segmentation'
+        else:
+            type = 'anat'
     
     else:
         type = 'misc'
