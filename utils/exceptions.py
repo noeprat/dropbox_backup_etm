@@ -10,7 +10,7 @@ def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path, deb
     
     for except_string in exceptions.keys():
         for file in new_file_infos.keys():
-            if except_string in file:
+            if except_string.lower() in file.lower():
                 for key in exceptions[except_string].keys():
                     new_file_infos[file][key] = exceptions[except_string][key]
     
