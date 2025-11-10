@@ -66,7 +66,10 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             "roots_out",
             "physiolog",
             "blender",
-            "tmp"
+            "tmp",
+            "code",
+            "aspinalgen",
+            "roots_rootlets"
         ]
 
         exact_stop_flags = [
@@ -140,7 +143,6 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
         # Create an instance of a Dropbox class, which can make requests to the API.
     print("Creating a Dropbox object...")
     with dropbox.Dropbox(TOKEN) as dbx:
-
         # Check that the access token is valid
         try:
             dbx.users_get_current_account()
