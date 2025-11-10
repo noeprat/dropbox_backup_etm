@@ -459,7 +459,7 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
                 if type not in out_data[sub].keys():
                     out_data[sub][type] = []
                 out_data[sub][type].append(new_path)
-        json.dump(out_data, f, indent=4)
+        json.dump(out_data, f, indent=4, sort_keys=True)
         
 
 def merge_general_recaps(input_files, out_path):
@@ -500,4 +500,4 @@ def merge_general_recaps(input_files, out_path):
     out_dirs = '/'.join(out_path.split('/')[:-1])
     os.makedirs(out_dirs, exist_ok=True)
     with open(out_path, 'w') as f:
-        json.dump(out_data, f, indent=4)
+        json.dump(out_data, f, indent=4, sort_keys=True)
