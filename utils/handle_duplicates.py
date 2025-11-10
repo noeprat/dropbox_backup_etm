@@ -32,7 +32,7 @@ def flag_same_new_paths(file_infos_path, flagged_path):
     Saves
     --------
         flagged_path, json file
-            flagged files can be found as follows: flagged_dict[file1] = list(possible duplicate files, file1 included)
+            flagged files can be found as follows: flagged_dict[file1] = list(possible duplicate files, file1 included ; file1 appears only if possible duplicates were found)
 
     """
     with open(file_infos_path, 'r') as f:
@@ -66,7 +66,7 @@ def flag_same_new_paths(file_infos_path, flagged_path):
 
 def flag_potential_duplicates(file_infos_path, flagged_path):
     """
-    Saves a json in `flagged_path` flagging different files that may be duplicates
+    Saves a json in `flagged_path` flagging different files that may be duplicates (with broader criteria than having the same new path)
 
     **Overwrites any existing file in `flagged_path`**
 
@@ -81,7 +81,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
     Saves
     --------
         flagged_path, json file
-            flagged files can be found as follows: flagged_dict[file1] = list(possible duplicate files, file1 included)
+            flagged files can be found as follows: flagged_dict[file1] = list(possible duplicate files, file1 included, only if one or several potential duplicates for file1 were found)
 
     """
     with open(file_infos_path, 'r') as f:
@@ -190,6 +190,34 @@ def rename_duplicates(file_infos_path, flagged_path, new_file_infos_path):
         json.dump(file_infos, f, indent=4)
     
 def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downloaded_path, TOKEN, verbose=True, debug=False):
+    """
+    Compares potential duplicates in `flagged_path` and saves a json in `actual_duplicates_path` showing all the actual duplicates it has found, 
+    and one in `not_downloaded_path` for the files it couldn't download (and that were not compared consequentially)
+
+    **Requires a Dropbox access token**
+
+    Parameters
+    --------
+        flagged_path : str,
+            path to the flagged potential duplicates
+        actual_duplicates_path : str,
+            path to the actual duplicates found
+        not_downloaded_path : str,
+            path to the json containing the files that could not be downloaded (contains the maximal file size set in utils.handle_duplicates and the size of the files)
+        TOKEN : str,
+            access token for the Dropbox API
+        verbose : bool, default: True,
+            prints info on the dropbox authentication if set to True
+        debug : bool, default: False
+            set to True to print steps while debugging
+    
+    Saves
+    --------
+        actual_duplicates_path : str,
+            path to the actual duplicates found
+        not_downloaded_path : str,
+            path to the json containing the files that could not be downloaded (contains the maximal file size set in utils.handle_duplicates and the size of the files)
+    """
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token.")
         # Create an instance of a Dropbox class, which can make requests to the API.
@@ -302,7 +330,26 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
     with open(not_downloaded_path, 'w') as f:
         json.dump(not_downloaded, f, indent=4)
 
-def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new_file_infos_path):             
+def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new_file_infos_path):
+    """
+    Modifies the file infos after the actual duplicates have been flagged
+
+    **Overwrites file infos in `new_file_infos_path`**
+
+    Parameters
+    --------
+        actual_duplicates_path : str,
+            path to the actual duplicates found
+        file_infos_path : str,
+            path to fileinfos
+        new_file_infos_path : str,
+            path to updated fileinfos (can be the same as the original fileinfos, which will update it)
+    
+    Saves
+    --------
+        new_file_infos_path, json file
+            updated fileinfos
+    """           
     with open(file_infos_path, 'r') as f1:
         file_infos = json.load(f1)
     

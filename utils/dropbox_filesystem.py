@@ -13,18 +13,29 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
     """
     Returns all file paths within a specified directory
 
-    Inputs:
-     - TOKEN: str, access token for the DropBox API
-     - dir='/source: str, path to the specified directory (should start with '/source'), 
-     dir='/source/dir' and dir='/source/dir/' will return the same result
-     - recursive=True: bool, allows recursive calls to explore all the subdirectories, 
-     will only show subdirs otherwise
-     - remove_source=True: bool, 
-     will remove '/source' in the returned paths iff True,
-     must be set to True for the other functions to work
+    Parameters
+    --------
+        TOKEN : str, 
+            access token for the Dropbox API
+        dir='/source' : str, 
+            path to the specified directory (should start with '/source'), 
+            dir='/source/dir' and dir='/source/dir/' will return the same result
+        recursive=True : bool, 
+            allows recursive calls to explore all the subdirectories, 
+            will only show subdirs otherwise
+        remove_source=True: bool, 
+            will remove '/source' in the returned paths iff True,
+            must be set to True for the other functions to work
+        exceptions=True : bool,
+            does not explore directories containing stop flags if set to True
+        verbose=True : bool,
+            prints infos on Dropbox authentication if set to True
+        
     
-    Returns:
-     - all_paths: list(str), a list of all file paths
+    Returns
+    --------
+        all_paths : list(str),
+            a list of all file paths in the specified Dropbox directory
     """
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token.")
@@ -101,16 +112,27 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
     """
     Sorts the files from `source_dir` and copies them to `target_dir` in the DropBox, 
     following the instructions in `file_infos_path`
+
+    Prerequisites
+    ----
+     - source directory is consistent with used file infos
+     - target directory is empty
     
-    Inputs:
-     - file_infos_path: str, where to find the instructions (should lead to a .json file)
-     - TOKEN: str, access token for the DropBox API
-     - source_dir='/source': str, path to the specified source directory (should start with '/source'), 
-     source_dir='/source/dir' and source_dir='/source/dir/' will return the same result
-     - target_dir='/target/': str, path to the specified target directory (should start with '/target'), 
-     target_dir='/target/dir' and target_dir='/target/dir/' will return the same result
+    Parameters
+    ----
+        file_infos_path: str, 
+            where to find the instructions (should lead to a .json file)
+        TOKEN: str, 
+            access token for the DropBox API
+        source_dir='/source': str, 
+            path to the specified source directory (should start with '/source'), 
+            source_dir='/source/dir' and source_dir='/source/dir/' will return the same result
+        target_dir='/target/': str, 
+            path to the specified target directory (should start with '/target'), 
+            target_dir='/target/dir' and target_dir='/target/dir/' will return the same result
     
-    Returns nothing
+    Modifies the target directory in Dropbox
+    ----
     """
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token.")

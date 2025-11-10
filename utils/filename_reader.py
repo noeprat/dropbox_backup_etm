@@ -12,6 +12,8 @@ def extract_id(str, debug=False):
     --------
         str : str,
             a path/filename string
+        debug : bool, default = False
+            allows prints for debugging purposes
     
     Returns
     --------
@@ -76,32 +78,41 @@ def extract_sub(str, participants_dict):
     else:
         return participants_dict[old_name]
 
-def extract_type(str, debug=False):
+def extract_type(input_path, debug=False):
     """
     Possible types (so far):
      - anat
+     - anat_derivatives
      - anat_segmentation
      - ct
      - ct_segmentation
      - func
+     - func_derivatives
+     - func_segmentation
+     - misc
+     - code
      - simulation
+     - modelling
+     - dti
 
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
+        debug : bool, default = False
+            prints variables if set to True
     
     Returns
     --------
         type: str,
             the type of the specified file
     """
-    filename = remove_extension(str.split('/')[-1]).lower()
-    dirs = '/'.join(str.split('/')[:-1]).lower()
-    extension = extract_extension(str)
+    filename = remove_extension(input_path.split('/')[-1]).lower()
+    dirs = '/'.join(input_path.split('/')[:-1]).lower()
+    extension = extract_extension(input_path)
     keywords = [keyword.lower() for keyword in filename.split('_')]
     root_dirs_keywords = []
-    for dir in str.split('/')[:-1:]:
+    for dir in input_path.split('/')[:-1:]:
         root_dirs_keywords+= [keyword.lower() for keyword in dir.split('_')]
 
     if debug:
@@ -125,7 +136,7 @@ def extract_type(str, debug=False):
     elif extension == '.smash':
         type = 'simulation'
 
-    elif 'restingstate' in keywords or 'fmri' in str.lower() or 'functional' in str.lower() or 'physiolog' in filename:
+    elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename:
         if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in str.lower():
             type = 'func_segmentation'
         else:
@@ -165,29 +176,14 @@ def get_category(input_path):
     """
     Returns additional information on the data
 
-    Possible categories (so far):
-     - ssl_tissues_post_pro_step_02
-     - ssl_tissues_post_pro_step_01
-     - ssl_tissues
-     - axobl_sacrum_deepseg
-     - axobl_sacrum
-     - ax_lspine_deepseg
-     - ax_lspine
-     - deepseg
-     - for_making_levels
-     - lumbar
-     - ax_lspine
-     - ax_obl_sacrum
-     - bladder
-     - individual_spinal_levels
-     - resting_state
-     - total_spineseg
-     - lumbar
+    see `utils/category.json` for the searched expressions
     
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
+        debug : bool, default = False
+            prints variables if set to True
     
     Returns
     --------
@@ -207,25 +203,16 @@ def get_seg_info(input_path, debug=False):
     """
     Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
+    see `utils/seg_info.json` for the searched expressions
     
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
     
     Returns
     --------
         seg_info: str,
-    
-    Example seg_info (so far)
-    --------
-     - segmentator_tissues
-     - seg_model_9_roots_as_one_entity_small
-     - seg_model_9_roots_as_one_entity
-     - seg_model_9
-     - seg_Model_10_roots_by_spinal_levels_small
-     - seg_Model_10_roots_by_spinal_levels
-     - seg_Model_10
     """
     seg_info = get_path_info(
         path= input_path,
@@ -261,7 +248,6 @@ def get_func_task(input_path, debug=False):
     'left_hip'
     'right_grasp'
     'left_grasp'
-    
     """
     
     func_task = get_path_info(

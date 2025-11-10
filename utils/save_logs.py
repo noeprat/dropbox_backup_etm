@@ -58,6 +58,7 @@ def save_file_infos(input_files, participants_dict, file_infos_path, tmpfile_inf
             the path where the file infos will be saved (usually of the type `/file_infos/subdir/file_infos-[n].json`)
         tmpfile_infos_path : str,
             the path where the file infos (for temporary files) will be saved (usually of the type `/file_infos/subdir/tmp_file_infos-[n].json`)
+        **kwargs
     
     Saves
     --------
@@ -183,6 +184,7 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
             path to fileinfos
         jsons_to_data_path : str,
             the path where the matches will be saved (usually of the type `/file_infos/subdir/jsons_to_data-[n].json`)
+        debug : bool, default=False,
     
     Saves
     --------
@@ -278,6 +280,10 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
             path to metadata-data matching file
         corrected_file_infos_path : str,
             the path where the corrected file infos will be saved (usually of the type `/file_infos/subdir/file_infos-[n]_corrected.json`)
+        verbose : bool, default = False,
+            will print some steps if set to True
+        debug : bool, default = False,
+            will print some variables for debugging if set to True
     
     Saves
     --------

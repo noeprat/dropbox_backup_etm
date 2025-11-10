@@ -62,6 +62,21 @@ def pick_largest_str_in_list(str_list):
     return res
 
 def get_path_info(path, data_path, debug=False):
+    """
+    Returns the infos contained in `path` by searching matching expressions from `data_path`
+
+    Parameters
+    --------
+        path : str,
+            path to dropbox file
+        data_path : str,
+            path to a json containing the strings to search in `path`
+    
+    Returns
+    --------
+        path_info, str
+            path_info (e.g. func_info, seg_info, func_task, category)
+    """
     filename = remove_extension(path.split('/')[-1]).lower()
     dir_path = '/'.join(path.split('/')[:-1]).lower()
     if len(filename.split('_'))>6:
