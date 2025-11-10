@@ -27,6 +27,14 @@
         "left_hip",
         "right_grasp",
         "left_grasp",
+        "closed_right_ankle",
+        "closed_left_ankle",
+        "closed_right_knee",
+        "closed_left_knee",
+        "closed_right_hip",
+        "closed_left_hip",
+        "closed_right_grasp",
+        "closed_left_grasp",
         "restingstate"
     ],
     "to_search_at_end_of_filename": []

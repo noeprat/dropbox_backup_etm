@@ -4,7 +4,8 @@
         "segmentation_sct_poly_0"
     ],
     "to_search_in_dirs": [
-    
+        "mp2rage",
+        "mp2rage_for_3d"
     ],
     "to_search_in_filename": [
         "t2_space",
