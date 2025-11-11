@@ -137,6 +137,10 @@ def extract_type(input_path, debug=False):
         type = 'simulation'
 
 
+    #special to T2G, rules may not apply to later dirs
+    elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls', 'blender']:
+        type = 'modelling'
+    
 
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
         if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
@@ -158,9 +162,7 @@ def extract_type(input_path, debug=False):
         else:
             type = 'anat'
 
-    #special to T2G, rules may not apply to later dirs
-    elif extension in ['.stl', '.blend', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls', 'blender']:
-        type = 'modelling'
+    
     elif 'spinal_level' in dirs or sum([word in filename for word in ['roots_out','roots_rootlets', 'roots_seg_to_centerline']])>=1 or ('intersections' in filename) :
         type = 'anat_segmentation'
 
@@ -390,14 +392,7 @@ def get_suffix(string, debug=False):
             else:
                 suffix = suffix + '_' + filename_expression
 
-    extras = [
-        'corrected',
-        'preprocessed',
-        'version-2024',
-        'fixed',
-        'new_inference'
-    ]
-
+    extras = data['extra']
     extras += ['v0' + str(i) for i in range(10)]
     extras += ['v' + str(i) for i in range(10)]
 
@@ -572,7 +567,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
 
     elif type =='code':
         try:
-            simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]) + '/' + old_path.lower().split('/')[-1]
+            simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]).strip('_') + '/' + old_path.lower().split('/')[-1]
         except:
             simplified_old_path = old_path.lower()
         if sub == '':
@@ -586,7 +581,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub =='':
             new_path += old_path.lower()
         else:
-            new_path += sub + old_path.lower()
+            new_path += '/' + sub + old_path.lower()
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
@@ -625,6 +620,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             elements = [sub, category, id_element, seg_info, suffix]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
+        new_path = new_path.replace('//', '/')
     
     return new_path
 
