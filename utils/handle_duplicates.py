@@ -136,7 +136,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
 
                     if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']):
                         file1_duplicates_list.append(file2)
-                        visited.append(file2)
+                        #visited.append(file2)
             visited.append(file1)
         if len(file1_duplicates_list)>1:
             out_dict[file1] = file1_duplicates_list
