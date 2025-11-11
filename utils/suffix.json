@@ -1,11 +1,15 @@
 {
     "to_ignore": [
         "dlir",
-        "segmentation_sct_poly_0"
+        "segmentation_sct_poly_0",
+        "exact"
     ],
     "to_search_in_dirs": [
         "mp2rage",
-        "mp2rage_for_3d"
+        "mp2rage_for_3d",
+        "registered_2_mp2rage",
+        "registered_2_mp2rage_for_3d",
+        "registered_to_t1_mp2rage"
     ],
     "to_search_in_filename": [
         "t2_space",
@@ -54,13 +58,31 @@
         "t12template_affine",
         "affine_nonbetted_mp2rage2standard_transf",
         "affine_betted_mp2rage2standard_transf",
+        "pre_op_ct_301",
+        "pre_op_ct_302",
+        "pre_op_ct_303",
+        "pre_op_ct_2",
+        "pre_op_ct",
         "ct",
         "dl",
         "dr",
         "nonbetted",
-        "betted"
+        "betted",
+        
+        "t2_spc_zoomit_stardist",
+        "t2_spc_zoomit_rpi",
+        "t2_spc_zoomit"
         
     ],
-    "to_search_at_end_of_filename": [
+    "extra": [
+        "resampled",
+        "corrected",
+        "corrected_resampled",
+        "preprocessed",
+        "version-2024",
+        "fixed",
+        "new_inference",
+        "iteration_1",
+        "iteration_2"
     ]
 }
