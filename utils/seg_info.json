@@ -7,7 +7,6 @@
         "roots_rootlets"
     ],
     "to_search_in_dirs": [
-        "segmentator_tissues",
         "seg_model_9_roots_as_one_entity_small",
         "seg_model_9_roots_as_one_entity",
         "seg_model_9",
@@ -20,7 +19,10 @@
         "seg_model_3",
         "seg_model_1_roots_as_one_entity",
         "seg_model_1",
-        "dl_vertebrae_seg"
+        "dl_vertebrae_seg",
+        "mp2rage_total_segmentator",
+        "t1spc3d_total_segmentator"
+
     ],
     "to_search_in_filename": [
         "seg_model_9_roots_as_one_entity_small",
@@ -30,7 +32,11 @@
         "seg_model_10_roots_by_spinal_levels",
         "seg_model_10",
         "t8_l3",
-        "t12_s1"
+        "t12_s1",
+        "mp2rage_total_segmentator",
+        "t1spc3d_total_segmentator",
+        "brain_total_segmentator",
+        "total_segmentator"
     ],
     "to_search_at_end_of_filename": [
         "seg_masked_fat_candidate_1",
@@ -51,7 +57,9 @@
         "csf_s4l_mask",
         "csf_s4l",
         "roots_mask",
+        "roots_masked",
         "roots",
+        "root_centerlines",
         "wm_mask",
         "step1_canal",
         "step1_cord",
@@ -209,6 +217,35 @@
         "left_lateral_ventricle_csf",
         "right_inferior_lateral_ventricle_csf",
         "left_inferior_lateral_ventricle_csf",
-        "right_lateral_ventricle_csf"
+        "right_lateral_ventricle_csf",
+        
+        "femur_right",
+        "duodenum",
+        "iliac_artery_left",
+        "humerus_left",
+        "urinary_bladder",
+        "femur_left",
+        "gallbladder",
+        "gluteus_minimus_right",
+        "prostate",
+        "gluteus_minimus_left",
+        "iliac_artery_right",
+        "pancreas",
+        "heart",
+        "humerus_right",
+
+        "root_centerlines_with_wm",
+        "root_centerlines",
+        "roots_from_iteration_2_mae_eroded_1",
+        "roots_from_iteration_2_mae",
+        "separated_roots_with_eroded_1.nii",
+        "separated_roots",
+
+        "masked_csf_cropped",
+        "masked_csf",
+        "masked_roots_cropped",
+        "masked_roots_mae",
+        "wm_from_seg_models"
+        
     ]
 }

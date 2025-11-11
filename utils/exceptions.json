@@ -1,5 +1,26 @@
 {
     "aspinalgen":{
         "type": "code"
+    },
+    "/Models/Model_Spine/Simulation_Version/Roots_Rootlets.zip":{
+        "confirmed_duplicate": true
+    },
+    "/Models/Model_Brain/Post_Op/T2G003_Brain_Post_Op.smash":{
+        "confirmed_duplicate": true
+    },
+    "/T2G003_Imaging/T2G003_Spine_NIFTI/T2G003_Spine_MRI_t2_tse_tra_WARP_20250122160508_8001.nii.gz": {
+        "confirmed_duplicate": true
+    },
+    "/T2G003_Imaging/T2G003_Spine_NIFTI/_All_IMGs/":{
+        "confirmed_duplicate": true
+    },
+    "/Models/Model_Spine/Simulation_Version/T2G003_save_zip/T2G003.smash": {
+        "suffix": "old_save"
+    },
+    "Brain_Total_Segmentator_skin.nii.gz": {
+        "seg_info": "brain_total_segmentator_skin"
+    },
+    "Brain_Total_Segmentator_body.nii.gz": {
+        "seg_info": "brain_total_segmentator_body"
     }
 }
