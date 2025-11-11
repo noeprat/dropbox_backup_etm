@@ -104,15 +104,21 @@ def get_path_info(path, data_path, debug=False):
     dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
     if debug:
         print('dir expressions: ',dir_expressions)
-    path_infos.append(pick_largest_str_in_list(dir_expressions))
+    chosen_dir_expression = pick_largest_str_in_list(dir_expressions)
+    path_infos.append(chosen_dir_expression)
+    filename.replace(chosen_dir_expression, '')
+    end_of_filename.replace(chosen_dir_expression, '')
     
 
     filename_expressions = [filename_expression 
                             for filename_expression in expressions_to_search_in_filename 
                             if filename_expression in filename and (filename_expression not in path_infos)]
-    path_infos.append(pick_largest_str_in_list(filename_expressions))
+    chosen_filename_expression = pick_largest_str_in_list(filename_expressions)
     if debug:
         print('filename expressions: ',filename_expressions)
+    path_infos.append(chosen_filename_expression)
+    filename.replace(chosen_filename_expression, '')
+    end_of_filename.replace(chosen_filename_expression, '')
 
     end_of_filename_expressions = [filename_expression 
                             for filename_expression in expressions_to_search_at_end_of_filename 
@@ -122,4 +128,6 @@ def get_path_info(path, data_path, debug=False):
         print('end_of_filename expressions: ',end_of_filename_expressions)
 
     path_info = '_'.join(path_infos)
-    return path_info.strip('_')
+    path_info = path_info.replace('__','_')
+    path_info = path_info.strip('_')
+    return path_info
