@@ -237,8 +237,9 @@
         "root_centerlines_with_wm",
         "root_centerlines",
         "roots_from_iteration_2_mae_eroded_1",
+        "roots_from_iteration_2_mae_eroded_1",
         "roots_from_iteration_2_mae",
-        "separated_roots_with_eroded_1.nii",
+        "separated_roots_with_eroded_1",
         "separated_roots",
 
         "masked_csf_cropped",

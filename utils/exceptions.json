@@ -3,16 +3,20 @@
         "type": "code"
     },
     "/Models/Model_Spine/Simulation_Version/Roots_Rootlets.zip":{
-        "confirmed_duplicate": true
+        "confirmed_duplicate": true,
+        "new_path": "confirmed_duplicates/Models/Model_Spine/Simulation_Version/Roots_Rootlets.zip"
     },
     "/Models/Model_Brain/Post_Op/T2G003_Brain_Post_Op.smash":{
-        "confirmed_duplicate": true
+        "confirmed_duplicate": true,
+        "new_path": "confirmed_duplicates/Models/Model_Brain/Post_Op/T2G003_Brain_Post_Op.smash"
     },
     "/T2G003_Imaging/T2G003_Spine_NIFTI/T2G003_Spine_MRI_t2_tse_tra_WARP_20250122160508_8001.nii.gz": {
-        "confirmed_duplicate": true
+        "confirmed_duplicate": true,
+        "new_path": "confirmed_duplicates/T2G003_Imaging/T2G003_Spine_NIFTI/T2G003_Spine_MRI_t2_tse_tra_WARP_20250122160508_8001.nii.gz"
     },
     "/T2G003_Imaging/T2G003_Spine_NIFTI/_All_IMGs/":{
-        "confirmed_duplicate": true
+        "confirmed_duplicate": true,
+        "new_path": "confirmed_duplicates"
     },
     "/Models/Model_Spine/Simulation_Version/T2G003_save_zip/T2G003.smash": {
         "suffix": "old_save"
@@ -22,5 +26,31 @@
     },
     "Brain_Total_Segmentator_body.nii.gz": {
         "seg_info": "brain_total_segmentator_body"
+    },
+    "Registered_2_MP2RAGE":{
+        "type": "func_segmentation",
+        "category": "registered_2_mp2rage"
+    },
+    "Registered_2_MP2RAGE_for_3D":{
+        "type": "func_segmentation",
+        "category": "registered_2_mp2rage_for_3d"
+    },
+    "Registered_2_MP2RAGE/nii_to_surface.py": {
+        "type" : "code"
+    },
+    "emconfig_T2G003PostOp727Exact.json": {
+        "type": "simulation"
+    },
+    "/Models/Model_Spine/Post_Op/T2G003_Post_Op_727_Exact_zip/T2G003PostOp727Exact.smash": {
+        "suffix": "small"
+    },
+    "/T2G003_Imaging/T2G003_Spine_TISSUES/T2G003_Spine_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_T11_L2_20250122160508_6001_seg_Models_WM.nii.gz": {
+        "seg_info": "seg_models_wm"
+    },
+    "/T2G003_Imaging/T2G003_Spine_TISSUES/T2G003_Spine_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_T11_L2_20250122160508_6001_seg_Models_CSF.nii.gz": {
+        "seg_info": "seg_models_csf"
+    },
+    "/T2G003_Imaging/T2G003_Spine_TISSUES/T2G003_Spine_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_T11_L2_20250122160508_6001_seg_Models_WM_corrected.nii.gz": {
+        "seg_info": "seg_models_wm"
     }
 }

@@ -71,7 +71,8 @@
         
         "t2_spc_zoomit_stardist",
         "t2_spc_zoomit_rpi",
-        "t2_spc_zoomit"
+        "t2_spc_zoomit",
+        "all_leads"
         
     ],
     "extra": [
@@ -83,6 +84,11 @@
         "fixed",
         "new_inference",
         "iteration_1",
-        "iteration_2"
+        "iteration_2",
+        "binary_volume",
+        "dilated_volume",
+        "merged_volume",
+        "testing_separation",
+        "testing_separation_geom_img"
     ]
 }
