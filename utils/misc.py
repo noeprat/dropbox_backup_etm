@@ -79,8 +79,9 @@ def get_path_info(path, data_path, debug=False):
     """
     filename = remove_extension(path.split('/')[-1]).lower()
     dir_path = '/'.join(path.split('/')[:-1]).lower()
-    if len(filename.split('_'))>6:
-        end_of_filename = '_'.join(filename.split('_')[-6:])
+    END_OF_FILENAME_LENGTH = 8
+    if len(filename.split('_'))>END_OF_FILENAME_LENGTH:
+        end_of_filename = '_'.join(filename.split('_')[-END_OF_FILENAME_LENGTH:])
     else:
         end_of_filename= filename
 
