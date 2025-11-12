@@ -138,7 +138,7 @@ def extract_type(input_path, debug=False):
 
 
     #special to T2G, rules may not apply to later dirs
-    elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb'] or filename in ['3d_generation', '_all_stls', 'blender']:
+    elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb'] or filename in ['3d_generation', '_all_stls', 'blender']:
         type = 'modelling'
     
 
