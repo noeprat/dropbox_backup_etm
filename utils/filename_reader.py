@@ -121,7 +121,7 @@ def extract_type(input_path, debug=False):
     
     if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
         type = 'code'
-    elif extension in ['.avi', '.png', '.pdf']:
+    elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx']:
         type = 'misc'
     elif 'dti' in keywords or extension in ['.bval', '.bvec']:
         type = 'dti'
@@ -133,7 +133,7 @@ def extract_type(input_path, debug=False):
             type= 'ct_segmentation' 
         else:
             type = 'ct'
-    elif extension == '.smash':
+    elif extension == '.smash' or 'selectivity' in filename:
         type = 'simulation'
 
 
@@ -155,7 +155,7 @@ def extract_type(input_path, debug=False):
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords:
             type = 'anat_segmentation'
-        elif 'betted' in filename or 'transf' in filename or 'template' in filename:
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower():
             if debug:
                 print(filename)
             type = 'anat_derivatives'
@@ -593,6 +593,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 new_path += type +'/' + sub + '/'
         else:
             new_path += sub + '/' + type + '/'
+            if 'dicom' in old_path.lower() and extension==".zip":
+                new_path += 'dicom/'
 
         if is_localizer_bool:
             new_path+= '_localizer/'
@@ -616,6 +618,9 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             elif func_info in seg_info:
                 func_info= ''
             elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix]  
+        elif type == 'simulation' and 'selectivity' in old_path.split('/')[-1].lower():
+            end = old_path.split('/')[-1].lower().strip('_')
+            elements = [sub, category, end]
         else:
             elements = [sub, category, id_element, seg_info, suffix]
 
