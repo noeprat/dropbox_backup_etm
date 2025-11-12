@@ -573,7 +573,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
-            new_path = sub + '/code' + simplified_old_path
+            new_path = 'code/' + sub + simplified_old_path
     
     elif type in ['misc','modelling']:
         new_path = 'derivatives/' + type
