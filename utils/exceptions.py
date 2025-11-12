@@ -1,4 +1,5 @@
 import json
+from utils.filename_reader import is_derivative, generate_new_path
 
 def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path, debug=False):
     with open(exceptions_path, 'r') as f1:
@@ -13,6 +14,9 @@ def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path, deb
             if except_string.lower() in file.lower():
                 for key in exceptions[except_string].keys():
                     new_file_infos[file][key] = exceptions[except_string][key]
+            if "type" in exceptions[except_string].keys():
+                new_type = exceptions[except_string]["type"]
+                new_file_infos[file]["is_derivative"] = is_derivative(new_type)
     
     with open(new_file_infos_path, "w") as f3:
         json.dump(new_file_infos, f3,  indent=4)
