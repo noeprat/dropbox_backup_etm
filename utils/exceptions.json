@@ -55,5 +55,9 @@
     },
     "/T2G003_Imaging/T2G003_Spine_TISSUES/T2G003_Spine_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_T11_L2_20250122160508_6001_seg_Models_WM_corrected.nii.gz": {
         "seg_info": "seg_models_wm"
+    },
+    "/T2G003_Imaging/T2G003_Spine_TISSUES_from_MAE/Output_Stardist/T2G003_t2_spc_ZOOMit_Stardist.nii.gz": {
+        "type": "anat_derivatives",
+        "is_derivative": true
     }
 }
