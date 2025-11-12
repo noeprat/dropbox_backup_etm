@@ -178,12 +178,17 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
         #print('Copying from: \n', from_path)
         #print('to: \n', to_path)
         try:
-            dbx.files_copy(
-                from_path= from_path,
-                to_path= to_path
-            )
+            confirmed_duplicate = file_infos[file]["confirmed_duplicate"]
         except:
-            print('Failed to copy')
-            print('from: \n', from_path)
-            print('to: \n', to_path)
+            confirmed_duplicate = False
+        if not confirmed_duplicate:
+            try:
+                dbx.files_copy(
+                    from_path= from_path,
+                    to_path= to_path
+                )
+            except:
+                print("Failed to copy")
+                print('from: \n', from_path)
+                print('to: \n', to_path)
         #print('\n')
