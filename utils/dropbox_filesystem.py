@@ -62,7 +62,8 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             ".feat",
             "scripts",
             "_all_stls",
-            "3d_generation",
+            "_from_stls",
+#            "3d_generation",
             "roots_out",
             "physiolog",
             "blender",
@@ -73,8 +74,10 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
         ]
 
         exact_stop_flags = [
-            '3d_generation',
+            #'3d_generation',
             '_all_stls',
+            'stls',
+            'objs',
             'roots_out',
             'screenshots'
         ]
