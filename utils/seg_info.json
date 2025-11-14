@@ -4,7 +4,8 @@
         "seg_post_pro",
         "synthseg",
         "cs4p6",
-        "roots_rootlets"
+        "roots_rootlets",
+        "mri_brain"
     ],
     "to_search_in_dirs": [
         "seg_model_9_roots_as_one_entity_small",
@@ -194,6 +195,7 @@
         "wm_padded",
         "wm",
         "gm",
+        "wm_gm_brainstem",
 
         "third_ventricle_csf",
         "fourth_ventricle_csf",
@@ -202,12 +204,22 @@
         "ctd",
         "canal",
         "skull",
+        "skull_smooth",
+        "skin_smooth",
         "skin",
         "brain",
+        "brainstem",
 
         "bin_1500",
         "bin_2000",
         "bin_2800",
+        "bin_2800_wimagine",
+        "bin_2800_metal",
+
+        "pre_op_304_metal",
+        "metal",
+        "302_face",
+        "face",
 
         "mask_sc",
         "mask_full",
@@ -246,7 +258,58 @@
         "masked_csf",
         "masked_roots_cropped",
         "masked_roots_mae",
-        "wm_from_seg_models"
+        "wm_from_seg_models",
+
+        "val_200_wall",
+        "val_200",
+        "val_200_erode_3",
+        "val_200_erode_4",
+        "val_200_erode_3_dim_0",
+        "val_200_erode_3_dim_1",
+        "val_200_erode_3_dim_2",
+
+        "temporalis_left",
+        "septum_pellucidum",
+        "thalamus",
+        "medial_pterygoid_right",
+        "temporal_lobe",
+        "insular_cortex",
+        "subarachnoid_space",
+        "lateral_pterygoid_left",
+        "ventricle",
+        "occipital_lobe",
+        "cerebellum",
+        "central_sulcus",
+        "lentiform_nucleus",
+        "medial_pterygoid_left",
+        "caudate_nucleus",
+        "frontal_lobe",
+        "venous_sinuses",
+        "masseter_left",
+        "temporalis_right",
+        "lateral_pterygoid_right",
+        "parietal_lobe",
+        "masseter_right",
+        "internal_capsule",
+
+
+        "lung_lower_lobe_left",
+        "lung_upper_lobe_right",
+        "thyrohyoid_left",
+        "pulmonary_vein",
+        "sternum",
+        "platysma_left",
+        "digastric_left",
+        "lung_lower_lobe_right",
+        "costal_cartilages",
+        "lung_middle_lobe_right",
+        "lung_upper_lobe_left",
+        "digastric_right",
+
+        "subcutaneous_fat",
+        "skeletal_muscle"
+
+
         
     ]
 }

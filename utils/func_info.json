@@ -30,6 +30,7 @@
         "thresh_zstat1_reg_t1_mp2rage_11",
         "thresh_zstat1_reg_t1_mp2rage_12",
         "thresh_zstat1_reg",
+        "threshzstat1",
         "func_mean_seg",
         "func_mean_reg",
         "func_mean",
@@ -57,12 +58,36 @@
         "full_gm",
         "full_wm",
 
+        
+
         "left_gm",
         "left_wm",
         "right_gm",
         "right_wm",
 
         "gm",
-        "wm"
+        "wm",
+        "clust_01",
+        "clust_02",
+        "clust_03",
+        "clust_04",
+        "clust_05",
+        "clust_06",
+        "clust_07",
+        "clust_08",
+        "clust_09",
+        "clust_10",
+        "clust_11",
+        "clust_12",
+        "clust_13",
+        "clust_14",
+        "clust_15",
+        "clust_16",
+        "clust_17",
+        "clust_18",
+        "clust_19",
+
+        "bin",
+        "nobin"
     ]
 }

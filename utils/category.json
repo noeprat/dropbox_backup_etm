@@ -1,6 +1,6 @@
 {
     "to_ignore":[
-
+        "bin_2800_wimagine"
     ],
     "to_search_in_dirs": [
         "for_3d_import",
@@ -11,11 +11,13 @@
         "ssl_tissues_post_pro_02",
         "ssl_tissues_post_pro_01",
         "ssl_tissues",
+        "ssl",
+        "ssl_post_pro_01",
+        "ssl_post_pro_02",
         "tissues_sct",
         "brain_tissues",
         "spine_tissues_from_mae",
         "spine_tissues",
-        "tissues",
         "axobl_sacrum_deepseg",
         "axobl_sacrum",
         "ax_lspine_deepseg",
@@ -32,11 +34,14 @@
         "registered_2_mp2rage",
         "mp2rage",
         "model_spine",
+        "model_brain",
         "segmentation_sct_poly_0",
         "spine_post_op",
         "brain_post_op_ct_304",
         "brain_post_op_ct_302",
         "brain_post_op",
+        "ct_post_op_brain",
+        "ct_intra_op",
         "pre_op",
         "post_op",
         "normalization_experiments",
@@ -80,7 +85,10 @@
         "postop727exact",
         "mdt565",
         "88thoracic_for_viz",
-        "727_for_viz"
+        "727_for_viz",
+        "wimagine",
+        "wimagine_voxelized",
+        "ct_intra_op_fluoroscopy"
     ],
     "to_search_at_end_of_filename": [
         

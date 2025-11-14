@@ -2,7 +2,8 @@
     "to_ignore": [
         "dlir",
         "segmentation_sct_poly_0",
-        "exact"
+        "exact",
+        "tr2_pat2_physiolog"
     ],
     "to_search_in_dirs": [
         "mp2rage",
@@ -12,8 +13,13 @@
         "registered_to_t1_mp2rage"
     ],
     "to_search_in_filename": [
+        "physiological",
+        "physiolog",
         "t2_space",
         "t2_tse",
+        "t2_trufi3d",
+        "t2space",
+        "t2spczoomit",
         "t2_trufi3d_comp",
         "t2_trufi3d_t8",
         "t2_trufi3d_t12",
@@ -21,6 +27,7 @@
         "t2_gre",
         "t1_tfe",
         "t1_spc3d",
+        "t1sp3d",
         "b_ffe",
         "t2_3d_tra_vista",
         "t2w_ffe",
@@ -28,6 +35,7 @@
         "t1_ts_exp_1",
         "mp2rage_ts_exp_1",
         "mp2rage_ts_exp_1",
+        "mp2rage",
         "t1_ts_exp_2",
         "t1_ts",
         "ffe",
@@ -63,7 +71,6 @@
         "pre_op_ct_303",
         "pre_op_ct_2",
         "pre_op_ct",
-        "ct",
         "dl",
         "dr",
         "nonbetted",
@@ -72,7 +79,8 @@
         "t2_spc_zoomit_stardist",
         "t2_spc_zoomit_rpi",
         "t2_spc_zoomit",
-        "all_leads"
+        "all_leads",
+        "stl_export"
         
     ],
     "extra": [
@@ -89,6 +97,7 @@
         "dilated_volume",
         "merged_volume",
         "testing_separation",
-        "testing_separation_geom_img"
+        "testing_separation_geom_img",
+        "minimal"
     ]
 }
