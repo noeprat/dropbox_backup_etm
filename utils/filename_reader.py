@@ -45,7 +45,7 @@ def extract_id(str, debug=False):
 
     if id_index is not None:
         for split_elt in split[id_index:]:
-            if (not split_elt.isalpha()) and (not split_elt in ['s4l', ]):
+            if (not split_elt.isalpha()) and (not split_elt in ['s4l']):
                 id_elt = id_elt + split_elt.lower()
     return id_elt
 
@@ -125,14 +125,7 @@ def extract_type(input_path, debug=False):
         type = 'misc'
     elif 'dti' in keywords or extension in ['.bval', '.bvec']:
         type = 'dti'
-    elif 'ct' in keywords or 'ct' in root_dirs_keywords:
-        if 'seg' in keywords or 'seg' in root_dirs_keywords or 'tissues' in root_dirs_keywords:
-            type = 'ct_segmentation'
-        elif 'bin' in keywords or 'metal' in keywords: 
-            ### this case might be specific to t2g_sub02 !!
-            type= 'ct_segmentation' 
-        else:
-            type = 'ct'
+    
     elif extension == '.smash' or 'selectivity' in filename:
         type = 'simulation'
 
@@ -140,11 +133,22 @@ def extract_type(input_path, debug=False):
     #special to T2G, rules may not apply to later dirs
     elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb'] or filename in ['3d_generation', '_all_stls', 'blender'] or '3d_generation' in input_path.lower():
         type = 'modelling'
+
+    elif ('ct' in keywords or 'ct' in root_dirs_keywords) and extension in ['.nii.gz', '.zip', '.json']:
+        if 'seg' in keywords or 'seg' in root_dirs_keywords or 'tissues' in root_dirs_keywords or 'voxelized' in filename:
+            type = 'ct_segmentation'
+        elif 'bin' in keywords or 'metal' in keywords: 
+            ### this case might be specific to t2g_sub02 !!
+            type= 'ct_segmentation' 
+        else:
+            type = 'ct'
     
 
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
         if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
             type = 'func_segmentation'
+        elif 'thresh_zscores' in input_path.lower():
+            type = 'func_derivatives'
         else:
             type = 'func'
     
@@ -153,7 +157,7 @@ def extract_type(input_path, debug=False):
     
     
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
-        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords:
+        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or 'voxelized' in filename:
             type = 'anat_segmentation'
         elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower():
             if debug:
@@ -357,9 +361,7 @@ def get_suffix(string, debug=False):
     extension = extract_extension(string)
 
     if 'func' in type and type != 'func_derivatives':
-        if 'physiolog' in filename:
-            suffix = 'physiolog'
-        elif 'interoperability' in filename:
+        if 'interoperability' in filename:
             suffix = 'interoperability'
         elif 'timings' in filename:
             suffix = 'timings'
@@ -370,6 +372,9 @@ def get_suffix(string, debug=False):
     
     elif type == 'dti':
         suffix = 'dti'
+    
+    elif 'ct' in type and 'pre_op_ct' not in filename:
+        suffix = 'ct'
 
 
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
@@ -567,7 +572,10 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
 
     elif type =='code':
         try:
-            simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]).strip('_') + '/' + old_path.lower().split('/')[-1]
+            if old_path.lower().split('/')[-1] != 'scripts':
+                simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]).strip('_') + '/' + old_path.lower().split('/')[-1]
+            else:
+                simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]).strip('_')
         except:
             simplified_old_path = old_path.lower()
         if sub == '':
