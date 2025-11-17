@@ -41,9 +41,10 @@
         "brain_post_op_ct_302",
         "brain_post_op",
         "ct_post_op_brain",
-        "ct_intra_op",
         "pre_op",
         "post_op",
+        "post_op_imaging",
+        "post_surgery_imaging",
         "normalization_experiments",
         "simulation_version",
         "mri_bones"
@@ -88,7 +89,13 @@
         "727_for_viz",
         "wimagine",
         "wimagine_voxelized",
-        "ct_intra_op_fluoroscopy"
+        "ct_intra_op",
+        "ct_intra_op_fluoroscopy",
+        "ct_intra_op_o_arm_fluoroscopy",
+        "ct_intra_op_o_arm_high_def",
+        "ct_intra_op_o_arm",
+        "ct_end_rehab"
+
     ],
     "to_search_at_end_of_filename": [
         

@@ -86,7 +86,10 @@
     "extra": [
         "resampled",
         "corrected",
+        "smooth",
+        "corrected_smooth",
         "corrected_resampled",
+        "correction",
         "preprocessed",
         "version-2024",
         "fixed",

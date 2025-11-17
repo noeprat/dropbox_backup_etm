@@ -35,7 +35,11 @@
         "closed_left_hip",
         "closed_right_grasp",
         "closed_left_grasp",
-        "restingstate"
+        "restingstate",
+        "grasp",
+        "shoulder",
+        "elbow"
+
     ],
     "to_search_at_end_of_filename": []
 }

@@ -5,43 +5,49 @@
     "oiginal_rder_runs.txt": {
         "func_info": "original_order_runs"
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_localizers_others/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_999.nii.gz": {
-        "id": "999"
+    "/_masked_not_modified":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_999.json": {
-        "id": "999"
+    "/08_Masked_Pre_Processed_Images_Done":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_995.json": {
-        "id": "995"
+    "/04_Segmentation_from_02":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_305.json": {
-        "id": "305"
+    "/06_Fine_mask":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_304.json": {
-        "id": "304"
+    "/07_Fine_Masked_Images":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_4.json": {
-        "id": "4"
+    "/03_Masks":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_306.json": {
-        "id": "306"
+    "/05_Choosing_Labels_from_04":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/_jsons/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_3.json": {
-        "id": "3"
+    "/03_Masked_Images":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/T2G004_CT_Post_Op_Spine_NIFTI/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_306.nii.gz": {
-        "id": "306"
+    "/02_Preprocessed_Image":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/T2G004_CT_Post_Op_Spine_NIFTI/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_304.nii.gz": {
-        "id": "304"
+    "/08_Masked_Pre_Processed_Images":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/T2G004_CT_Post_Op_Spine_NIFTI/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_3.nii.gz": {
-        "id": "3"
+    "/08_Masked_Pre_Processed_Images_In_Parallel":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/T2G004_CT_Post_Op_Spine_NIFTI/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_4.nii.gz": {
-        "id": "4"
+    "/09_Segmentation_From_08_In_Parallel":{
+        "is_tmp": true
     },
-    "/T2G004_Imaging/T2G004_CT_Post_Op_NIFTI/T2G004_CT_Post_Op_Spine_NIFTI/T2G004_CT_Post_Op_55_THORAX_ABDOMEN_NATIF_-_DLIR_2025117093057_305.nii.gz": {
-        "id": "305"
+    "/03_Segmentation_from_01":{
+        "is_tmp": true
+    },
+    "/09_Segmentation_From_08":{
+        "is_tmp": true
+    },
+    "/01_Preprocessed_Image":{
+        "is_tmp": true
     }
 }
