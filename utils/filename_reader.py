@@ -37,8 +37,8 @@ def extract_id(str, debug=False):
     
 
     split = filename.split("_")
-    for i,elt in enumerate(split):
-        if is_date(elt):
+    for i,elt in enumerate(split[:-1]):
+        if is_date(elt) or (elt=='ct' and split[i+1].isnumeric()):
             id_index = i+1
             break
     id_elt = ''
@@ -135,7 +135,7 @@ def extract_type(input_path, debug=False):
         type = 'modelling'
 
     elif ('ct' in keywords or 'ct' in root_dirs_keywords) and extension in ['.nii.gz', '.zip', '.json']:
-        if 'seg' in keywords or 'seg' in root_dirs_keywords or 'tissues' in root_dirs_keywords or 'voxelized' in filename:
+        if 'seg' in keywords or 'seg' in root_dirs_keywords or 'tissues' in root_dirs_keywords or 'voxelized' in filename or 'segmentation' in input_path.lower() or get_seg_info(input_path) != "":
             type = 'ct_segmentation'
         elif 'bin' in keywords or 'metal' in keywords: 
             ### this case might be specific to t2g_sub02 !!
