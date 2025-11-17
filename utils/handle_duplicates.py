@@ -96,7 +96,12 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
         filename1 = file_infos[file1]['old_path'].split('/')[-1]
         type1 = file_infos[file1]['type']
         id1 = file_infos[file1]['id']
+
         extension1 = extract_extension(filename1)
+        try:
+            is_tmp1 = file_infos[file1]['is_tmp']
+        except:
+            is_tmp1 = False
         try:
             seg_info1 = file_infos[file1]['seg_info']
         except:
@@ -110,12 +115,16 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
         except:
             func_info1 = ''
 
-        if file1 not in visited:            
+        if file1 not in visited and (not is_tmp1):
             for file2 in file_infos.keys():
                 filename2 = file_infos[file2]['old_path'].split('/')[-1]
                 type2 = file_infos[file2]['type']
                 id2 = file_infos[file2]['id']
                 extension2 = extract_extension(filename2)
+                try:
+                    is_tmp2 = file_infos[file2]['is_tmp']
+                except:
+                    is_tmp2 = False
                 try:
                     seg_info2 = file_infos[file2]['seg_info']
                 except:
@@ -129,7 +138,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
                 except:
                     func_info2 = ''
 
-                if file2 not in visited:
+                if file2 not in visited and (not is_tmp2):
                     condition1 = file_infos[file1]['new_path']==file_infos[file2]['new_path']
                     condition2 = filename1 == filename2 and func_task1 == func_task2
                     condition3 = (type1==type2) and (id1==id2) and (seg_info1==seg_info2) and (func_task1==func_task2) and (func_info1==func_info2)
