@@ -261,82 +261,75 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
         n = len(flagged_duplicates[key])
         if debug:
             print('comparing potential duplicates for ' + key)
-        for file1_idx in range(n-1):
-            from_path1 = '/source' + flagged_duplicates[key][file1_idx]
-            from_path1_without_source = flagged_duplicates[key][file1_idx]
-            to_path1 = 'tmp_dir/file1' + extract_extension(from_path1)
 
-            try:
-                file1_size = dbx.files_get_metadata(from_path1).size
-                assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
-                dbx.files_download_to_file(to_path1, from_path1)
-                downloaded1 = True
-            except:
-                downloaded1 = False
-                not_downloaded[from_path1_without_source] = {
-                    'old_path': from_path1_without_source,
-                    'size': file1_size
-                }
+        from_path1 = '/source' + flagged_duplicates[key][0]
+        from_path1_without_source = flagged_duplicates[key][0]
+        to_path1 = 'tmp_dir/file1' + extract_extension(from_path1)
+
+        try:
+            file1_size = dbx.files_get_metadata(from_path1).size
+            assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
+            dbx.files_download_to_file(to_path1, from_path1)
+            downloaded1 = True
+        except:
+            downloaded1 = False
+            not_downloaded[from_path1_without_source] = {
+                'old_path': from_path1_without_source,
+                'size': file1_size
+            }
 
 
-            if downloaded1:
-                actual_duplicates[from_path1_without_source] = [from_path1_without_source]
-
-                for file2_idx in range(file1_idx+1, n):
-                    from_path2 = '/source' + flagged_duplicates[key][file2_idx]
-                    from_path2_without_source = flagged_duplicates[key][file2_idx]
-                    to_path2 = 'tmp_dir/file2' + extract_extension(from_path2)
-
-                    if debug:    
-                        print(from_path1)
-                        print(from_path2)
-                    
-                    try:
-                        file2_size = dbx.files_get_metadata(from_path2).size
-                        assert file2_size <= MAX_FILE_SIZE_FOR_COMPARISON
-                        dbx.files_download_to_file(to_path2, from_path2)
-                        downloaded2 = True
-                    except:
-                        downloaded2 = False
-                        not_downloaded[from_path2_without_source] = {
-                                'old_path': from_path2_without_source,
-                                'size': file2_size
-                            }
-                    
-                    if downloaded2 and file1_size == file2_size:
-
-                        if extract_extension(from_path1) == '.nii.gz' and extract_extension(from_path2) == '.nii.gz':
-
-                            img1 = nib.load(to_path1)
-                            img2 = nib.load(to_path2)
-
-                            data1 = img1.get_fdata()
-                            data2 = img2.get_fdata()
-
-                            if data1.shape == data2.shape:
-                                if (data1==data2).all():
-                                    if debug:
-                                        print(from_path1 + '\n    is the same as: \n' + from_path2)
-                                    actual_duplicates[from_path1_without_source].append(from_path2_without_source)
-                        else:
-                            try:
-                                comp = filecmp.cmp(to_path1, to_path2, shallow=False)
-                            except:
-                                comp=False
-                                print(from_path1 + ' not compared')
-
-                            if comp:
+        if downloaded1:
+            actual_duplicates[from_path1_without_source] = [from_path1_without_source]
+            for file2_idx in range(1, n):
+                from_path2 = '/source' + flagged_duplicates[key][file2_idx]
+                from_path2_without_source = flagged_duplicates[key][file2_idx]
+                to_path2 = 'tmp_dir/file2' + extract_extension(from_path2)
+                if debug:    
+                    print(from_path1)
+                    print(from_path2)
+                
+                try:
+                    file2_size = dbx.files_get_metadata(from_path2).size
+                    assert file2_size <= MAX_FILE_SIZE_FOR_COMPARISON
+                    dbx.files_download_to_file(to_path2, from_path2)
+                    downloaded2 = True
+                except:
+                    downloaded2 = False
+                    not_downloaded[from_path2_without_source] = {
+                            'old_path': from_path2_without_source,
+                            'size': file2_size
+                        }
+                
+                if downloaded2 and file1_size == file2_size:
+                    if extract_extension(from_path1) == '.nii.gz' and extract_extension(from_path2) == '.nii.gz':
+                        img1 = nib.load(to_path1)
+                        img2 = nib.load(to_path2)
+                        data1 = img1.get_fdata()
+                        data2 = img2.get_fdata()
+                        if data1.shape == data2.shape:
+                            if (data1==data2).all():
                                 if debug:
                                     print(from_path1 + '\n    is the same as: \n' + from_path2)
-                                actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
+                                actual_duplicates[from_path1_without_source].append(from_path2_without_source)
+                    else:
+                        try:
+                            comp = filecmp.cmp(to_path1, to_path2, shallow=False)
+                        except:
+                            comp=False
+                            print(from_path1 + ' not compared')
+                        if comp:
+                            if debug:
+                                print(from_path1 + '\n    is the same as: \n' + from_path2)
+                            actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
 
-                        os.remove(to_path2)
-                with open(actual_duplicates_path, 'w') as f:
-                    json.dump(actual_duplicates, f, indent=4)
-                
-                with open(not_downloaded_path, 'w') as f:
-                    json.dump(not_downloaded, f, indent=4)
-                os.remove(to_path1)
+                    os.remove(to_path2)
+            with open(actual_duplicates_path, 'w') as f:
+                json.dump(actual_duplicates, f, indent=4)
+            
+            with open(not_downloaded_path, 'w') as f:
+                json.dump(not_downloaded, f, indent=4)
+            os.remove(to_path1)
 
     with open(actual_duplicates_path, 'w') as f:
         json.dump(actual_duplicates, f, indent=4)
