@@ -303,7 +303,7 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                                 'size': file2_size
                             }
                     
-                    if downloaded2:
+                    if downloaded2 and file1_size == file2_size:
 
                         if extract_extension(from_path1) == '.nii.gz' and extract_extension(from_path2) == '.nii.gz':
 
@@ -319,19 +319,23 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                                         print(from_path1 + '\n    is the same as: \n' + from_path2)
                                     actual_duplicates[from_path1_without_source].append(from_path2_without_source)
                         else:
-                            if file1_size == file2_size:
-                                try:
-                                    comp = filecmp.cmp(to_path1, to_path2, shallow=False)
-                                except:
-                                    comp=False
-                                    print(from_path1 + ' not compared')
+                            try:
+                                comp = filecmp.cmp(to_path1, to_path2, shallow=False)
+                            except:
+                                comp=False
+                                print(from_path1 + ' not compared')
 
-                                if comp:
-                                    if debug:
-                                        print(from_path1 + '\n    is the same as: \n' + from_path2)
-                                    actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
+                            if comp:
+                                if debug:
+                                    print(from_path1 + '\n    is the same as: \n' + from_path2)
+                                actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
 
                         os.remove(to_path2)
+                with open(actual_duplicates_path, 'w') as f:
+                    json.dump(actual_duplicates, f, indent=4)
+                
+                with open(not_downloaded_path, 'w') as f:
+                    json.dump(not_downloaded, f, indent=4)
                 os.remove(to_path1)
 
     with open(actual_duplicates_path, 'w') as f:
