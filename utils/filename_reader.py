@@ -142,7 +142,17 @@ def extract_type(input_path, debug=False):
             type= 'ct_segmentation' 
         else:
             type = 'ct'
-    
+
+    elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
+        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or 'voxelized' in filename:
+            type = 'anat_segmentation'
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower():
+            if debug:
+                print(filename)
+            type = 'anat_derivatives'
+        else:
+            type = 'anat'
+
 
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
         if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
@@ -156,15 +166,6 @@ def extract_type(input_path, debug=False):
         type = 'func_derivatives'
     
     
-    elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
-        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or 'voxelized' in filename:
-            type = 'anat_segmentation'
-        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower():
-            if debug:
-                print(filename)
-            type = 'anat_derivatives'
-        else:
-            type = 'anat'
 
     
     elif 'spinal_level' in dirs or sum([word in filename for word in ['roots_out','roots_rootlets', 'roots_seg_to_centerline']])>=1 or ('intersections' in filename) :
