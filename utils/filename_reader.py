@@ -131,7 +131,7 @@ def extract_type(input_path, debug=False):
 
 
     #special to T2G, rules may not apply to later dirs
-    elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb', '.ply'] or filename in ['3d_generation', '_all_stls', 'blender'] or '3d_generation' in input_path.lower():
+    elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb', '.ply', '.step', '.3ds', '.iges', '.model', '.sab'] or filename in ['3d_generation', '_all_stls', 'blender'] or '3d_generation' in input_path.lower():
         type = 'modelling'
 
     elif ('ct' in keywords or 'ct' in root_dirs_keywords) and extension in ['.nii.gz', '.zip', '.json']:
@@ -146,7 +146,7 @@ def extract_type(input_path, debug=False):
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or 'voxelized' in filename:
             type = 'anat_segmentation'
-        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower():
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat']:
             if debug:
                 print(filename)
             type = 'anat_derivatives'
@@ -157,7 +157,9 @@ def extract_type(input_path, debug=False):
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
         if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
             type = 'func_segmentation'
-        elif 'thresh_zscores' in input_path.lower():
+        elif 'thresh_zscores' in input_path.lower() or "zstat1" in input_path.lower():
+            type = 'func_derivatives'
+        elif extension == '.feat' or 'thresh_zstat1_reg' in filename or 'acompcor' in filename or 'rmsctp0fmri' in filename:
             type = 'func_derivatives'
         else:
             type = 'func'
@@ -384,19 +386,14 @@ def get_suffix(string, debug=False):
     else:
         suffix = ''
 
-    expressions_to_search_in_filename = data['to_search_in_filename']
-
     if debug:
         print(filename)
     
-    for filename_expression in expressions_to_search_in_filename:
-        if debug:
-            print('expression',filename_expression)
-        if filename_expression in filename and filename_expression not in suffix:
-            if suffix == '':
-                suffix = filename_expression
-            else:
-                suffix = suffix + '_' + filename_expression
+    additional = get_path_info(string, 'utils/suffix.json')
+    if suffix=='':
+        suffix = additional
+    else:
+        suffix = suffix + '_' + additional
 
     extras = data['extra']
     extras += ['v0' + str(i) for i in range(10)]
@@ -579,6 +576,11 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 simplified_old_path = '/' + '_'.join(old_path.lower().split('/')[:-1]).strip('_')
         except:
             simplified_old_path = old_path.lower()
+        try:
+            if simplified_old_path.split('_')[0] in ['/up200' + str(i) for i in range(1,5) ]:
+                simplified_old_path = '_'.join(simplified_old_path.split('_')[1:])
+        except:
+            simplified_old_path = old_path.lower()
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
@@ -586,11 +588,14 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
     
     elif type in ['misc','modelling']:
         new_path = 'derivatives/' + type
+
+        if old_path.lower().split('/')[1] in ['up200' + str(i) for i in range(1,5) ]:
+            simplified_old_path = '/'.join(old_path.split('/')[2:]).lower()
         
         if sub =='':
-            new_path += old_path.lower()
+            new_path += simplified_old_path
         else:
-            new_path += '/' + sub + old_path.lower()
+            new_path += '/' + sub + simplified_old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
