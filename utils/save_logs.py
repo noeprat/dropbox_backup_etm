@@ -243,17 +243,20 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
                 tasks_json = [
                     side + part
                     for side in ['l','r']
-                    for part in ['ankle','knee', 'hip', 'grasp']
+                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
                 ]
                 tasks_json.append('restingstate')
                 tasks_nifti = [
                     side +'_'+ part
                     for side in ['left','right']
-                    for part in ['ankle','knee', 'hip', 'grasp']
+                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
                 ]
                 tasks_nifti.append('rest')
                 for idx, task in enumerate(tasks_json):
                     if task in json_file.lower() and tasks_nifti[idx] in data_file.lower():
+                        condition3 = True
+                    #specific to up2_sub01 (so far)
+                    elif task in json_file.lower() and (tasks_nifti[idx][len('right_'):] in data_file.lower() or tasks_nifti[idx][len('left_'):] in data_file.lower()):
                         condition3 = True
             condition1 = curated_json_filename == curated_filename
             condition2 = json_filename == filename
