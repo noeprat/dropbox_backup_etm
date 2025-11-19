@@ -49,5 +49,87 @@
     },
     "/01_Preprocessed_Image":{
         "is_tmp": true
+    },
+    "/UP2001/UP2001_Imaging/Post_Op_Imaging/Post_Surgery_Imaging/UP2001_Brain_Post_Op_CT_NIFTI/total_segmentator_test/segmentations_online/statistics.json":{
+        "type": "ct_segmentation",
+        "suffix": "statistics"
+    },
+    "/UP2001/UP2001_Imaging/Post_Op_Imaging/Post_Surgery_Imaging/UP2001_Brain_Post_Op_CT_NIFTI/for_import/":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/UP2001_Imaging/Post_Op_Imaging/Post_Surgery_Imaging/UP2001_Brain_Post_Op_CT_NIFTI/total_segmentator_test/segmentations/":{
+        "suffix": "segmentations_ct"
+    },
+    "/UP2001/UP2001_Imaging/Post_Op_Imaging/Post_Surgery_Imaging/UP2001_Brain_Post_Op_CT_NIFTI/total_segmentator_test/segmentations_online/": {
+        "suffix": "segmentations_online_ct"
+    },
+    "_nudged": {
+        "is_tmp": true
+    },
+    "/UP2001/UP2001_Imaging/Pre_Op_Imaging/UP2001_CT_Pre_Op_NIFTI/Spine_CT/UP2001_CT_Pre_Op_DICOM_7.7_NEURORESTORE_20230711140522_303_DL_vertebrae_seg": {
+        "id": "303"
+    },
+    "/UP2001/UP2001_Imaging/Pre_Op_Imaging/UP2001_CT_Pre_Op_NIFTI/Spine_CT/UP2001_CT_Pre_Op_DICOM_7.7_NEURORESTORE_20230711140522_4_DL_vertebrae_seg/": {
+        "id": "4"
+    },
+    "/UP2001/UP2001_Imaging/Pre_Op_Imaging/UP2001_CT_Pre_Op_NIFTI/Spine_CT/UP2001_CT_Pre_Op_DICOM_7.7_NEURORESTORE_20230711140522_305_DL_vertebrae_seg/": {
+        "id": "305"
+    },
+    "/UP2001/Model_Upperlimb/Segmentations/_Previous_Version/Segmentations/ARM_best_muscle_segmentations/acromion_24.nii.gz":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Model_Upperlimb/Segmentations/_Previous_Version/Segmentations/ARM_best_muscle_segmentations/forearm_muscle_26_anterior.nii.gz":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Model_Upperlimb/Segmentations/_Previous_Version/Segmentations/ARM_best_muscle_segmentations/forearm_muscle_26_posterior_smoothed.nii.gz":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Model_Upperlimb/Segmentations/_Previous_Version/Segmentations/ARM_best_muscle_segmentations/hand_bones_24_incomplete.nii.gz":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Model_Upperlimb/Segmentations/_Previous_Version/Segmentations/ARM_best_muscle_segmentations/supraspinatus_21c.nii.gz":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Model_Brain/Post_Op/Moving_Outside_Brain/UP2001_Brain_Post_Op.smash": {
+        "category": "model_brain_post_op_moving_outside_brain"
+    },
+    "/UP2001/Model_Brain/Post_Op/UP2001_Brain_Post_Op_20250422.smash": {
+        "category": "model_brain_post_op_20250422"
+    },
+    "/UP2001/Model_Brain/Post_Op/UP2001_Brain_Post_Op.smash": {
+        "category": "model_brain_post_op"
+    },
+    "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/10_Uncorrected_Muscles/10_Uncorrected_Muscles/":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240704/10_Uncorrected_Muscles/10_Uncorrected_Muscles/":{
+        "confirmed_duplicate": true, 
+        "new_path": "whocares"
+    },
+    "/UP2001/Measurements_Muscles/Muscles_MRI_CT_Pre_Op/UP2001_List_Muscles_Labels.xlsx":{
+        "type": "ct_derivatives",
+        "is_derivative": true
+    },
+    "/UP2001/UP2001_Imaging/Pre_Op_Imaging/UP2001_Pre_Op_MRI_ANONYMIZED.zip": {
+        "old_path": "/UP2001/UP2001_Imaging/Pre_Op_Imaging/UP2001_Pre_Op_MRI_ANONYMIZED.zip",
+        "id": "",
+        "sub": "sub-01",
+        "type": "func",
+        "extension": ".zip",
+        "category": "pre_op",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "bold",
+        "is_derivative": false,
+        "new_path": "sub-01/func/dicom/sub-01_pre_op_bold.zip"
     }
 }

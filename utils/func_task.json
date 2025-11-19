@@ -4,7 +4,9 @@
         "seg_post_pro",
         "synthseg",
         "cs4p6",
-        "roots_rootlets"
+        "roots_rootlets",
+        "elbow_1",
+        "elbow_2"
     ],
     "to_search_in_dirs": [
         "right_ankle",
@@ -15,6 +17,9 @@
         "left_hip",
         "right_grasp",
         "left_grasp",
+        "grasp",
+        "shoulder",
+        "elbow",
         "functional_rest",
         "rest"
     ],

@@ -10,7 +10,9 @@
         "mp2rage_for_3d",
         "registered_2_mp2rage",
         "registered_2_mp2rage_for_3d",
-        "registered_to_t1_mp2rage"
+        "registered_to_t1_mp2rage",
+        "10_uncorrected_muscles",
+        "11_corrected_muscles"
     ],
     "to_search_in_filename": [
         "physiological",
@@ -44,15 +46,19 @@
         "roots_rootlets", 
         "roots_seg_to_centerline",
         "trufi3d",
+        "initial_translation",
         "intersections_voxel_mod",
         "intersections_voxel",
         "intersections_world",
         "root_segments_mod",
         "root_segments",
-        
+        "list_muscles_labels",
 
         "mp2rage_reg_template",
         "mp2rage2template_nonlinear",
+        "mprage2template_nonlinear.mat",
+        "mprage_reg_affine_template",
+        "mprage_reg_nonlinear_template",
         "nonlinear_betted_mp2rage2standard_transf",
         "t1_reg_affine_template",
         "nonlinear_nonbetted_mp2rage2standard_transf",
@@ -61,6 +67,7 @@
         "mp2rage_reg_affine_template",
         "mp2rage_reg_nonlinear_template",
         "mp2rage2template_affine",
+        "mprage2template_affine",
         "mp2rage2template",
         "affine_betted_t12standard_transf",
         "t12template_affine",
@@ -75,6 +82,9 @@
         "dr",
         "nonbetted",
         "betted",
+
+        "uncorrected",
+        "corrected",
         
         "t2_spc_zoomit_stardist",
         "t2_spc_zoomit_rpi",
@@ -83,13 +93,16 @@
         "stl_export"
         
     ],
+    "to_search_at_end_of_filename": [],
     "extra": [
         "resampled",
-        "corrected",
+        "corrected2",
         "smooth",
         "corrected_smooth",
         "corrected_resampled",
         "correction",
+        "correction2",
+        "correction2_filled",
         "preprocessed",
         "version-2024",
         "fixed",

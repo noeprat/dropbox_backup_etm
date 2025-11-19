@@ -17,6 +17,7 @@
         "tissues_sct",
         "brain_tissues",
         "spine_tissues_from_mae",
+        "spine_tissues_from_sct",
         "spine_tissues",
         "axobl_sacrum_deepseg",
         "axobl_sacrum",
@@ -47,7 +48,10 @@
         "post_surgery_imaging",
         "normalization_experiments",
         "simulation_version",
-        "mri_bones"
+        "mri_bones",
+        "post_rehab_muscles",
+        "upper_limb_ct_20240704",
+        "upper_limb_ct_20240809"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",
@@ -81,6 +85,10 @@
         "cerveau",
         "brain_post_op",
         "post_op",
+        "post_op_for_simulations",
+        "for_simulations_in_original_space",
+        "for_simulations",
+        "qy",
         "post_op_from_sims",
         "postop727exact_vizu",
         "postop727exact",
@@ -94,7 +102,8 @@
         "ct_intra_op_o_arm_fluoroscopy",
         "ct_intra_op_o_arm_high_def",
         "ct_intra_op_o_arm",
-        "ct_end_rehab"
+        "ct_end_rehab",
+        "hand_arm"
 
     ],
     "to_search_at_end_of_filename": [
