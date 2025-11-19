@@ -131,5 +131,14 @@
         "suffix": "bold",
         "is_derivative": false,
         "new_path": "sub-01/func/dicom/sub-01_pre_op_bold.zip"
+    },
+    "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/11_Corrected_Muscles/11_Corrected_Muscles/Correcting_deltoid/":{
+        "is_tmp": true
+    },
+    "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/11_Corrected_Muscles/11_Corrected_Muscles/Correcting_triceps/":{
+        "is_tmp": true
+    },
+    "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/11_Corrected_Muscles/11_Corrected_Muscles/Separating_biceps_brachialis/":{
+        "is_tmp": true
     }
 }
