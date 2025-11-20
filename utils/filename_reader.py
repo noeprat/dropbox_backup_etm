@@ -607,7 +607,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 new_path += type +'/' + sub + '/'
         else:
             new_path += sub + '/' + type + '/'
-            if 'dicom' in old_path.lower() and extension==".zip":
+            if ('dicom' in old_path.lower() or type in ['anat','func','ct']) and extension==".zip":
                 new_path += 'dicom/'
 
         if is_localizer_bool:
