@@ -157,6 +157,8 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
 
+    errors = {}
+
     for file in tqdm(file_infos.keys()):
         if source_dir[-1] == '/' and file_infos[file]["old_path"][0] =='/':
             correct_source_dir = source_dir[:-1]
@@ -185,13 +187,15 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
         except:
             confirmed_duplicate = False
         if not confirmed_duplicate:
+
             try:
                 dbx.files_copy(
                     from_path= from_path,
                     to_path= to_path
                 )
             except:
-                print("Failed to copy")
-                print('from: \n', from_path)
-                print('to: \n', to_path)
-        #print('\n')
+                errors[from_path] = to_path
+    with open('transfer_errors.json', 'w') as f:
+        json.dump(errors, f, indent=4)
+    
+    print('Files successfully copied in target directory, except for the ones in transfer_errors.json')
