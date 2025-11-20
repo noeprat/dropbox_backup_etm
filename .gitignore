@@ -16,6 +16,8 @@ inputs.json
 
 participants.csv
 
+transfer_errors.json
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
