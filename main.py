@@ -82,191 +82,230 @@ if __name__ == '__main__':
     print('Need an access token for Dropbox')
     ACCESS_TOKEN = input_with_default('access token')
 
-    s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
+    s = input("Use a preexisting file_infos.json ? [y/n]")
 
-    if s0 == 'y':
-        input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
-                                dir= '/source', 
-                                recursive=True, 
-                                remove_source=True
-                                )
-        print('Done reading files from Dropbox \n')
+    if s=="y":
+        file_infos_path_user = input_with_default("file_infos_path")
+        tmpfile_infos_path_user = input_with_default("tmpfile_infos_path")
 
-        save_file_list(input_files, file_list_path)
-    
-    else:
-        print('Reading file list from ' + file_list_path)
-
-        input_files = read_file_list(file_list_path)
-    
-    if sub=='':
-        participants_dict = {}
-
-        try:
-            with open('participants.csv') as f:
-                reader = csv.reader(f)
-                for row in reader:
-                    left = row[0].strip()
-                    right = row[1].strip()
-                    if left != 'old_sub_name':
-                        participants_dict[left] = right
-        except:
-            print('participants.csv not found')
-
-        finally:    
-            save_file_infos(
-                input_files= input_files,
-                participants_dict= participants_dict,
-                file_infos_path= file_infos_path,
-                tmpfile_infos_path= tmpfile_infos_path
-                )
-            
-
-            handle_exceptions(
-                exceptions_path= exceptions_path,
-                file_infos_path= file_infos_path,
-                new_file_infos_path= file_infos_path)
-
-    else:
-        save_file_infos(
-                input_files,
-                participants_dict={},
-                file_infos_path= file_infos_path,
-                tmpfile_infos_path= tmpfile_infos_path,
-                sub=sub)
+        write_paths_file(
+            file_infos_path= file_infos_path_user,
+            out_path = txt_logs_path,
+            old_prefix=old_prefix,
+            new_prefix=new_prefix
+            )
         
-        handle_exceptions(
-                exceptions_path= exceptions_path,
-                file_infos_path= file_infos_path,
-                new_file_infos_path= file_infos_path)
-    
-    # handle duplicates    
+        print('Path log saved in ' + txt_logs_path)
 
-    
-    s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
-    
-    if s == 'y':
-        flag_potential_duplicates(
-                    file_infos_path=file_infos_path,
-                    flagged_path= potential_duplicates_path
-                )
-        input('Check potential duplicates in '+ potential_duplicates_path + '\n(type enter when done to continue)')
+        write_paths_file(
+            file_infos_path= tmpfile_infos_path_user,
+            out_path = tmpfiles_txt_logs_path,
+            old_prefix=old_prefix,
+            new_prefix=new_prefix
+            )
 
-        compare_potential_duplicates(
-            flagged_path=potential_duplicates_path,
-            actual_duplicates_path=actual_duplicates_path,
-            not_downloaded_path=not_downloaded_path,
-            TOKEN= ACCESS_TOKEN,
-            verbose= True
-        )
-
-        handle_duplicates_in_file_infos(
-            actual_duplicates_path=actual_duplicates_path,
-            file_infos_path= file_infos_path,
-            new_file_infos_path= file_infos_path
-        )
-    elif s == 'use_previous':
-        actual_duplicates_path_user = input_with_default('actual_duplicates_path')
-        handle_duplicates_in_file_infos(
-            actual_duplicates_path=actual_duplicates_path_user,
-            file_infos_path= file_infos_path,
-            new_file_infos_path= file_infos_path
-        )
-
-    s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/use_previous] \n')
-
-    if s=='y':
-        save_jsons_to_data(
-            file_infos_path = file_infos_path,
-            jsons_to_data_path= jsons_to_data_path)
-        input('Manually correct the json in ' +jsons_to_data_path+ ' to match each json to its correct data file (type enter when done to continue)')
-
-        correct_file_infos_with_matching_metadata(
-                        file_infos_path = file_infos_path,
-                        jsons_to_data_path = jsons_to_data_path,
-                        corrected_file_infos_path = corrected_file_infos_path
-                    )
+        print('Path log for tmps saved in ' + tmpfiles_txt_logs_path)
         
-    elif s == 'use_previous':
-        jsons_to_data_path_user = input_with_default('jsons_to_data_path')
+        write_general_recap_file(
+            file_infos_path= file_infos_path_user,
+            out_path= json_recap_path,
+            new_prefix=new_prefix
+            )
+        
+        print('Recap saved in ' + json_recap_path)
 
-        correct_file_infos_with_matching_metadata(
-                        file_infos_path = file_infos_path,
-                        jsons_to_data_path = jsons_to_data_path_user,
-                        corrected_file_infos_path = corrected_file_infos_path
-                    )
-
-    flag_same_new_paths(
-                        file_infos_path=corrected_file_infos_path,
-                        flagged_path= same_new_paths_path
-                    )
-    
-    rename_duplicates(
-                    corrected_file_infos_path,
-                    same_new_paths_path,
-                    renamed_duplicates_file_infos_path
-                )
-    
-
-    print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
-    s = input('Do you want to refresh the new paths ? [y/n] \n')
-
-    if s == 'y':
-        refresh_new_paths(
-                    renamed_duplicates_file_infos_path,
-                    renamed_duplicates_file_infos_path
-                )
-        handle_exceptions(
-                exceptions_path= exceptions_path,
-                file_infos_path= renamed_duplicates_file_infos_path,
-                new_file_infos_path= renamed_duplicates_file_infos_path
+        sort_source_to_target(
+            file_infos_path= renamed_duplicates_file_infos_path,
+            TOKEN=ACCESS_TOKEN
             )
     
-        flag_same_new_paths(
-                        file_infos_path=renamed_duplicates_file_infos_path,
-                        flagged_path= same_new_paths_path
+    else:
+
+        s0= input("Should the files in Dropbox be read ? (can be a time-consuming step, and requires a dbx access token)\n[y/n]")
+
+        if s0 == 'y':
+            input_files = get_all_paths(TOKEN= ACCESS_TOKEN, 
+                                    dir= '/source', 
+                                    recursive=True, 
+                                    remove_source=True
+                                    )
+            print('Done reading files from Dropbox \n')
+
+            save_file_list(input_files, file_list_path)
+        
+        else:
+            print('Reading file list from ' + file_list_path)
+
+            input_files = read_file_list(file_list_path)
+        
+        if sub=='':
+            participants_dict = {}
+
+            try:
+                with open('participants.csv') as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        left = row[0].strip()
+                        right = row[1].strip()
+                        if left != 'old_sub_name':
+                            participants_dict[left] = right
+            except:
+                print('participants.csv not found')
+
+            finally:    
+                save_file_infos(
+                    input_files= input_files,
+                    participants_dict= participants_dict,
+                    file_infos_path= file_infos_path,
+                    tmpfile_infos_path= tmpfile_infos_path
                     )
+                
+
+                handle_exceptions(
+                    exceptions_path= exceptions_path,
+                    file_infos_path= file_infos_path,
+                    new_file_infos_path= file_infos_path)
+
+        else:
+            save_file_infos(
+                    input_files,
+                    participants_dict={},
+                    file_infos_path= file_infos_path,
+                    tmpfile_infos_path= tmpfile_infos_path,
+                    sub=sub)
+            
+            handle_exceptions(
+                    exceptions_path= exceptions_path,
+                    file_infos_path= file_infos_path,
+                    new_file_infos_path= file_infos_path)
+        
+        # handle duplicates    
+
+        
+        s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
+        
+        if s == 'y':
+            flag_potential_duplicates(
+                        file_infos_path=file_infos_path,
+                        flagged_path= potential_duplicates_path
+                    )
+            input('Check potential duplicates in '+ potential_duplicates_path + '\n(type enter when done to continue)')
+
+            compare_potential_duplicates(
+                flagged_path=potential_duplicates_path,
+                actual_duplicates_path=actual_duplicates_path,
+                not_downloaded_path=not_downloaded_path,
+                TOKEN= ACCESS_TOKEN,
+                verbose= True
+            )
+
+            handle_duplicates_in_file_infos(
+                actual_duplicates_path=actual_duplicates_path,
+                file_infos_path= file_infos_path,
+                new_file_infos_path= file_infos_path
+            )
+        elif s == 'use_previous':
+            actual_duplicates_path_user = input_with_default('actual_duplicates_path')
+            handle_duplicates_in_file_infos(
+                actual_duplicates_path=actual_duplicates_path_user,
+                file_infos_path= file_infos_path,
+                new_file_infos_path= file_infos_path
+            )
+
+        s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/use_previous] \n')
+
+        if s=='y':
+            save_jsons_to_data(
+                file_infos_path = file_infos_path,
+                jsons_to_data_path= jsons_to_data_path)
+            input('Manually correct the json in ' +jsons_to_data_path+ ' to match each json to its correct data file (type enter when done to continue)')
+
+            correct_file_infos_with_matching_metadata(
+                            file_infos_path = file_infos_path,
+                            jsons_to_data_path = jsons_to_data_path,
+                            corrected_file_infos_path = corrected_file_infos_path
+                        )
+            
+        elif s == 'use_previous':
+            jsons_to_data_path_user = input_with_default('jsons_to_data_path')
+
+            correct_file_infos_with_matching_metadata(
+                            file_infos_path = file_infos_path,
+                            jsons_to_data_path = jsons_to_data_path_user,
+                            corrected_file_infos_path = corrected_file_infos_path
+                        )
+
+        flag_same_new_paths(
+                            file_infos_path=corrected_file_infos_path,
+                            flagged_path= same_new_paths_path
+                        )
         
         rename_duplicates(
-                        renamed_duplicates_file_infos_path,
+                        corrected_file_infos_path,
                         same_new_paths_path,
                         renamed_duplicates_file_infos_path
                     )
+        
 
-    print('\nLast chance to correct ' + renamed_duplicates_file_infos_path + ' before saving logs and copying files in Dropbox \n')
-    input('Type enter to continue')
+        print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
+        s = input('Do you want to refresh the new paths ? [y/n] \n')
 
-    # Save paths.txt and recap.json
+        if s == 'y':
+            refresh_new_paths(
+                        renamed_duplicates_file_infos_path,
+                        renamed_duplicates_file_infos_path
+                    )
+            handle_exceptions(
+                    exceptions_path= exceptions_path,
+                    file_infos_path= renamed_duplicates_file_infos_path,
+                    new_file_infos_path= renamed_duplicates_file_infos_path
+                )
+        
+            flag_same_new_paths(
+                            file_infos_path=renamed_duplicates_file_infos_path,
+                            flagged_path= same_new_paths_path
+                        )
+            
+            rename_duplicates(
+                            renamed_duplicates_file_infos_path,
+                            same_new_paths_path,
+                            renamed_duplicates_file_infos_path
+                        )
+
+        print('\nLast chance to correct ' + renamed_duplicates_file_infos_path + ' before saving logs and copying files in Dropbox \n')
+        input('Type enter to continue')
+
+        # Save paths.txt and recap.json
 
 
 
-    write_paths_file(
-        file_infos_path= renamed_duplicates_file_infos_path,
-        out_path = txt_logs_path,
-        old_prefix=old_prefix,
-        new_prefix=new_prefix
-        )
-    
-    write_paths_file(
-        file_infos_path= tmpfile_infos_path,
-        out_path = tmpfiles_txt_logs_path,
-        old_prefix=old_prefix,
-        new_prefix=new_prefix
-        )
+        write_paths_file(
+            file_infos_path= renamed_duplicates_file_infos_path,
+            out_path = txt_logs_path,
+            old_prefix=old_prefix,
+            new_prefix=new_prefix
+            )
+        
+        write_paths_file(
+            file_infos_path= tmpfile_infos_path,
+            out_path = tmpfiles_txt_logs_path,
+            old_prefix=old_prefix,
+            new_prefix=new_prefix
+            )
 
-    print('Path log saved in ' + txt_logs_path)
-    
-    write_general_recap_file(
-        file_infos_path= renamed_duplicates_file_infos_path,
-        out_path= json_recap_path,
-        new_prefix=new_prefix
-        )
-    
-    print('Recap saved in ' + json_recap_path)
+        print('Path log saved in ' + txt_logs_path)
+        
+        write_general_recap_file(
+            file_infos_path= renamed_duplicates_file_infos_path,
+            out_path= json_recap_path,
+            new_prefix=new_prefix
+            )
+        
+        print('Recap saved in ' + json_recap_path)
 
-    sort_source_to_target(
-        file_infos_path= renamed_duplicates_file_infos_path,
-        TOKEN=ACCESS_TOKEN
-        )
-    
-    print('Files successfully copied in target directory')
+        sort_source_to_target(
+            file_infos_path= renamed_duplicates_file_infos_path,
+            TOKEN=ACCESS_TOKEN
+            )
+        
+        
