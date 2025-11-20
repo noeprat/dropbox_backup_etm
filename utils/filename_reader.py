@@ -584,7 +584,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
-            new_path = 'code/' + sub + simplified_old_path
+            new_path = 'code/' + sub + '/' + simplified_old_path
     
     elif type in ['misc','modelling']:
         new_path = 'derivatives/' + type
@@ -595,7 +595,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub =='':
             new_path += simplified_old_path
         else:
-            new_path += '/' + sub + simplified_old_path
+            new_path += '/' + sub + '/' + simplified_old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
@@ -641,7 +641,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         new_path += '_'.join([element for element in elements if element!= '']) + extension
         new_path = new_path.replace('//', '/')
     
-    return new_path
+    return new_path.replace('//', '/')
 
 
 def create_filename_dict(str, participants_dict, **kwargs):
