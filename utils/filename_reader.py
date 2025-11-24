@@ -144,9 +144,9 @@ def extract_type(input_path, debug=False):
             type = 'ct'
 
     elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
-        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or 'voxelized' in filename:
+        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
             type = 'anat_segmentation'
-        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat']:
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat'] or 'im_straight' in root_dirs_keywords:
             if debug:
                 print(filename)
             type = 'anat_derivatives'
@@ -358,6 +358,7 @@ def get_suffix(string, debug=False):
 
     for s in strings_to_ignore:
         filename = filename.replace(s, '')
+        string = string.replace(s,'')
 
     
     keywords = [keyword.lower() for keyword in filename.split('_')]
@@ -500,11 +501,11 @@ def is_other(str, debug=False):
     except:
         return False
     
-def is_a_previous_version(str):
+def is_a_previous_version(input_path):
     """
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
     
     Returns
@@ -512,7 +513,11 @@ def is_a_previous_version(str):
         is_a_previous_version_bool: bool,
             True iff the file is a previous version
     """
-    return 'previous_version' in str.lower() or 'version_2024' in str.lower()
+    b1 = 'previous_version' in input_path.lower() 
+    b2 = 'version_2024' in input_path.lower() 
+    b3 = '_previous' in input_path.lower().split('/')
+    is_a_previous_version_bool = b1 or b2 or b3
+    return is_a_previous_version_bool
 
 def is_tmp(str):
     """
