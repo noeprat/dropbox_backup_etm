@@ -3,7 +3,8 @@
         "dlir",
         "segmentation_sct_poly_0",
         "exact",
-        "tr2_pat2_physiolog"
+        "tr2_pat2_physiolog",
+        "nnunetv2"
     ],
     "to_search_in_dirs": [
         "mp2rage",
@@ -12,7 +13,8 @@
         "registered_2_mp2rage_for_3d",
         "registered_to_t1_mp2rage",
         "10_uncorrected_muscles",
-        "11_corrected_muscles"
+        "11_corrected_muscles",
+        "straight"
     ],
     "to_search_in_filename": [
         "physiological",
@@ -93,7 +95,11 @@
         "stl_export"
         
     ],
-    "to_search_at_end_of_filename": [],
+    "to_search_at_end_of_filename": [
+        "padded",
+        "cropped",
+        "orig_header_cropped"
+    ],
     "extra": [
         "resampled",
         "corrected2",

@@ -19,6 +19,7 @@
         "spine_tissues_from_mae",
         "spine_tissues_from_sct",
         "spine_tissues",
+        "spine",
         "axobl_sacrum_deepseg",
         "axobl_sacrum",
         "ax_lspine_deepseg",

@@ -21,7 +21,23 @@
         "shoulder",
         "elbow",
         "functional_rest",
-        "rest"
+        "rest",
+
+        "left_wrist",
+        "left_wrist_ext_1",
+        "left_wrist_ext_2",
+
+        "right_wrist",
+        "right_wrist_ext_1",
+        "right_wrist_ext_2",
+
+        "left_fingers",
+        "left_fingers_ext_1",
+        "left_fingers_ext_2",
+
+        "right_fingers",
+        "right_fingers_ext_1",
+        "right_fingers_ext_2"
     ],
     "to_search_in_filename": [
         "right_ankle",
@@ -43,7 +59,23 @@
         "restingstate",
         "grasp",
         "shoulder",
-        "elbow"
+        "elbow",
+
+        "left_wrist",
+        "left_wrist_ext_1",
+        "left_wrist_ext_2",
+
+        "right_wrist",
+        "right_wrist_ext_1",
+        "right_wrist_ext_2",
+
+        "left_fingers",
+        "left_fingers_ext_1",
+        "left_fingers_ext_2",
+
+        "right_fingers",
+        "right_fingers_ext_1",
+        "right_fingers_ext_2"
 
     ],
     "to_search_at_end_of_filename": []

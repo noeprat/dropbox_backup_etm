@@ -140,5 +140,17 @@
     },
     "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/11_Corrected_Muscles/11_Corrected_Muscles/Separating_biceps_brachialis/":{
         "is_tmp": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/UP2002_t2_space_rootlets_sct.nii.gz":{
+        "type": "anat_segmentation"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/03_Segmentation/MRI/nnunetv2_segs/UP2_002_t2_space_ones.nii.gz": {
+        "is_tmp": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/03_Segmentation/MRI/nnunetv2_segs/UP2_002_t2_space_cropped.nii.gz": {
+        "type": "anat_derivatives"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/03_Segmentation/MRI/nnunetv2_segs/UP2_002_t2_space_not_cropped_but_zeros.nii.gz": {
+        "type": "anat_derivatives"
     }
 }
