@@ -102,13 +102,17 @@ def get_path_info(path, data_path, debug=False):
     
     path_infos = []
 
-    dir_expressions = [dir_expression for dir_expression in expressions_to_search_in_dirs if dir_expression in dir_path]
-    if debug:
-        print('dir expressions: ',dir_expressions)
-    chosen_dir_expression = pick_largest_str_in_list(dir_expressions)
-    path_infos.append(chosen_dir_expression)
-    filename.replace(chosen_dir_expression, '')
-    end_of_filename.replace(chosen_dir_expression, '')
+    for dir in dir_path.split('/'):
+
+        dir_expressions = [dir_expression 
+                           for dir_expression in expressions_to_search_in_dirs 
+                           if dir_expression in dir and (dir_expression not in path_infos)]
+        if debug:
+            print('dir expressions: ',dir_expressions)
+        chosen_dir_expression = pick_largest_str_in_list(dir_expressions)
+        path_infos.append(chosen_dir_expression)
+        filename.replace(chosen_dir_expression, '')
+        end_of_filename.replace(chosen_dir_expression, '')
     
 
     filename_expressions = [filename_expression 
@@ -128,7 +132,7 @@ def get_path_info(path, data_path, debug=False):
     if debug:
         print('end_of_filename expressions: ',end_of_filename_expressions)
 
-    path_info = '_'.join(path_infos)
+    path_info = '_'.join([elt.strip('_') for elt in path_infos if elt !=''])
     path_info = path_info.replace('__','_')
     path_info = path_info.strip('_')
     return path_info
