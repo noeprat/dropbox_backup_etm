@@ -1,4 +1,5 @@
 import json
+import os
 
 def extract_extension(str):
     """
@@ -136,3 +137,9 @@ def get_path_info(path, data_path, debug=False):
     path_info = path_info.replace('__','_')
     path_info = path_info.strip('_')
     return path_info
+
+def clean_up_tmpdir(debug=False):
+    for file in os.listdir('tmp_dir/'):
+        if debug:
+            print(file)
+        os.remove('tmp_dir/' + file)
