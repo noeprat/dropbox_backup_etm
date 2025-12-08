@@ -4,7 +4,9 @@
         "segmentation_sct_poly_0",
         "exact",
         "tr2_pat2_physiolog",
-        "nnunetv2"
+        "nnunetv2",
+        "straightened_roots",
+        "smoothness"
     ],
     "to_search_in_dirs": [
         "mp2rage",
