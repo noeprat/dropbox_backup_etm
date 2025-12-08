@@ -1,4 +1,4 @@
-from .misc import remove_extension, extract_extension
+from .misc import remove_extension, extract_extension, clean_up_tmpdir
 import json
 import os
 import filecmp
@@ -243,11 +243,6 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                 "access token from the app console on the web.")
     
     os.makedirs('tmp_dir', exist_ok=True)
-
-    for file in os.listdir('tmp_dir/'):
-        if debug:
-            print(file)
-        os.remove('tmp_dir/' + file)
         
     actual_duplicates = {}
     not_downloaded = {
@@ -265,6 +260,8 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
         from_path1 = '/source' + flagged_duplicates[key][0]
         from_path1_without_source = flagged_duplicates[key][0]
         to_path1 = 'tmp_dir/file1' + extract_extension(from_path1)
+
+        clean_up_tmpdir(debug)
 
         try:
             file1_size = dbx.files_get_metadata(from_path1).size
@@ -322,7 +319,7 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                             if debug:
                                 print(from_path1 + '\n    is the same as: \n' + from_path2)
                             actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
-
+                if downloaded2:
                     os.remove(to_path2)
             with open(actual_duplicates_path, 'w') as f:
                 json.dump(actual_duplicates, f, indent=4)
