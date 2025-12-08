@@ -92,6 +92,7 @@
         "varcope1",
         "weights1",
         "mask",
+        "mask_init",
         "zflame1uppertstat1",
         "tdof_t1",
         
@@ -101,10 +102,17 @@
         "msctp0fmri",
         "lmax_zstat1_tal",
         "cluster_zstat1_std",
-        "mean2firstrun"
+        "mean2firstrun",
+        "acompcor_only",
+        "acompcor_only_manual",
+        "output_sct_poly_acompcor_only",
+        "output_sct_poly_acompcor_only_manual",
+        "design_1st_2x2x6_sct_poly_0_acompcor_only",
+        "design_1st_2x2x6_sct_poly_0_acompcor_only_test",
+        "design_1st_2x2x6_sct_poly_0_acompcor_only_test_cov",
+        "design_1st_2x2x6_sct_poly_0_acompcor_only_test_v2"
     ],
     "to_search_at_end_of_filename": [
-        "acompcor_only",
         "brain_wm_gm_reg",
         "brain_wm_gm",
         "left_cerebellum_gm",

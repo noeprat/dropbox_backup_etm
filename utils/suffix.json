@@ -16,7 +16,9 @@
         "registered_to_t1_mp2rage",
         "10_uncorrected_muscles",
         "11_corrected_muscles",
-        "straight"
+        "straight",
+        "v_20240611",
+        "corrected"
     ],
     "to_search_in_filename": [
         "physiological",
@@ -100,6 +102,8 @@
     "to_search_at_end_of_filename": [
         "padded",
         "cropped",
+        "not_cropped_but_zeros",
+        "orig_header",
         "orig_header_cropped"
     ],
     "extra": [

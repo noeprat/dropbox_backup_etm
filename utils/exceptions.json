@@ -141,9 +141,6 @@
     "/UP2001/Measurements_Muscles/Post_Rehab_Muscles_CT/Upper_Limb_CT_20240809/11_Corrected_Muscles/11_Corrected_Muscles/Separating_biceps_brachialis/":{
         "is_tmp": true
     },
-    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/UP2002_t2_space_rootlets_sct.nii.gz":{
-        "type": "anat_segmentation"
-    },
     "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/03_Segmentation/MRI/nnunetv2_segs/UP2_002_t2_space_ones.nii.gz": {
         "is_tmp": true
     },
@@ -152,5 +149,107 @@
     },
     "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/03_Segmentation/MRI/nnunetv2_segs/UP2_002_t2_space_not_cropped_but_zeros.nii.gz": {
         "type": "anat_derivatives"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional/Right_Wrist_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat":{
+        "suffix": "small"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional/Left_Fingers_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat":{
+        "suffix": "small"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/UP2002_t2_space_rootlets_sct.nii.gz": {
+        "old_path": "/UP2002/UP2002_Imaging/UP2002_Spine/Structural/UP2002_t2_space_rootlets_sct.nii.gz",
+        "id": "",
+        "sub": "sub-02",
+        "type": "anat_segmentation",
+        "extension": ".nii.gz",
+        "category": "spine",
+        "seg_info": "rootlets_sct",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "t2_space",
+        "is_derivative": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/02_Left_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/05_Left_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Left_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/07_Right_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/09_Right_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Right_Fingers_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/03_Right_Wrist_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/04_Right_Wrist_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Right_Wrist_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/06_Left_Wrist_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/08_Left_Wrist_Ext_": {
+        "confirmed_duplicate": true
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Right_Fingers_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "eberfb"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/07_Right_Fingers_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "kjnzerjk"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/03_Right_Wrist_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "zgregr"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Right_Wrist_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "zgreafz"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/06_Left_Wrist_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "zfzid"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Left_Wrist_Ext_1/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "kzjdv"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/05_Left_Fingers_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "yuifn"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Left_Fingers_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "onbhvui"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Right_Fingers_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "ijnhy"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/09_Right_Fingers_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "ujhbef"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/08_Left_Wrist_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "uhezgyc"
+    },
+    "/UP2002/UP2002_Imaging/UP2002_Spine/Functional_zip/Left_Wrist_Ext_2/output_SCT_POLY_ACOMPCOR_ONLY.feat": {
+        "confirmed_duplicate": true,
+        "new_path": "aqswxcdfredsf"
     }
 }
