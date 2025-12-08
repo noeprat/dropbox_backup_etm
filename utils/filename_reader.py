@@ -186,7 +186,7 @@ def extract_type(input_path, debug=False):
     
     return type
 
-def get_category(input_path):
+def get_category(input_path, debug=False):
     """
     Returns additional information on the data
 
@@ -207,7 +207,8 @@ def get_category(input_path):
 
     category = get_path_info(
         path= input_path,
-        data_path='utils/category.json'
+        data_path='utils/category.json',
+        debug=debug
     )
     return category
 
@@ -406,8 +407,9 @@ def get_suffix(string, debug=False):
                 suffix = extra
             else:
                 suffix = suffix + '_' + extra
-
-    return suffix.strip('_')
+    suffix = suffix.strip('_')
+    suffix = suffix.replace('__', '_')
+    return suffix
     
 ##################################################################################################################################################
 ################################ Booleans ########################################################################################################
