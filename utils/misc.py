@@ -78,6 +78,7 @@ def get_path_info(path, data_path, debug=False):
         path_info, str
             path_info (e.g. func_info, seg_info, func_task, category)
     """
+    path = path.replace(' ', '_')
     filename = remove_extension(path.split('/')[-1]).lower()
     dir_path = '/'.join(path.split('/')[:-1]).lower()
     END_OF_FILENAME_LENGTH = 8
