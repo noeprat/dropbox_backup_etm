@@ -41,7 +41,15 @@
 
         "right_fingers",
         "right_fingers_ext_1",
-        "right_fingers_ext_2"
+        "right_fingers_ext_2",
+
+        "fingers_extension_1",
+        "fingers_extension_2",
+        "fingers_extension_3",
+        "wrist_extension_1",
+        "wrist_extension_2",
+        "wrist_extension_3",
+        "wrist_extension_4"
     ],
     "to_search_in_filename": [
         "right_ankle",
@@ -62,9 +70,18 @@
         "closed_left_grasp",
         "restingstate",
         "grasp",
+        "right_shoulder",
+        "left_shoulder",
         "shoulder",
-        "elbow",
 
+        "right_elbow",
+        "left_elbow",
+        "elbow",
+        
+        "right_grasp",
+        "left_grasp",
+        "grasp",
+        
         "left_wrist",
         "left_wrist_ext_1",
         "left_wrist_ext_2",

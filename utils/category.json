@@ -52,7 +52,10 @@
         "mri_bones",
         "post_rehab_muscles",
         "upper_limb_ct_20240704",
-        "upper_limb_ct_20240809"
+        "upper_limb_ct_20240809",
+        "arm_trunk",
+        "for_segmentation",
+        "from_itis"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",
