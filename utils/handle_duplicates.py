@@ -299,26 +299,15 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                         }
                 
                 if downloaded2 and file1_size == file2_size:
-                    if extract_extension(from_path1) == '.nii.gz' and extract_extension(from_path2) == '.nii.gz':
-                        img1 = nib.load(to_path1)
-                        img2 = nib.load(to_path2)
-                        data1 = img1.get_fdata()
-                        data2 = img2.get_fdata()
-                        if data1.shape == data2.shape:
-                            if (data1==data2).all():
-                                if debug:
-                                    print(from_path1 + '\n    is the same as: \n' + from_path2)
-                                actual_duplicates[from_path1_without_source].append(from_path2_without_source)
-                    else:
-                        try:
-                            comp = filecmp.cmp(to_path1, to_path2, shallow=False)
-                        except:
-                            comp=False
-                            print(from_path1 + ' not compared')
-                        if comp:
-                            if debug:
-                                print(from_path1 + '\n    is the same as: \n' + from_path2)
-                            actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
+                    try:
+                        comp = filecmp.cmp(to_path1, to_path2, shallow=False)
+                    except:
+                        comp=False
+                        print(from_path1 + ' not compared')
+                    if comp:
+                        if debug:
+                            print(from_path1 + '\n    is the same as: \n' + from_path2)
+                        actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
                 if downloaded2:
                     os.remove(to_path2)
             with open(actual_duplicates_path, 'w') as f:
