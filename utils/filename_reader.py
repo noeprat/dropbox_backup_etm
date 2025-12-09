@@ -121,7 +121,7 @@ def extract_type(input_path, debug=False):
     
     if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
         type = 'code'
-    elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx']:
+    elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx'] or filename == 'screenshots':
         type = 'misc'
     elif 'dti' in keywords or extension in ['.bval', '.bvec']:
         type = 'dti'
@@ -130,7 +130,6 @@ def extract_type(input_path, debug=False):
         type = 'simulation'
 
 
-    #special to T2G, rules may not apply to later dirs
     elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb', '.ply', '.step', '.3ds', '.iges', '.model', '.sab'] or filename in ['3d_generation', '_all_stls', 'blender'] or '3d_generation' in input_path.lower():
         type = 'modelling'
 
@@ -143,7 +142,7 @@ def extract_type(input_path, debug=False):
         else:
             type = 'ct'
 
-    elif 'structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords:
+    elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
             type = 'anat_segmentation'
         elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat'] or 'im_straight' in root_dirs_keywords:
