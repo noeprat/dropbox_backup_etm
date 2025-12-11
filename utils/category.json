@@ -55,7 +55,8 @@
         "upper_limb_ct_20240809",
         "arm_trunk",
         "for_segmentation",
-        "from_itis"
+        "from_itis",
+        "first_tests"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",

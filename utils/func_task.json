@@ -96,7 +96,29 @@
 
         "right_fingers",
         "right_fingers_ext_1",
-        "right_fingers_ext_2"
+        "right_fingers_ext_2",
+
+        "rest_10min",
+        "rest_125mes",
+        "rest",
+
+        "fingerextension1",
+        "fingerextension2",
+        "fingerextension3",
+        "wristextension1",
+        "wristextension2",
+        "wristextension3",
+        "wristextension4",
+
+        "lelbow",
+        "lshoulder",
+        "lwrist",
+        "relbow",
+        "rshoulder",
+        "rgrasp",
+        "lgrasp",
+        "rwrist"
+
 
     ],
     "to_search_at_end_of_filename": []

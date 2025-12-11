@@ -4,15 +4,27 @@
         "seg_post_pro",
         "synthseg",
         "cs4p6",
-        "roots_rootlets"
+        "roots_rootlets",
+        "right_arm_left_hemisphere_bin"
     ],
     "to_search_in_dirs": [
         "smoothing_sct_poly_0",
         "alignment_sct_poly_0",
         "means_sct_poly_0_acompcor_only",
-        "stats"
+        "stats",
+        "wip",
+        "v_01_moco_siemens",
+        "thresholded_and_only_left_side",
+        "for_nav",
+        "timings"
     ],
     "to_search_in_filename": [
+        "general",
+        "order_runs",
+        "notes",
+        "timings",
+        "acompcor",
+        "interoperability",
         "cluster_mask_zstat1",
         "zstat1",
         "clust_zstat1_z16_p001",

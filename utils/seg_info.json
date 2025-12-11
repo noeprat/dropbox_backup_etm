@@ -5,7 +5,8 @@
         "synthseg",
         "cs4p6",
         "roots_rootlets",
-        "mri_brain"
+        "mri_brain",
+        "ct_post_op_brain"
     ],
     "to_search_in_dirs": [
         "50_z_boxes",
@@ -14,6 +15,9 @@
         "150_z_boxes",
         "220_z_boxes",
         "500_z_boxes",
+        "axis_0",
+        "axis_1",
+        "axis_2",
         "bones_segmented",
         "everything",
         "arm_best_muscle_segmentations",
@@ -65,8 +69,10 @@
         "trapezius",
         "bone",
         "bones",
-        "muscles",
-        "tissues"
+        "tissues",
+        "label",
+        "label_1",
+        "label_2"
     ],
     "to_search_at_end_of_filename": [
         "302_face",
@@ -123,6 +129,8 @@
         "brachialis2",
         "brachioradialis",
         "brain",
+        "brain_implant",
+        "brain_implant_electrodes",
         "brain_wm_gm",
         "brain_wm_gm_padded",
         "brainstem",
@@ -156,6 +164,7 @@
         "elecs_wimagine_t1_17001_hd",
         "elecs_wimagine_t1_17001_hd_norm",
         "electrodes",
+        "electrodes_norm",
         "electrodes_cable",
         "electrodes_cables",
         "electrodes_ipg",
@@ -348,6 +357,7 @@
         "sacrum",
         "scapula_left",
         "scapula_right",
+        "sct_rlets",
         "seg_bin",
         "seg_canal",
         "seg_discs",
@@ -533,7 +543,8 @@
         "upper_arm_bone",
         "tricep_tendon",
         "anterior_medial_deltoid",
-        "lower_arm_muscle1-forearm_muscle"
-
+        "lower_arm_muscle1-forearm_muscle",
+        "right_arm_left_hemisphere_bin",
+        "right_arm_left_hemisphere"
     ]
 }

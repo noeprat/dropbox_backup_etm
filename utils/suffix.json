@@ -43,7 +43,9 @@
         "t1_ts_exp_1",
         "mp2rage_ts_exp_1",
         "mp2rage_ts_exp_1",
+        "wip19_mp2rage",
         "mp2rage",
+        "t1_mp2rage",
         "t1_ts_exp_2",
         "t1_ts",
         "ffe",
@@ -104,7 +106,8 @@
         "cropped",
         "not_cropped_but_zeros",
         "orig_header",
-        "orig_header_cropped"
+        "orig_header_cropped",
+        "modified"
     ],
     "extra": [
         "resampled",
