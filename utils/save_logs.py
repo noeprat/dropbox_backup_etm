@@ -2,6 +2,7 @@ import json
 from .filename_reader import create_filename_dict, generate_new_path, is_derivative
 from .misc import remove_extension
 import os
+from tqdm import tqdm
 
 def save_file_list(input_files, file_list_path):
     """
@@ -224,7 +225,7 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
     if debug:
         c=0
 
-    for json_file in jsons_dict.keys():
+    for json_file in tqdm(jsons_dict.keys()):
         json_filename = json_file.split('/')[-1][:-len('.json')].lower()
         out_dict[json_file] = []
         for data_file in data_dict.keys():
