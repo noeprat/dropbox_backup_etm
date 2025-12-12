@@ -78,25 +78,30 @@ def get_path_info(path, data_path, debug=False):
         path_info, str
             path_info (e.g. func_info, seg_info, func_task, category)
     """
-    path = path.replace(' ', '_')
-    filename = remove_extension(path.split('/')[-1]).lower()
-    dir_path = '/'.join(path.split('/')[:-1]).lower()
+    with open(data_path, 'r') as f:
+        data = json.load(f)
+
+    curated_path = path.replace(' ', '_').lower()
+
+    strs_to_ignore = data["to_ignore"]
+
+    for s in strs_to_ignore:
+        curated_path = curated_path.replace(s,'')
+    
+    if debug:
+        print('curated path', curated_path)
+
+    filename = remove_extension(curated_path.split('/')[-1])
+    dir_path = '/'.join(curated_path.split('/')[:-1])
     END_OF_FILENAME_LENGTH = 8
     if len(filename.split('_'))>END_OF_FILENAME_LENGTH:
         end_of_filename = '_'.join(filename.split('_')[-END_OF_FILENAME_LENGTH:])
     else:
         end_of_filename= filename
 
-    with open(data_path, 'r') as f:
-        data = json.load(f)
-
-    strs_to_ignore = data["to_ignore"]
-    for s in strs_to_ignore:
-        filename = filename.replace(s, '')
-        dir_path = dir_path.replace(s,'')
-        end_of_filename = end_of_filename.replace(s,'')
     if debug:
         print('curated filename: ', filename)
+        print('curated eof', end_of_filename)
     
     expressions_to_search_in_dirs = data["to_search_in_dirs"]
     expressions_to_search_in_filename = data["to_search_in_filename"]
