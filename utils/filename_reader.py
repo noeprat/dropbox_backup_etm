@@ -30,6 +30,7 @@ def extract_id(str, debug=False):
         'fat_candidate_1',
         'fat_candidate_2',
         'fat_candidate_3',
+        '_-_DLIR'
     ]
     
     for s in strs_to_ignore:
@@ -38,7 +39,8 @@ def extract_id(str, debug=False):
 
     split = filename.split("_")
     for i,elt in enumerate(split[:-1]):
-        if is_date(elt) or (elt=='ct' and split[i+1].isnumeric()):
+        #if is_date(elt) or (elt=='ct' and split[i+1].isnumeric()):
+        if is_date(elt):
             id_index = i+1
             break
     id_elt = ''
@@ -141,6 +143,13 @@ def extract_type(input_path, debug=False):
             type= 'ct_segmentation' 
         else:
             type = 'ct'
+    
+    #specific to up2003
+    elif "bold_moco_p2" in filename or "iso_tr2_pat2_on_wip_advphysio" in filename:
+        type = "func"
+    
+    elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename:
+        type = "func"
 
     elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
         if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
@@ -153,8 +162,10 @@ def extract_type(input_path, debug=False):
             type = 'anat'
 
 
-    elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '':
-        if 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower():
+    elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '' or 'bold_moco_p2' in filename:
+        if filename in ["fmri", "timings", "order_runs"] or 'bold_moco_p2' in filename:
+            type = 'func'
+        elif 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower() or get_seg_info(input_path) != '':
             type = 'func_segmentation'
         elif 'thresh_zscores' in input_path.lower() or "zstat1" in input_path.lower():
             type = 'func_derivatives'
@@ -364,14 +375,7 @@ def get_suffix(string, debug=False):
     keywords = [keyword.lower() for keyword in filename.split('_')]
     extension = extract_extension(string)
 
-    if 'func' in type and type != 'func_derivatives':
-        if 'interoperability' in filename:
-            suffix = 'interoperability'
-        elif 'timings' in filename:
-            suffix = 'timings'
-        elif 'acompcor' in filename:
-            suffix = 'acompcor'
-        else:
+    if type == 'func' and extension in ['.json', '.nii.gz']:
             suffix = 'bold'
     
     elif type == 'dti':
@@ -429,7 +433,7 @@ def is_date(str):
         is_date_bool: bool,
     """
     if str.isdecimal():   
-        if len(str)==14: #correctly formatted date
+        if len(str)==14 or len(str) == 8: #correctly formatted date (long or short)
             year = int(str[:4])
             month = int(str[4:6])
             day = int(str[6:8])
@@ -587,6 +591,12 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 simplified_old_path = '_'.join(simplified_old_path.split('_')[1:])
         except:
             simplified_old_path = old_path.lower()
+        for i in range(1,5):
+            sub_code = 'up200' + str(i)
+            while sub_code in simplified_old_path:
+                simplified_old_path = simplified_old_path.replace(sub_code, '')
+        while '__' in simplified_old_path:
+            simplified_old_path = simplified_old_path.replace('__', '_')
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
@@ -627,7 +637,11 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             id_element = 'id-' +id
         else:
             id_element = ''
-        
+        suffix_elt = suffix
+        if 'segmentation' in type and suffix in seg_info:
+            suffix_elt = ''
+        if type in ['func_derivatives', 'func_segmentation'] and suffix in func_info:
+            suffix_elt = ''
         if 'func' in type:
             if func_task != '':
                 task_elt = 'task-' + func_task
@@ -637,12 +651,12 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 seg_info= ''
             elif func_info in seg_info:
                 func_info= ''
-            elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix]  
+            elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix_elt]  
         elif type == 'simulation' and 'selectivity' in old_path.split('/')[-1].lower():
             end = old_path.split('/')[-1].lower().strip('_')
             elements = [sub, category, end]
         else:
-            elements = [sub, category, id_element, seg_info, suffix]
+            elements = [sub, category, id_element, seg_info, suffix_elt]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
         new_path = new_path.replace('//', '/')
