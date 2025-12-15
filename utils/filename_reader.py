@@ -1,16 +1,16 @@
 from .misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
 import json
-
+import re
 
 
     
-def extract_id(str, debug=False):
+def extract_id(input_path, debug=False):
     """
     Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
 
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
         debug : bool, default = False
             allows prints for debugging purposes
@@ -20,7 +20,7 @@ def extract_id(str, debug=False):
         id_elt: str,
             the id of the specified filename
     """
-    filename = remove_extension(str).split('/')[-1].lower()
+    filename = remove_extension(input_path).split('/')[-1].lower()
     id_index = None
 
     # curate filename to avoid confusions
@@ -49,6 +49,16 @@ def extract_id(str, debug=False):
         for split_elt in split[id_index:]:
             if (not split_elt.isalpha()) and (not split_elt in ['s4l']):
                 id_elt = id_elt + split_elt.lower()
+
+    pattern1 = re.compile(r'CT_\D*_([\d_]*)_bin')
+    match1 = re.search(pattern1,input_path)
+    if match1:
+        id_elt += match1.group(1)
+    pattern2 = re.compile(r'Pre_Op_CT_([\d_]*)_bin')
+    match2 = re.search(pattern2, input_path)
+    if match2:
+        id_elt += match2.group(1)
+        
     return id_elt
 
 
@@ -145,7 +155,7 @@ def extract_type(input_path, debug=False):
             type = 'ct'
     
     #specific to up2003
-    elif "bold_moco_p2" in filename or "iso_tr2_pat2_on_wip_advphysio" in filename:
+    elif "bold_moco_p2" in filename or "iso_tr2_pat2_on_wip_advphysio" in filename or "_bold_" in filename:
         type = "func"
     
     elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename:
@@ -524,11 +534,11 @@ def is_a_previous_version(input_path):
     is_a_previous_version_bool = b1 or b2 or b3
     return is_a_previous_version_bool
 
-def is_tmp(str):
+def is_tmp(input_path):
     """
     Parameters
     --------
-        str : str,
+        input_path : str,
             a path/filename string
     
     Returns
@@ -536,7 +546,7 @@ def is_tmp(str):
         is_tmp_bool: bool,
             True iff the file is suspected to be a temporary file (contains 'tmp' in its path)
     """
-    is_tmp_bool = 'tmp' in str.lower()
+    is_tmp_bool = 'tmp' in input_path.lower() or 'test' in input_path.lower()
     return is_tmp_bool
 
 
