@@ -1,7 +1,7 @@
 from utils.dropbox_filesystem import get_all_paths, sort_source_to_target
 from utils.save_logs import save_file_infos, save_file_list, read_file_list, save_jsons_to_data, correct_file_infos_with_matching_metadata 
 from utils.save_logs import write_paths_file, write_general_recap_file, refresh_new_paths
-from utils.handle_duplicates import flag_same_new_paths, flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos
+from utils.handle_duplicates import flag_same_new_paths, flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos, regroup_actual_duplicates
 from utils.exceptions import handle_exceptions
 
 from tokens import ACCESS_TOKEN
@@ -197,6 +197,11 @@ if __name__ == '__main__':
                 not_downloaded_path=not_downloaded_path,
                 TOKEN= ACCESS_TOKEN,
                 verbose= True
+            )
+
+            regroup_actual_duplicates(
+                actual_duplicates_path=actual_duplicates_path,
+                new_duplicates_path=actual_duplicates_path
             )
 
             handle_duplicates_in_file_infos(

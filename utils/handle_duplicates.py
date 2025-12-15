@@ -323,6 +323,44 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
     with open(not_downloaded_path, 'w') as f:
         json.dump(not_downloaded, f, indent=4)
 
+def regroup_actual_duplicates(actual_duplicates_path, new_duplicates_path, debug=False):
+    """
+    Removes redundancy in the flagged duplicates
+
+    **Overwrites file infos in `new_duplicates_path`**
+
+    Parameters
+    --------
+        actual_duplicates_path : str,
+            path to the actual duplicates found
+        new_duplicates_path : str,
+            path to the new file
+        debug : bool,
+            set to true for debugging
+    
+    Saves
+    --------
+        new_duplicates_path, json file
+            updated duplicates file
+    """
+    with open(actual_duplicates_path, 'r') as f:
+        actual_duplicates = json.load(f)
+    
+    for file1 in actual_duplicates.keys():
+        if len(actual_duplicates[file1]) > 1 :
+            for subfile1 in actual_duplicates[file1][1:]:
+                if subfile1 in actual_duplicates.keys():
+                    for subfile1_duplicate in actual_duplicates[subfile1]:
+                        if subfile1_duplicate not in actual_duplicates[file1]:
+                            actual_duplicates[file1].append(subfile1_duplicate)
+                        actual_duplicates[subfile1] = 'to_remove'
+    new_duplicates = {}
+    for key in actual_duplicates.keys():
+        if actual_duplicates[key] != 'to_remove':
+            new_duplicates[key] = actual_duplicates[key]
+    with open(new_duplicates_path, 'w') as f:
+        json.dump(new_duplicates, f, indent=4)
+
 def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new_file_infos_path):
     """
     Modifies the file infos after the actual duplicates have been flagged
