@@ -1,12 +1,17 @@
-from .misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
 import json
 import re
 
+from utils.globals import STRS_TO_IGNORE_FOR_ID
+from utils.misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
 
     
 def extract_id(input_path, debug=False):
     """
     Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
+
+    Package
+    ----
+    `utils.filename_reader.py`
 
     Parameters
     --------
@@ -24,18 +29,8 @@ def extract_id(input_path, debug=False):
     id_index = None
 
     # curate filename to avoid confusions
-    strs_to_ignore = [
-        'model_9',
-        'model_10',
-        'fat_candidate_1',
-        'fat_candidate_2',
-        'fat_candidate_3',
-        '_-_DLIR',
-        "_viz_99p",
-        "_bin_99p"
-    ]
     
-    for s in strs_to_ignore:
+    for s in STRS_TO_IGNORE_FOR_ID:
         filename = filename.replace(s, '')
     
 
@@ -68,6 +63,10 @@ def extract_sub(str, participants_dict):
     """
     Returns the participant code of a string, raises an assertion error if it cannot find it in the filename
 
+    Package
+    ----
+    `utils.filename_reader.py`
+
     Parameters
     --------
         str : str,
@@ -94,20 +93,11 @@ def extract_sub(str, participants_dict):
 
 def extract_type(input_path, debug=False):
     """
-    Possible types (so far):
-     - anat
-     - anat_derivatives
-     - anat_segmentation
-     - ct
-     - ct_segmentation
-     - func
-     - func_derivatives
-     - func_segmentation
-     - misc
-     - code
-     - simulation
-     - modelling
-     - dti
+    Returns the suspected type of the specified file.
+
+    Package
+    ----
+    `utils.filename_reader.py`
 
     Parameters
     --------
@@ -216,6 +206,10 @@ def get_category(input_path, debug=False):
     Returns additional information on the data
 
     see `utils/category.json` for the searched expressions
+
+    Package
+    ----
+    `utils.filename_reader.py`
     
     Parameters
     --------
@@ -244,6 +238,10 @@ def get_seg_info(input_path, debug=False):
     Returns additional information about a segmentation (if it is a mask, which part was targeted, which tools were used to segment, ...)
     
     see `utils/seg_info.json` for the searched expressions
+
+    Package
+    ----
+    `utils.filename_reader.py`
     
     Parameters
     --------
@@ -267,7 +265,10 @@ def get_seg_info(input_path, debug=False):
 def get_func_task(input_path, debug=False):
     """
     Returns the task performed for fMRI
-    
+
+    Package
+    ----
+    `utils.filename_reader.py`
     
     Parameters
     --------
@@ -300,7 +301,10 @@ def get_func_task(input_path, debug=False):
 def get_func_info(input_path):
     """
     Returns additional information about fMRI 
-    
+
+    Package
+    ----
+    `utils.filename_reader.py`    
     
     Parameters
     --------
@@ -341,23 +345,11 @@ def get_func_info(input_path):
 
 def get_suffix(string, debug=False):
     """
-    Returns the suffix for the new path, should contain information about the imaging sequance and/or the type of signal
+    Returns the suffix for the new path, should contain information about the imaging sequence and/or the type of signal, or anything supplementary
 
-    Possible suffixes:
-     - ct
-     - physiolog
-     - interoperability
-     - bold
-     - t2_spc_zoomit
-     - t2_space
-     - t2_tse
-     - t2_trufi3d
-     - t2_gre
-     - t1_tfe
-     - b_ffe
-     - t2_3d_tra_vista
-     - t2w_ffe
-     - ffe
+    Package
+    ----
+    `utils.filename_reader.py`
     
     Parameters
     --------
@@ -439,6 +431,10 @@ def is_date(str):
 
     Returns False otherwise
 
+    Package
+    ----
+    `utils.filename_reader.py`
+
     Parameters
     --------
         str : str,
@@ -468,6 +464,10 @@ def is_date(str):
 
 def is_derivative(type):
     """
+    Package
+    ----
+    `utils.filename_reader.py`
+
     Parameters
     --------
         type : str,
@@ -481,6 +481,10 @@ def is_derivative(type):
 
 def is_localizer(str):
     """
+    Package
+    ----
+    `utils.filename_reader.py`
+
     Parameters
     --------
         str : str,
@@ -501,6 +505,10 @@ def is_localizer(str):
 
 def is_other(str, debug=False):
     """
+    Package
+    ----
+    `utils.filename_reader.py`
+
     Parameters
     --------
         str : str,
@@ -524,6 +532,10 @@ def is_other(str, debug=False):
     
 def is_a_previous_version(input_path):
     """
+    Package
+    ----
+    `utils.filename_reader.py`
+    
     Parameters
     --------
         input_path : str,
@@ -542,6 +554,10 @@ def is_a_previous_version(input_path):
 
 def is_tmp(input_path):
     """
+    Package
+    ----
+    `utils.filename_reader.py`
+    
     Parameters
     --------
         input_path : str,
@@ -565,7 +581,11 @@ def is_tmp(input_path):
 def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
-
+    
+    Package
+    ----
+    `utils.filename_reader.py`
+    
     Parameters
     --------
         old_path : str,
@@ -623,6 +643,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
 
         if old_path.lower().split('/')[1] in ['up200' + str(i) for i in range(1,5) ]:
             simplified_old_path = '/'.join(old_path.split('/')[2:]).lower()
+        else:
+            simplified_old_path = old_path.lower()
         
         if sub =='':
             new_path += simplified_old_path
@@ -685,6 +707,10 @@ def create_filename_dict(str, participants_dict, **kwargs):
     Returns a dict containing information and sorting instructions ("new_path") given a path string and the participants dict.
     Handles suspected tmp files (contain 'tmp' in their path)
 
+    Package
+    ----
+    `utils.filename_reader.py`
+    
     Parameters
     --------
         str : str,

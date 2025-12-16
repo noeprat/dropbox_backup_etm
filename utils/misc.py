@@ -6,6 +6,10 @@ def extract_extension(str):
     Returns the extension of the filename / path string, dot included,
     returns an empty string if there is no extension (folders or specific files)
 
+    Package
+    ----
+    `utils.misc.py`
+
     Parameters
     --------
         str : str,
@@ -36,6 +40,10 @@ def extract_extension(str):
 def remove_extension(str):
     """
     Removes the extension of a path string
+    
+    Package
+    ----
+    `utils.misc.py`
 
     Parameters
     --------
@@ -56,6 +64,11 @@ def remove_extension(str):
         return str
 
 def pick_largest_str_in_list(str_list):
+    """
+    Package
+    ----
+    `utils.misc.py`
+    """
     res = ''
     for s in str_list:
         if len(s) > len(res):
@@ -65,6 +78,10 @@ def pick_largest_str_in_list(str_list):
 def get_path_info(path, data_path, debug=False):
     """
     Returns the infos contained in `path` by searching matching expressions from `data_path`
+
+    Package
+    ----
+    `utils.misc.py`
 
     Parameters
     --------
@@ -145,6 +162,11 @@ def get_path_info(path, data_path, debug=False):
     return path_info
 
 def clean_up_tmpdir(debug=False):
+    """
+    Package
+    ----
+    `utils.misc.py`
+    """
     for file in os.listdir('tmp_dir/'):
         if debug:
             print(file)

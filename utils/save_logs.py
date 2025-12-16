@@ -1,12 +1,19 @@
 import json
-from .filename_reader import create_filename_dict, generate_new_path, is_derivative
-from .misc import remove_extension
 import os
+
 from tqdm import tqdm
+
+from utils.filename_reader import create_filename_dict, generate_new_path
+from utils.globals import STRS_TO_REMOVE_FOR_JSONS_TO_DATA
+from utils.misc import remove_extension
 
 def save_file_list(input_files, file_list_path):
     """
     Saves a json in `file_list_path` containing all files in the source directory in the dropbox
+
+    Package
+    ----
+    `utils.save_logs.py`
 
     Parameters
     --------
@@ -48,6 +55,10 @@ def save_file_infos(input_files, participants_dict, file_infos_path, tmpfile_inf
     Saves a json in `file_infos_path` containing information and sorting instructions ("new_path") for all files in `input_files`
 
     Kwargs can be used to pre-determine some information
+
+    Package
+    ----
+    `utils.save_logs.py`
 
     Parameters
     --------
@@ -115,6 +126,10 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
 
     **Overwrites the file in `out_path`**
 
+    Package
+    ----
+    `utils.save_logs.py`
+
     Parameters
     --------
         file_infos_path : str,
@@ -178,6 +193,9 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
     """
     Saves a json in `jsons_to_data_path` matching metadata files with their respective data
 
+    Package
+    ----
+    `utils.save_logs.py`
 
     Parameters
     --------
@@ -199,14 +217,6 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
 
     out_dict = {}
 
-    strs_to_remove = [
-        '.',
-        'dicoms_',
-        't2g002_',
-        'brain_',
-        'nonanonymous_',
-        'ct_'
-    ]
 
     with open(file_infos_path, 'r') as f:
         file_infos = json.load(f)
@@ -232,7 +242,7 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
             filename = data_file.split('/')[-1].lower()
             curated_filename = remove_extension(filename)
             curated_json_filename = json_filename
-            for s in strs_to_remove:
+            for s in STRS_TO_REMOVE_FOR_JSONS_TO_DATA:
                 curated_json_filename = curated_json_filename.replace(s,'')
                 curated_filename = curated_filename.replace(s,'')
             if debug and c<10:
@@ -274,6 +284,10 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
     Saves a json in `corrected_file_infos_path` correcting the metadata file infos
 
     If no correction is required, it will save a renamed copy of the initial file
+
+    Package
+    ----
+    `utils.save_logs.py`
 
 
     Parameters
@@ -357,6 +371,10 @@ def write_paths_file(file_infos_path, out_path, old_prefix='', new_prefix=''):
 
     **Overwrites the file in `out_path`**
 
+    Package
+    ----
+    `utils.save_logs.py`
+
     Parameters
     --------
         file_infos_path : str,
@@ -424,6 +442,10 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
 
     **Overwrites the file in `out_path`**
 
+    Package
+    ----
+    `utils.save_logs.py`
+
     Parameters
     --------
         file_infos_path : str,
@@ -471,6 +493,10 @@ def merge_general_recaps(input_files, out_path):
     Merges the json recaps listed in `input_files` and saves the result in `out_path`
 
     **Overwrites the file in `out_path`**
+
+    Package
+    ----
+    `utils.save_logs.py`
 
     Parameters
     --------

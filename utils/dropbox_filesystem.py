@@ -1,10 +1,14 @@
-import json
-import sys
 import dropbox
+import json
+import numpy as np
+import sys
+
 from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
+
 from tqdm import tqdm
-import numpy as np
+
+from utils.globals import STOP_FLAGS, EXACT_STOP_FLAGS
 
 
     
@@ -13,6 +17,10 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
     """
     Returns all file paths within a specified directory
 
+    Package
+    ----
+    `utils.dropbox_filesystem.py`
+    
     Parameters
     --------
         TOKEN : str, 
@@ -56,36 +64,11 @@ def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, 
             
     all_paths = []
 
-    if exceptions:
-        stop_flags = [
-            "_results",
-            ".feat",
-            "scripts",
-            "_all_stls",
-#            "_from_stls",
-#            "3d_generation",
-            "roots_out",
-            "physiolog",
-            "blender",
-            "tmp",
-            "code",
-            "aspinalgen",
-            "roots_rootlets"
-        ]
-
-        exact_stop_flags = [
-            #'3d_generation',
-            '_all_stls',
-            'stls',
-            'objs',
-            'roots_out',
-            'screenshots'
-        ]
     for entry in dbx.files_list_folder(dir).entries:
         last_folder = (entry.path_display).split('/')[-1].lower()
         if recursive:  
             if type(entry) == dropbox.files.FolderMetadata:
-                if exceptions and (np.array([stop_flag in entry.path_display.lower() for stop_flag in stop_flags]).any() or last_folder in exact_stop_flags ):
+                if exceptions and (np.array([stop_flag in entry.path_display.lower() for stop_flag in STOP_FLAGS]).any() or last_folder in EXACT_STOP_FLAGS ):
                     if remove_source:
                         new_path = entry.path_display[len('/source'):]
                         if new_path[0] != '/':
@@ -118,7 +101,11 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
     """
     Sorts the files from `source_dir` and copies them to `target_dir` in the DropBox, 
     following the instructions in `file_infos_path`
-
+    
+    Package
+    ----
+    `utils.dropbox_filesystem.py`
+    
     Prerequisites
     ----
      - source directory is consistent with used file infos

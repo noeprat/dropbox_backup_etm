@@ -1,26 +1,24 @@
-from .misc import remove_extension, extract_extension, clean_up_tmpdir
+import dropbox
 import json
-import os
 import filecmp
-
-import nibabel as nib
-import numpy as np
+import os
 import sys
 
-import json
-import dropbox
-from dropbox.files import WriteMode
-from dropbox.exceptions import ApiError, AuthError
+from dropbox.exceptions import AuthError
 from tqdm import tqdm
 
-MAX_FILE_SIZE_FOR_COMPARISON = (2**10)**3 # 1Go limit when downloading for comparison
+from utils.globals import MAX_FILE_SIZE_FOR_COMPARISON
+from utils.misc import remove_extension, extract_extension, clean_up_tmpdir
 
 def flag_same_new_paths(file_infos_path, flagged_path):
     """
     Saves a json in `flagged_path` flagging different files that may have the same new path
 
     **Overwrites any existing file in `flagged_path`**
-
+    
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
@@ -69,7 +67,10 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
     Saves a json in `flagged_path` flagging different files that may be duplicates (with broader criteria than having the same new path)
 
     **Overwrites any existing file in `flagged_path`**
-
+    
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
@@ -163,6 +164,9 @@ def rename_duplicates(file_infos_path, flagged_path, new_file_infos_path):
 
     **Overwrites any existing file in `new_file_infos_path`**
 
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
@@ -204,6 +208,10 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
     and one in `not_downloaded_path` for the files it couldn't download (and that were not compared consequentially)
 
     **Requires a Dropbox access token**
+    
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
@@ -328,6 +336,10 @@ def regroup_actual_duplicates(actual_duplicates_path, new_duplicates_path, debug
     Removes redundancy in the flagged duplicates
 
     **Overwrites file infos in `new_duplicates_path`**
+    
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
@@ -366,6 +378,10 @@ def handle_duplicates_in_file_infos(actual_duplicates_path, file_infos_path, new
     Modifies the file infos after the actual duplicates have been flagged
 
     **Overwrites file infos in `new_file_infos_path`**
+
+    Package
+    ----
+    `utils.handle_duplicates.py`
 
     Parameters
     --------
