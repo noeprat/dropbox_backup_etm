@@ -30,7 +30,9 @@ def extract_id(input_path, debug=False):
         'fat_candidate_1',
         'fat_candidate_2',
         'fat_candidate_3',
-        '_-_DLIR'
+        '_-_DLIR',
+        "_viz_99p",
+        "_bin_99p"
     ]
     
     for s in strs_to_ignore:
@@ -58,7 +60,7 @@ def extract_id(input_path, debug=False):
     match2 = re.search(pattern2, input_path)
     if match2:
         id_elt += match2.group(1)
-        
+
     return id_elt
 
 
@@ -124,9 +126,9 @@ def extract_type(input_path, debug=False):
     extension = extract_extension(input_path)
     keywords = [keyword.lower() for keyword in filename.split('_')]
     root_dirs_keywords = []
-    for dir in input_path.split('/')[:-1:]:
-        root_dirs_keywords+= [keyword.lower() for keyword in dir.split('_')]
-
+    root_dirs_keywords = [keyword.lower() 
+                      for dir in input_path.split('/')[:-1:]
+                      for keyword in dir.split('_') ]
     if debug:
         print(root_dirs_keywords)
     
@@ -162,7 +164,10 @@ def extract_type(input_path, debug=False):
         type = "func"
 
     elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
-        if 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
+        pattern = re.compile(r'dilate_\d*')
+        if re.search(pattern, filename) or "wimagine_covers_center" in filename or "visualization" in root_dirs_keywords:
+            type = "anat_derivatives"
+        elif 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
             type = 'anat_segmentation'
         elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat'] or 'im_straight' in root_dirs_keywords:
             if debug:
@@ -419,7 +424,8 @@ def get_suffix(string, debug=False):
             if suffix == '':
                 suffix = extra
             else:
-                suffix = suffix + '_' + extra
+                if extra not in suffix:
+                    suffix = suffix + '_' + extra
     suffix = suffix.strip('_')
     suffix = suffix.replace('__', '_')
     return suffix
@@ -650,7 +656,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         suffix_elt = suffix
         if 'segmentation' in type and suffix in seg_info:
             suffix_elt = ''
-        if type in ['func_derivatives', 'func_segmentation'] and suffix in func_info:
+        if suffix in func_info:
             suffix_elt = ''
         if 'func' in type:
             if func_task != '':
