@@ -113,7 +113,7 @@ def get_path_info(path, data_path, debug=False):
 
         dir_expressions = [dir_expression 
                            for dir_expression in expressions_to_search_in_dirs 
-                           if dir_expression in dir and (dir_expression not in path_infos)]
+                           if dir_expression in dir and (dir_expression not in '_'.join(path_infos))]
         if debug:
             print('dir expressions: ',dir_expressions)
         chosen_dir_expression = pick_largest_str_in_list(dir_expressions)
@@ -124,7 +124,7 @@ def get_path_info(path, data_path, debug=False):
 
     filename_expressions = [filename_expression 
                             for filename_expression in expressions_to_search_in_filename 
-                            if filename_expression in filename and (filename_expression not in path_infos)]
+                            if filename_expression in filename and (filename_expression not in '_'.join(path_infos))]
     chosen_filename_expression = pick_largest_str_in_list(filename_expressions)
     if debug:
         print('filename expressions: ',filename_expressions)
@@ -134,7 +134,7 @@ def get_path_info(path, data_path, debug=False):
 
     end_of_filename_expressions = [filename_expression 
                             for filename_expression in expressions_to_search_at_end_of_filename 
-                            if filename_expression in end_of_filename and (filename_expression not in path_infos)]
+                            if filename_expression in end_of_filename and (filename_expression not in '_'.join(path_infos))]
     path_infos.append(pick_largest_str_in_list(end_of_filename_expressions))
     if debug:
         print('end_of_filename expressions: ',end_of_filename_expressions)
