@@ -1,101 +1,111 @@
 {
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/ARM_TRUNK_Test_SegmentAnyMuscle/": {
-        "is_tmp": true,
-        "new_path": "drtfch"
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/_Trunk_Arm_For_Segmentation/": {
-        "type": "anat"
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/UP2003_ARM_TRUNK_MRI_NIFTI/Spine_Structural/": {
-        "type": "anat"
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/UP2003_ARM_TRUNK_MRI_NIFTI/_Trunk_Input/": {
-        "type": "anat"
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/UP2003_ARM_TRUNK_MRI_NIFTI/_Trunk_Arm_For_Segmentation": {
-        "type": "anat"
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/UP2003_ARM_TRUNK_MRI_NIFTI/_localizer_others/": {
-        "type": "anat",
-        "is_localizer": true
-    },
-    "/UP2003/UP2003_Imaging/_For_Muscle_Segmentations/_MRI_ARM_TRUNK/Segmentations/UP2003_ARM_TRUNK_MRI_NIFTI/UP2003": {
-        "type": "anat"
-    },
-    "/UP2003/UP2003_Imaging/UP2003_Brain_MRI_NIFTI/Functional_For_Nav/_muptiplied_by_500/": {
-        "func_info": "for_nav_multiplied_by_500"
-    },
-    "/UP2003/UP2003_Imaging/UP2003_Brain_MRI/UP2003_Brain_MRI_NIFTI/_All_Runs/UP2003_Brain_MRI_MOT_RShoulder_SMS3_2ISO_TR2_pat2_ON_wip_AdvPhysio_20241127134443_66.nii.gz": {
-        "id": "66",
-        "sub": "sub-03",
+    "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json": {
+        "old_path": "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json",
+        "id": "23",
+        "sub": "sub-04",
         "type": "func",
-        "extension": ".nii.gz",
-        "category": "",
-        "func_task": "rshoulder",
+        "extension": ".json",
+        "category": "spine",
+        "func_task": "rest_125mes",
         "func_info": "",
         "is_tmp": false,
         "is_localizer": false,
         "is_other": false,
         "is_a_previous_version": false,
-        "suffix": "bold_small",
+        "suffix": "bold",
         "is_derivative": false
     },
-    "/UP2003/UP2003_Imaging/UP2003_Brain_MRI/UP2003_Brain_MRI_NIFTI/_All_Runs/UP2003_BRAIN_MRI_MOT_Rgrasp_SMS3_2ISO_TR2_pat2_ON_wip_AdvPhysio_20241127134443_59.nii.gz": {
-        "old_path": "/UP2003/UP2003_Imaging/UP2003_Brain_MRI/UP2003_Brain_MRI_NIFTI/_All_Runs/UP2003_BRAIN_MRI_MOT_Rgrasp_SMS3_2ISO_TR2_pat2_ON_wip_AdvPhysio_20241127134443_59.nii.gz",
-        "id": "59",
-        "sub": "sub-03",
-        "type": "func",
-        "extension": ".nii.gz",
-        "category": "",
-        "func_task": "rgrasp",
-        "func_info": "",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "bold_small",
-        "is_derivative": false
-    },
-    "/UP2003/UP2003_Imaging/UP2003_Spine_MRI_NIFTI/Structural/Preprocessed/UP2003_Spine_MRI_t2_space_sag_p2_iso_20241204142558_3_modified.nii.gz": {
-        "old_path": "/UP2003/UP2003_Imaging/UP2003_Spine_MRI_NIFTI/Structural/Preprocessed/UP2003_Spine_MRI_t2_space_sag_p2_iso_20241204142558_3_modified.nii.gz",
-        "id": "3",
-        "sub": "sub-03",
-        "type": "anat_derivatives",
-        "extension": ".nii.gz",
-        "category": "spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "t2_space_modified",
+    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs": {
+        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs",
+        "id": "",
+        "sub": "sub-04",
+        "type": "modelling",
         "is_derivative": true
     },
-    "/UP2003/UP2003_Imaging/UP2003_Spine_MRI_NIFTI/Structural/Preprocessed/UP2003_Spine_MRI_t2_space_sag_p2_iso_20241204142558_3.nii.gz": {
-        "old_path": "/UP2003/UP2003_Imaging/UP2003_Spine_MRI_NIFTI/Structural/Preprocessed/UP2003_Spine_MRI_t2_space_sag_p2_iso_20241204142558_3.nii.gz",
-        "id": "3",
-        "sub": "sub-03",
-        "type": "anat_derivatives",
-        "extension": ".nii.gz",
-        "category": "spine",
+    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv": {
+        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv",
+        "id": "",
+        "sub": "sub-04",
+        "type": "anat_segmentation",
+        "extension": ".csv",
+        "category": "model_arm",
+        "seg_info": "volumes",
         "is_tmp": false,
         "is_localizer": false,
         "is_other": false,
         "is_a_previous_version": false,
-        "suffix": "t2_space",
+        "suffix": "v1",
         "is_derivative": true
     },
-    "/UP2003/UP2003_Imaging/UP2003_Brain_MRI_NIFTI/Structural/UP2003_Brain_MRI_wip19_mp2rage_1iso_cs4p6_20241127134443_12_to_t1.log": {
-        "old_path": "/UP2003/UP2003_Imaging/UP2003_Brain_MRI_NIFTI/Structural/UP2003_Brain_MRI_wip19_mp2rage_1iso_cs4p6_20241127134443_12_to_t1.log",
-        "id": "12",
-        "sub": "sub-03",
-        "type": "anat_derivatives",
-        "extension": ".log",
-        "category": "",
+    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx": {
+        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx",
+        "id": "",
+        "sub": "sub-04",
+        "type": "anat_segmentation",
+        "extension": ".xlsx",
+        "category": "model_arm",
         "is_tmp": false,
         "is_localizer": false,
         "is_other": false,
         "is_a_previous_version": false,
-        "suffix": "wip19_mp2rage_to_t1",
+        "suffix": "list_muscles_labels_v1",
+        "is_derivative": true
+    },
+    "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb": {
+        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb",
+        "id": "",
+        "sub": "sub-04",
+        "type": "anat_segmentation",
+        "seg_info": "scene",
+        "extension": ".mrb",
+        "category": "model_arm",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "v1",
+        "is_derivative": true
+    },
+    "/UP2004/Models/Model_Spine/UP2004.smash_Results": {
+        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash_Results",
+        "id": "",
+        "sub": "sub-04",
+        "type": "simulation",
+        "extension": "",
+        "category": "model_spine",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "results",
+        "is_derivative": true
+    },
+    "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470": {
+        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470",
+        "id": "",
+        "sub": "sub-04",
+        "type": "simulation",
+        "extension": ".f94d6557-848c-41e8-8cdc-d32b6d59b470",
+        "category": "model_spine",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "saved_by_s4l",
+        "is_derivative": true
+    },
+    "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4": {
+        "old_path": "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4",
+        "id": "",
+        "sub": "sub-04",
+        "type": "simulation",
+        "extension": ".d975a096-80b1-469b-8948-b31e3caa30e4",
+        "category": "model_spine",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "saved_by_s4l",
         "is_derivative": true
     }
 }

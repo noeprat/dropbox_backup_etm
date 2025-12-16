@@ -9,21 +9,24 @@
         "smoothness"
     ],
     "to_search_in_dirs": [
-        "mp2rage",
-        "mp2rage_for_3d",
-        "registered_2_mp2rage",
-        "registered_2_mp2rage_for_3d",
-        "registered_to_t1_mp2rage",
         "10_uncorrected_muscles",
         "11_corrected_muscles",
         "straight",
         "v_20240611",
-        "corrected"
+        "corrected",
+        "dilate_01",
+        "dilate_02",
+        "dilate_03",
+        "dilate_04",
+        "dilate_05",
+        "bin_06"
     ],
     "to_search_in_filename": [
         "physiological",
         "physiolog",
         "t2_space",
+        "t2_space_075",
+        "t2_space_08",
         "t2_tse",
         "t2_trufi3d",
         "t2space",
@@ -35,6 +38,8 @@
         "t2_gre",
         "t1_tfe",
         "t1_spc3d",
+        "t1_vibe",
+        "t1_vibe_dixon",
         "t1sp3d",
         "b_ffe",
         "t2_3d_tra_vista",
@@ -58,6 +63,8 @@
         "intersections_voxel_mod",
         "intersections_voxel",
         "intersections_world",
+        "intersect_voxels_stl",
+        "intersect_world_stl",
         "root_segments_mod",
         "root_segments",
         "list_muscles_labels",
@@ -93,6 +100,8 @@
 
         "uncorrected",
         "corrected",
+        "corrected_for_substract",
+        "corrected_from_sub",
         
         "t2_spc_zoomit_stardist",
         "t2_spc_zoomit_rpi",
@@ -107,7 +116,19 @@
         "not_cropped_but_zeros",
         "orig_header",
         "orig_header_cropped",
-        "modified"
+        "modified",
+        "dilate_01",
+        "dilate_02",
+        "dilate_03",
+        "dilate_04",
+        "dilate_05",
+        "center",
+        "viz",
+        "viz_99p",
+        "viz_95p",
+        "bin",
+        "bin_95p",
+        "bin_99p"
     ],
     "extra": [
         "resampled",

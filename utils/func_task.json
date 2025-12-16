@@ -31,17 +31,29 @@
         "left_wrist_ext_1",
         "left_wrist_ext_2",
 
+        "wrist_left_ext_1",
+        "wrist_left_ext_2",
+
         "right_wrist",
         "right_wrist_ext_1",
         "right_wrist_ext_2",
+
+        "wrist_right_ext_1",
+        "wrist_right_ext_2",
 
         "left_fingers",
         "left_fingers_ext_1",
         "left_fingers_ext_2",
 
+        "fingers_left_ext_1",
+        "fingers_left_ext_2",
+
         "right_fingers",
         "right_fingers_ext_1",
         "right_fingers_ext_2",
+        
+        "fingers_right_ext_1",
+        "fingers_right_ext_2",
 
         "fingers_extension_1",
         "fingers_extension_2",
@@ -86,17 +98,29 @@
         "left_wrist_ext_1",
         "left_wrist_ext_2",
 
+        "wrist_extens_left_stretch_1",
+        "wrist_extens_left_stretch_2",
+
         "right_wrist",
         "right_wrist_ext_1",
         "right_wrist_ext_2",
+
+        "wrist_extens_right_stretch_1",
+        "wrist_extens_right_stretch_2",        
 
         "left_fingers",
         "left_fingers_ext_1",
         "left_fingers_ext_2",
 
+        "fingers_flexors_left_stretch_1",
+        "fingers_flexors_left_stretch_2",
+
         "right_fingers",
         "right_fingers_ext_1",
         "right_fingers_ext_2",
+        
+        "fingers_flexors_right_stretch_1",
+        "fingers_flexors_right_stretch_2",
 
         "rest_10min",
         "rest_125mes",
@@ -111,12 +135,12 @@
         "wristextension4",
 
         "lelbow",
+        "lgrasp",
         "lshoulder",
         "lwrist",
         "relbow",
-        "rshoulder",
         "rgrasp",
-        "lgrasp",
+        "rshoulder",
         "rwrist"
 
 
