@@ -1,6 +1,10 @@
 {
     "to_ignore":[
-        "bin_2800_wimagine"
+        "bin_2800_wimagine",
+        "dl_spine_seg",
+        "dl_spine_seg_full",
+        "dl_vertebrae_seg",
+        "dl_vertebrae_seg_full"
     ],
     "to_search_in_dirs": [
         "for_3d_import",
@@ -75,6 +79,7 @@
         "for_rendering",
         "visualization",
         "bones_only",
+        "for_bones",
         "muscles_only",
         "for_visu"
     ],

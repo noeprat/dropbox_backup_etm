@@ -1,111 +1,11 @@
 {
-    "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json": {
-        "old_path": "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json",
-        "id": "23",
-        "sub": "sub-04",
-        "type": "func",
-        "extension": ".json",
-        "category": "spine",
-        "func_task": "rest_125mes",
-        "func_info": "",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "bold",
+    "/MRI_COMPATIBLE_MANUALS":{
         "is_derivative": false
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs",
-        "id": "",
-        "sub": "sub-04",
-        "type": "modelling",
-        "is_derivative": true
+    "/SPL002/SPL002_MRI_NIFTI_zip/for_bones/SPL002_MRI_t2_gre_sag_sergio_mat384_TR428_06x0.6_5min47_20240508180712_6_DL_Vertebrae_seg_full/SPL002_MRI_t2_gre_sag_sergio_mat384_TR428_06x0.6_5min47_20240508180712_6_seg_Vertebrae.nii.gz": {
+        "seg_info": "dl_vertebrae_seg_full_vertebrae"
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "extension": ".csv",
-        "category": "model_arm",
-        "seg_info": "volumes",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "v1",
-        "is_derivative": true
-    },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "extension": ".xlsx",
-        "category": "model_arm",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "list_muscles_labels_v1",
-        "is_derivative": true
-    },
-    "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "seg_info": "scene",
-        "extension": ".mrb",
-        "category": "model_arm",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "v1",
-        "is_derivative": true
-    },
-    "/UP2004/Models/Model_Spine/UP2004.smash_Results": {
-        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash_Results",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": "",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "results",
-        "is_derivative": true
-    },
-    "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470": {
-        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": ".f94d6557-848c-41e8-8cdc-d32b6d59b470",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "saved_by_s4l",
-        "is_derivative": true
-    },
-    "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4": {
-        "old_path": "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": ".d975a096-80b1-469b-8948-b31e3caa30e4",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "saved_by_s4l",
-        "is_derivative": true
+    "/SPL002/20240508_SPL002_MRI_DICOM_ANONYMIZED.zip": {
+        "id": ""
     }
 }

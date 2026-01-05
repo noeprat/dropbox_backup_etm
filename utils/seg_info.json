@@ -8,7 +8,8 @@
         "mri_brain",
         "ct_post_op_brain",
         "up2004_brain_mri",
-        "up2004_spine_mri"
+        "up2004_spine_mri",
+        "t2_ciss3d"
     ],
     "to_search_in_dirs": [
         "50_z_boxes",
@@ -44,6 +45,9 @@
         "seg_model_1_roots_as_one_entity",
         "seg_model_1",
         "dl_vertebrae_seg",
+        "dl_vertebrae_seg_full",
+        "dl_spine_seg",
+        "dl_spine_seg_full",
         "mp2rage_total_segmentator",
         "t1spc3d_total_segmentator",
         "total_segmentator_test",
