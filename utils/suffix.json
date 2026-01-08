@@ -129,7 +129,8 @@
         "viz_95p",
         "bin",
         "bin_95p",
-        "bin_99p"
+        "bin_99p",
+        "corrected_no_extra"
     ],
     "extra": [
         "resampled",

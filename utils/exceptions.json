@@ -7,5 +7,81 @@
     },
     "/SPL002/20240508_SPL002_MRI_DICOM_ANONYMIZED.zip": {
         "id": ""
+    },
+    "/SPL004/SPL004_Imaging/SPL004_MRI_Pre_Op/SPL004_MRI_Pre_Op_NIFTI/mri_bones/SPL004_MRI_Pre_Op_t2_gre_sag_sergio_mat384_TR428_06x06_5min47_20240913142059_3_DL_Vertebrae_seg_full/SPL004_MRI_Pre_Op_t2_gre_sag_sergio_mat384_TR428_06x06_5min47_20240913142059_3_seg_Vertebrae.nii.gz": {
+        "seg_info": "dl_vertebrae_seg_full_vertebrae"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op_Prone/SPL004_CT_Post_Op_Prone_NIFTI/SPL004_CT_Post_Op_Prone_72_RACHIS_LOMBAIRE_20241111143140_302_Total_Segment_Segs/": {
+        "id": "302"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op_Prone/SPL004_CT_Post_Op_Prone_NIFTI/SPL004_CT_Post_Op_Prone_72_RACHIS_LOMBAIRE_20241111143140_301_Total_Segment_Segs/": {
+        "id": "301"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op_Prone/SPL004_CT_Post_Op_Prone_NIFTI/SPL004_CT_Post_Op_Prone_72_RACHIS_LOMBAIRE_20241111143140_2_Total_Segment_Segs/": {
+        "id": "2"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op/SPL004_CT_Post_Op_NIFTI/SPL004_CT_Post_Op_302_Total_Segmentator_Segs/": {
+        "id": "302"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op/SPL004_CT_Post_Op_NIFTI/SPL004_CT_Post_Op_301_Total_Segmentator_Segs/": {
+        "id": "301"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op/SPL004_CT_Post_Op_NIFTI/SPL004_CT_Post_Op_2_Total_Segmentator_Segs/": {
+        "id": "2"
+    },
+    "/SPL004/SPL004_Imaging/SPL004_CT_Post_Op/SPL004_CT_Post_Op_NIFTI/SPL004_CT_Post_Op_303_Total_Segmentator_Segs/": {
+        "id": "303"
+    },
+    "/SPL004/Model/_Previous_Versions/SPL004_v_00.smash": {
+        "suffix": "v00"
+    },
+    "/SPL004/Model/_Previous_Versions/SPL004_v0_20241027.smash": {
+        "suffix": "v0_20241027"
+    },
+    "/SPL004/Model/_Previous_Versions/SPL004_v_01.smash": {
+        "suffix": "v01"
+    },
+    "/SPL004/Model/Post_Op/3D_Generation/SPL004_Post_Op_STL_export.smash": {
+        "category": "3d_generation_post_op",
+        "suffix": "stl_export"
+    },
+    "/SPL004/Model/3D_Generation/SPL004_STL_export.smash": {
+        "category": "3d_generation",
+        "suffix": "stl_export"
+    },
+    "/SPL004/Model/SPL004.smash.c5bf3d18-b085-476a-b2cb-3450f3f76031": {
+        "id": "",
+        "sub": "sub-04",
+        "type": "simulation",
+        "extension": "",
+        "category": "",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "saved_by_s4l",
+        "is_derivative": true,
+        "new_path": "derivatives/simulation/sub-04/sub-04_saved_by_s4l.smash.c5bf3d18-b085-476a-b2cb-3450f3f76031"
+    },
+    "/SPL004/Model/SPL004.smash_Results": {
+        "old_path": "/SPL004/Model/SPL004.smash_Results",
+        "id": "",
+        "sub": "sub-04",
+        "type": "simulation",
+        "extension": "",
+        "category": "",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "",
+        "is_derivative": true,
+        "new_path": "derivatives/simulation/sub-04/sub-04.smash_results"
+    },
+    "303_Tilt_Eq_1": {
+        "id": "303_tilt_eq_1"
+    },
+    "302_Eq_1": {
+        "id": "302_eq_1"
     }
 }
