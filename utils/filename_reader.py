@@ -27,11 +27,13 @@ def extract_id(input_path, debug=False):
     """
     filename = remove_extension(input_path).split('/')[-1].lower()
     id_index = None
+    curated_input_path = input_path.lower()
 
     # curate filename to avoid confusions
     
     for s in STRS_TO_IGNORE_FOR_ID:
         filename = filename.replace(s, '')
+        curated_input_path = curated_input_path.replace(s, '')
     
 
     split = filename.split("_")
@@ -55,7 +57,10 @@ def extract_id(input_path, debug=False):
     match2 = re.search(pattern2, input_path)
     if match2:
         id_elt += match2.group(1)
-
+    pattern3 = re.compile(r'ct_post_op_(\d+)')
+    match3 = re.search(pattern3, curated_input_path)
+    if match3:
+        id_elt += match3.group(1)
     return id_elt
 
 
