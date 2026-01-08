@@ -31,7 +31,9 @@ STRS_TO_IGNORE_FOR_ID = [
         'fat_candidate_3',
         '_-_DLIR',
         "_viz_99p",
-        "_bin_99p"
+        "_bin_99p",
+        "ct_post_op_77",
+        "ct_post_op_7.7",
     ]
 
 MAX_FILE_SIZE_FOR_COMPARISON = (2**10)**3 # 1Go limit when downloading for comparison
