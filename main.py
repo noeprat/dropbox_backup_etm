@@ -182,7 +182,7 @@ if __name__ == '__main__':
         # handle duplicates    
 
         
-        s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
+        s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/u(se previous)] \n')
         
         if s == 'y':
             flag_potential_duplicates(
@@ -209,15 +209,21 @@ if __name__ == '__main__':
                 file_infos_path= file_infos_path,
                 new_file_infos_path= file_infos_path
             )
-        elif s == 'use_previous':
+        elif s == 'u':
             actual_duplicates_path_user = input_with_default('actual_duplicates_path')
+
+            regroup_actual_duplicates(
+                actual_duplicates_path=actual_duplicates_path_user,
+                new_duplicates_path=actual_duplicates_path_user
+            )
+
             handle_duplicates_in_file_infos(
                 actual_duplicates_path=actual_duplicates_path_user,
                 file_infos_path= file_infos_path,
                 new_file_infos_path= file_infos_path
             )
 
-        s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/use_previous] \n')
+        s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/u(se previous)] \n')
 
         if s=='y':
             save_jsons_to_data(
@@ -231,7 +237,7 @@ if __name__ == '__main__':
                             corrected_file_infos_path = corrected_file_infos_path
                         )
             
-        elif s == 'use_previous':
+        elif s == 'u':
             jsons_to_data_path_user = input_with_default('jsons_to_data_path')
 
             correct_file_infos_with_matching_metadata(
