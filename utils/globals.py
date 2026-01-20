@@ -20,7 +20,8 @@ EXACT_STOP_FLAGS = [
         'stls',
         'objs',
         'roots_out',
-        'screenshots'
+        'screenshots',
+        'dicom'
     ]
 
 STRS_TO_IGNORE_FOR_ID = [
