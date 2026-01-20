@@ -81,6 +81,8 @@ def save_file_infos(input_files, participants_dict, file_infos_path, tmpfile_inf
     --------
         sub : str,
             precises the sub name
+        ses : str,
+            precises the session
         type : str,
             precises if it is 'anat', 'func', etc.
         category : str,
@@ -167,14 +169,15 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
         
         if should_be_refreshed:
             new_path = generate_new_path(
-                old_path= file_infos[file]['old_path'],
+                old_path = file_infos[file]['old_path'],
                 sub = file_infos[file]['sub'],
+                ses = file_infos[file]['ses'],
                 id = file_infos[file]['id'],
                 type = file_infos[file]['type'],
                 category = file_infos[file]['category'],
                 seg_info = seg_info,
-                func_task= func_task,
-                func_info= func_info,
+                func_task = func_task,
+                func_info = func_info,
                 suffix = file_infos[file]['suffix'],
                 extension = file_infos[file]['extension'],
                 is_tmp_bool = file_infos[file]['is_tmp'],
