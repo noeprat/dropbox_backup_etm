@@ -578,7 +578,7 @@ def is_tmp(input_path):
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
 
-def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+def generate_new_path(old_path, sub, ses, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
     
@@ -590,6 +590,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
     --------
         old_path : str,
         sub : str,
+        ses : str,
         id : str,
         type : str,
         category : str,
@@ -610,6 +611,13 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             new path for the original file
     """
     new_path = ''
+
+    if ses == '':
+        sub_ses_folder = sub
+        sub_ses_file = sub
+    else:
+        sub_ses_folder = sub + '/' + ses
+        sub_ses_file = sub + '_' + ses
 
     if is_tmp_bool:
         new_path = 'tmp' + old_path
@@ -636,7 +644,7 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
-            new_path = 'code/' + sub + '/' + simplified_old_path
+            new_path = 'code/' + sub_ses_folder + simplified_old_path
     
     elif type in ['misc','modelling']:
         new_path = 'derivatives/' + type
@@ -649,18 +657,18 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub =='':
             new_path += simplified_old_path
         else:
-            new_path += '/' + sub + '/' + simplified_old_path
+            new_path += '/' + sub_ses_folder + '/' + simplified_old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
             if 'segmentation' in type:
-                new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
+                new_path += 'segmentation/' + sub_ses_folder + '/' + type.split('_')[0] + '/'
             elif 'derivatives' in type:
-                new_path += type.split('_')[0] + '/' + sub +'/'
+                new_path += type.split('_')[0] + '/' + sub_ses_folder +'/'
             else:
-                new_path += type +'/' + sub + '/'
+                new_path += type +'/' + sub_ses_folder + '/'
         else:
-            new_path += sub + '/' + type + '/'
+            new_path += sub_ses_folder + '/' + type + '/'
             if ('dicom' in old_path.lower() or type in ['anat','func','ct']) and extension==".zip":
                 new_path += 'dicom/'
 
@@ -689,12 +697,12 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 seg_info= ''
             elif func_info in seg_info:
                 func_info= ''
-            elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix_elt]  
+            elements = [sub_ses_file, category, id_element, task_elt, func_info, seg_info, suffix_elt]  
         elif type == 'simulation' and 'selectivity' in old_path.split('/')[-1].lower():
             end = old_path.split('/')[-1].lower().strip('_')
-            elements = [sub, category, end]
+            elements = [sub_ses_file, category, end]
         else:
-            elements = [sub, category, id_element, seg_info, suffix_elt]
+            elements = [sub_ses_file, category, id_element, seg_info, suffix_elt]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
         new_path = new_path.replace('//', '/')
@@ -727,6 +735,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     --------
         sub : str,
             precises the sub name
+        ses : str,
+            precises the session
         type : str,
             precises if it is 'anat', 'func', etc.
         category : str,
@@ -751,6 +761,11 @@ def create_filename_dict(str, participants_dict, **kwargs):
     else:
         sub = kwargs['sub']
     out["sub"] = sub
+
+    if "ses" in kwargs.keys():
+        ses = kwargs['ses']
+    else:
+        ses = ''
     
     if 'type' not in kwargs.keys():
         type = extract_type(str)
@@ -827,6 +842,7 @@ def create_filename_dict(str, participants_dict, **kwargs):
     new_path = generate_new_path(
         str,
         sub,
+        ses,
         id,
         type,
         category,
