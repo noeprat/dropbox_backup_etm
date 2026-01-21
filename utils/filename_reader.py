@@ -62,6 +62,13 @@ def extract_run(input_path, debug=False):
             run_elt += '0' + match3.group(4)
         else:
             run_elt += match3.group(4)
+    if input_path.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'run-([\d]*)')
+        match1 = re.search(pattern1,input_path)
+        if match1:
+            run_elt = match1.group(1).lower()
+        else:
+            run_elt =''
     return run_elt
 
 
@@ -97,6 +104,13 @@ def extract_sub(str, participants_dict):
         sub = participants_dict[old_sub]
     else:
         sub=''
+    if str.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'/(sub-[\d]*)/')
+        match1 = re.search(pattern1,str)
+        if match1:
+            sub = match1.group(1).lower()
+        else:
+            sub=''
     return sub
 
     #while (old_name not in participants_dict.keys()) and i <len(split):
@@ -243,6 +257,13 @@ def get_ses(input_path, debug=False):
         ses = match1.group(1).lower()
     except:
         ses=''
+    if input_path.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'/ses-([\d]*)/')
+        match1 = re.search(pattern1,input_path)
+        if match1:
+            ses = match1.group(1).lower()
+        else:
+            ses=''
     return ses
 
 
@@ -335,6 +356,13 @@ def get_func_task(input_path, debug=False):
     'right_grasp'
     'left_grasp'
     """
+    if str.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'task-([^_]*)_')
+        match1 = re.search(pattern1,input_path)
+        if match1:
+            func_task = match1.group(1).lower()
+        else:
+            func_task = ''
     
     func_task = get_path_info(
         path= input_path,
