@@ -1,13 +1,13 @@
 import json
 import re
 
-from utils.globals import STRS_TO_IGNORE_FOR_ID
-from utils.misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
+from utils.globals import STRS_TO_IGNORE_FOR_RUN
+from utils.misc import get_path_info, remove_extension, extract_extension
 
     
-def extract_id(input_path, debug=False):
+def extract_run(input_path, debug=False):
     """
-    Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
+    Returns the run of a filename (SeriesNumber with sometimes additional characters) as a string
 
     Package
     ----
@@ -22,15 +22,15 @@ def extract_id(input_path, debug=False):
     
     Returns
     --------
-        id_elt: str,
-            the id of the specified filename
+        run_elt: str,
+            the run corresponding to the specified filename
     """
     filename = remove_extension(input_path).split('/')[-1].lower()
-    id_index = None
+    run_index = None
 
     # curate filename to avoid confusions
     
-    for s in STRS_TO_IGNORE_FOR_ID:
+    for s in STRS_TO_IGNORE_FOR_RUN:
         filename = filename.replace(s, '')
     
 
@@ -38,25 +38,31 @@ def extract_id(input_path, debug=False):
     for i,elt in enumerate(split[:-1]):
         #if is_date(elt) or (elt=='ct' and split[i+1].isnumeric()):
         if is_date(elt):
-            id_index = i+1
+            run_index = i+1
             break
-    id_elt = ''
+    run_elt = ''
 
-    if id_index is not None:
-        for split_elt in split[id_index:]:
+    if run_index is not None:
+        for split_elt in split[run_index:]:
             if (not split_elt.isalpha()) and (not split_elt in ['s4l']):
-                id_elt = id_elt + split_elt.lower()
+                run_elt = run_elt + split_elt.lower()
 
     pattern1 = re.compile(r'CT_\D*_([\d_]*)_bin')
     match1 = re.search(pattern1,input_path)
     if match1:
-        id_elt += match1.group(1)
+        run_elt += match1.group(1)
     pattern2 = re.compile(r'Pre_Op_CT_([\d_]*)_bin')
     match2 = re.search(pattern2, input_path)
     if match2:
-        id_elt += match2.group(1)
-
-    return id_elt
+        run_elt += match2.group(1)
+    pattern3 = re.compile(r'/([^/]*)_(Ext|Flex)_(A|P)_([\d]*)/')
+    match3 = re.search(pattern3, input_path)
+    if match3:
+        if int(match3.group(4))<10:
+            run_elt += '0' + match3.group(4)
+        else:
+            run_elt += match3.group(4)
+    return run_elt
 
 
 def extract_sub(str, participants_dict):
@@ -79,17 +85,27 @@ def extract_sub(str, participants_dict):
         new_name: str,
             the new participant code ('sub-*')
     """
-    filename = str.split("/")[-1]
-    split = filename.split("_")
-    old_name = split[0]
-    i=1
-    while (old_name not in participants_dict.keys()) and i <len(split):
-        old_name += '_' + split[i]
-        i+=1
-    if old_name not in participants_dict.keys():
-        return ''
+    #filename = str.split("/")[-1]
+    #split = filename.split("_")
+    #old_name = split[0]
+    #i=1
+
+
+    #   specific to lumbar_healthy_fmri
+    old_sub = str.split('/')[1]
+    if old_sub in participants_dict.keys():
+        sub = participants_dict[old_sub]
     else:
-        return participants_dict[old_name]
+        sub=''
+    return sub
+
+    #while (old_name not in participants_dict.keys()) and i <len(split):
+    #    old_name += '_' + split[i]
+    #    i+=1
+    #if old_name not in participants_dict.keys():
+    #    return ''
+    #else:
+    #    return participants_dict[old_name]
 
 def extract_type(input_path, debug=False):
     """
@@ -200,6 +216,35 @@ def extract_type(input_path, debug=False):
         type = 'misc'
     
     return type
+
+def get_ses(input_path, debug=False):
+    """
+    Returns the session identifier
+
+    Package
+    ----
+    `utils.filename_reader.py`
+    
+    Parameters
+    --------
+        input_path : str,
+            a path/filename string
+        debug : bool, default = False
+            prints variables if set to True
+    
+    Returns
+    --------
+        ses: str,
+            the session of the specified file
+    """
+    try:
+        pattern1 = re.compile(r'/([^/]*)_(Ext|Flex)')
+        match1 = re.search(pattern1,input_path)
+        ses = match1.group(1).lower()
+    except:
+        ses=''
+    return ses
+
 
 def get_category(input_path, debug=False):
     """
@@ -578,7 +623,7 @@ def is_tmp(input_path):
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
 
-def generate_new_path(old_path, sub, ses, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+def generate_new_path(old_path, sub, ses, run, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
     
@@ -591,7 +636,7 @@ def generate_new_path(old_path, sub, ses, id, type, category, seg_info, func_tas
         old_path : str,
         sub : str,
         ses : str,
-        id : str,
+        run : str,
         type : str,
         category : str,
         seg_info : str,
@@ -679,10 +724,10 @@ def generate_new_path(old_path, sub, ses, id, type, category, seg_info, func_tas
         elif is_a_previous_version_bool:
             new_path += '_previous_version/'
         
-        if id != '':
-            id_element = 'id-' +id
+        if run != '':
+            run_element = 'run-' +run
         else:
-            id_element = ''
+            run_element = ''
         suffix_elt = suffix
         if 'segmentation' in type and suffix in seg_info:
             suffix_elt = ''
@@ -697,12 +742,12 @@ def generate_new_path(old_path, sub, ses, id, type, category, seg_info, func_tas
                 seg_info= ''
             elif func_info in seg_info:
                 func_info= ''
-            elements = [sub_ses_file, category, id_element, task_elt, func_info, seg_info, suffix_elt]  
+            elements = [sub_ses_file, category, run_element, task_elt, func_info, seg_info, suffix_elt]  
         elif type == 'simulation' and 'selectivity' in old_path.split('/')[-1].lower():
             end = old_path.split('/')[-1].lower().strip('_')
             elements = [sub_ses_file, category, end]
         else:
-            elements = [sub_ses_file, category, id_element, seg_info, suffix_elt]
+            elements = [sub_ses_file, category, run_element, seg_info, suffix_elt]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
         new_path = new_path.replace('//', '/')
@@ -750,8 +795,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     """
     out = {}
     out["old_path"] = str
-    id = extract_id(str)
-    out["id"] = id
+    run = extract_run(str)
+    out["run"] = run
 
     if 'sub' not in kwargs.keys():
         try:
@@ -765,7 +810,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     if "ses" in kwargs.keys():
         ses = kwargs['ses']
     else:
-        ses = ''
+        ses = get_ses(str)
+    out["ses"] = ses
     
     if 'type' not in kwargs.keys():
         type = extract_type(str)
@@ -843,7 +889,7 @@ def create_filename_dict(str, participants_dict, **kwargs):
         str,
         sub,
         ses,
-        id,
+        run,
         type,
         category,
         seg_info,
