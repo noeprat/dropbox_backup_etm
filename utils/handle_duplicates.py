@@ -251,11 +251,19 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                 "access token from the app console on the web.")
     
     os.makedirs('tmp_dir', exist_ok=True)
-        
-    actual_duplicates = {}
-    not_downloaded = {
-        "max_size (in octets)": MAX_FILE_SIZE_FOR_COMPARISON
-    }
+    
+    if os.path.exists(actual_duplicates_path):
+        with open(actual_duplicates_path, 'r') as f:
+            actual_duplicates = json.load(f)
+    else:
+        actual_duplicates = {}
+    if os.path.exists(not_downloaded_path):
+        with open(not_downloaded_path, 'r') as f:
+            not_downloaded = json.load(f)
+    else:
+        not_downloaded = {
+            "max_size (in octets)": MAX_FILE_SIZE_FOR_COMPARISON
+        }
 
     with open(flagged_path, 'r') as f:
         flagged_duplicates = json.load(f)
@@ -271,20 +279,23 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
 
         clean_up_tmpdir(debug)
 
-        try:
-            file1_size = dbx.files_get_metadata(from_path1).size
-            assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
-            dbx.files_download_to_file(to_path1, from_path1)
-            downloaded1 = True
-        except:
-            downloaded1 = False
-            not_downloaded[from_path1_without_source] = {
-                'old_path': from_path1_without_source,
-                'size': file1_size
-            }
+        if key not in actual_duplicates.keys():
+            to_skip = False
+            try:
+                file1_size = dbx.files_get_metadata(from_path1).size
+                assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
+                dbx.files_download_to_file(to_path1, from_path1)
+                downloaded1 = True
+            except:
+                downloaded1 = False
+                not_downloaded[from_path1_without_source] = {
+                    'old_path': from_path1_without_source,
+                    'size': file1_size
+                }
+        else:
+            to_skip = True
 
-
-        if downloaded1:
+        if downloaded1 and (not to_skip):
             actual_duplicates[from_path1_without_source] = [from_path1_without_source]
             for file2_idx in range(1, n):
                 from_path2 = '/source' + flagged_duplicates[key][file2_idx]
@@ -315,9 +326,7 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                     if comp:
                         if debug:
                             print(from_path1 + '\n    is the same as: \n' + from_path2)
-                        actual_duplicates[from_path1[len('/source'):]].append(from_path2[len('/source'):])
-                if downloaded2:
-                    os.remove(to_path2)
+                        actual_duplicates[from_path1_without_source].append(from_path2_without_source)
             with open(actual_duplicates_path, 'w') as f:
                 json.dump(actual_duplicates, f, indent=4)
             
