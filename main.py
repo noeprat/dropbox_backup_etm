@@ -8,6 +8,7 @@ from tokens import ACCESS_TOKEN
 
 import csv
 import json
+import os
 
 def input_with_default(input_name):
     try:
@@ -185,10 +186,11 @@ if __name__ == '__main__':
         s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
         
         if s == 'y':
-            flag_potential_duplicates(
-                        file_infos_path=file_infos_path,
-                        flagged_path= potential_duplicates_path
-                    )
+            if not os.path.exists(potential_duplicates_path):
+                flag_potential_duplicates(
+                            file_infos_path=file_infos_path,
+                            flagged_path= potential_duplicates_path
+                        )
             input('Check potential duplicates in '+ potential_duplicates_path + '\n(type enter when done to continue)')
 
             compare_potential_duplicates(
