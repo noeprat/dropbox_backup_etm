@@ -142,7 +142,7 @@ if __name__ == '__main__':
             participants_dict = {}
 
             try:
-                with open('participants.csv') as f:
+                with open('./utils/participants.csv') as f:
                     reader = csv.reader(f)
                     for row in reader:
                         left = row[0].strip()
