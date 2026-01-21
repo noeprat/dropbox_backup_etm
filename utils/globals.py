@@ -24,7 +24,7 @@ EXACT_STOP_FLAGS = [
         'dicom'
     ]
 
-STRS_TO_IGNORE_FOR_ID = [
+STRS_TO_IGNORE_FOR_RUN = [
         'model_9',
         'model_10',
         'fat_candidate_1',
