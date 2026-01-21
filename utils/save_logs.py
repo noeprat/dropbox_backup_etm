@@ -172,7 +172,7 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
                 old_path = file_infos[file]['old_path'],
                 sub = file_infos[file]['sub'],
                 ses = file_infos[file]['ses'],
-                id = file_infos[file]['id'],
+                run = file_infos[file]['run'],
                 type = file_infos[file]['type'],
                 category = file_infos[file]['category'],
                 seg_info = seg_info,
@@ -334,7 +334,7 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
                 print('json_file', json_file)
                 print('matching_file', matching_file)
             
-            for key in ['id', 'suffix', 'seg_info', 'func_info', 'func_task']:
+            for key in ['run', 'ses', 'suffix', 'seg_info', 'func_info', 'func_task']:
                 try:
                     old_json_value = file_infos[json_file][key]
                 except:
