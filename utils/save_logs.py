@@ -482,12 +482,21 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
                 is_duplicate_bool= 'confirmed_duplicates' in new_path
 
             sub = file_infos[file]['sub']
+            ses = file_infos[file]['ses']
+            ses_key = 'ses-' + ses
             if (not is_tmp_bool) and (type != 'misc') and (not is_duplicate_bool):
                 if sub not in out_data.keys():
                     out_data[sub] = {}
-                if type not in out_data[sub].keys():
+                if ses != '' and (ses_key not in out_data[sub].keys()):
+                    out_data[sub][ses_key] = {}
+                if ses != '' and (type not in out_data[sub][ses_key].keys()):
+                    out_data[sub][ses_key][type] = []
+                if ses == '' and (type not in out_data[sub].keys()):
                     out_data[sub][type] = []
-                out_data[sub][type].append(new_path)
+                if ses == '':
+                    out_data[sub][type].append(new_path)
+                else:
+                    out_data[sub][ses_key][type].append(new_path)
         json.dump(out_data, f, indent=4, sort_keys=True)
         
 
