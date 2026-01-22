@@ -200,7 +200,7 @@ def extract_type(input_path, debug=False):
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '' or 'bold_moco_p2' in filename:
         if filename in ["fmri", "timings", "order_runs"] or 'bold_moco_p2' in filename:
             type = 'func'
-        elif 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower() or get_seg_info(input_path) != '':
+        elif ('seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower() or get_seg_info(input_path) != '') and extension != ".feat":
             type = 'func_segmentation'
         elif 'thresh_zscores' in input_path.lower() or "zstat1" in input_path.lower():
             type = 'func_derivatives'
@@ -356,18 +356,24 @@ def get_func_task(input_path, debug=False):
     'right_grasp'
     'left_grasp'
     """
-    if str.split('/')[1] == "_Others":
-        pattern1 = re.compile(r'task-([^_]*)_')
-        match1 = re.search(pattern1,input_path)
-        if match1:
-            func_task = match1.group(1).lower()
-        else:
-            func_task = ''
+    func_task = ''
+    if len(input_path.split('/')[1]) >= 2:
+        if input_path.split('/')[1] == "_Others":
+            pattern1 = re.compile(r'task-([^_]*)_')
+            match1 = re.search(pattern1,input_path)
+            if match1:
+                func_task = match1.group(1).lower()
     
-    func_task = get_path_info(
+    func_task += get_path_info(
         path= input_path,
         data_path='utils/func_task.json'
     )
+
+    #specific to lumbar_health_fmri
+    to_replace = ["_flex_", "_ext_", "_p", "_a"]
+    replacements = ["_flexion_", "_extension_", "_passive", "_active"]
+    for idx, string in enumerate(to_replace):
+        func_task = func_task.replace(string, replacements[idx])
     return func_task
 
 
@@ -689,8 +695,8 @@ def generate_new_path(old_path, sub, ses, run, type, category, seg_info, func_ta
         sub_ses_folder = sub
         sub_ses_file = sub
     else:
-        sub_ses_folder = sub + '/' + ses
-        sub_ses_file = sub + '_' + ses
+        sub_ses_folder = sub + '/' + 'ses-' + ses
+        sub_ses_file = sub + '_' + 'ses-' + ses
 
     if is_tmp_bool:
         new_path = 'tmp' + old_path
