@@ -335,7 +335,6 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
             
             with open(not_downloaded_path, 'w') as f:
                 json.dump(not_downloaded, f, indent=4)
-            os.remove(to_path1)
 
     with open(actual_duplicates_path, 'w') as f:
         json.dump(actual_duplicates, f, indent=4)
