@@ -113,6 +113,7 @@
     "to_search_at_end_of_filename": [
         "padded",
         "cropped",
+        "notcropped",
         "not_cropped_but_zeros",
         "orig_header",
         "orig_header_cropped",
@@ -133,7 +134,6 @@
     "extra": [
         "resampled",
         "corrected2",
-        "smooth",
         "corrected_smooth",
         "corrected_resampled",
         "correction",

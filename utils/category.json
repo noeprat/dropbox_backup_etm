@@ -76,7 +76,8 @@
         "visualization",
         "bones_only",
         "muscles_only",
-        "for_visu"
+        "for_visu",
+        "processing"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",

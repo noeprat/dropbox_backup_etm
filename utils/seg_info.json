@@ -8,7 +8,11 @@
         "mri_brain",
         "ct_post_op_brain",
         "up2004_brain_mri",
-        "up2004_spine_mri"
+        "up2004_spine_mri",
+        "rmsctp0fmri",
+        "msctp0fmri",
+        "fmri_mean_centerline",
+        "sct_poly_0"
     ],
     "to_search_in_dirs": [
         "50_z_boxes",
@@ -101,7 +105,8 @@
         "trunk",
         "neck",
         "totalspineseg",
-        "sct"
+        "sct",
+        "mask"
     ],
     "to_search_at_end_of_filename": [
         "302_face",
