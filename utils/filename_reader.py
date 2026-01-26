@@ -69,6 +69,10 @@ def extract_run(input_path, debug=False):
             run_elt = match1.group(1).lower()
         else:
             run_elt =''
+    pattern4 = re.compile(r'localizer_(\d*)_(i\d*)')
+    match4 = re.search(pattern4, input_path)
+    if match4:
+        run_elt += match4.group(1) + match4.group(2)
     return run_elt
 
 
@@ -474,6 +478,9 @@ def get_suffix(string, debug=False):
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
         suffix = 't2_spc_zoomit'
     
+    elif 't2' in keywords and 'space' in keywords and 'zoomit' in keywords:
+        suffix = 't2_space_zoomit'
+    
     else:
         suffix = ''
 
@@ -484,7 +491,8 @@ def get_suffix(string, debug=False):
     if suffix=='':
         suffix = additional
     else:
-        suffix = suffix + '_' + additional
+        if additional not in suffix:
+            suffix = suffix + '_' + additional
 
     extras = data['extra']
     extras += ['v0' + str(i) for i in range(10)]
