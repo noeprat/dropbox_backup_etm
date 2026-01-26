@@ -96,6 +96,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
         file1_duplicates_list = []
         filename1 = file_infos[file1]['old_path'].split('/')[-1]
         type1 = file_infos[file1]['type']
+        sub1 = file_infos[file1]['sub']
         run1 = file_infos[file1]['run']
         ses1 = file_infos[file1]['ses']
 
@@ -121,6 +122,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
             for file2 in file_infos.keys():
                 filename2 = file_infos[file2]['old_path'].split('/')[-1]
                 type2 = file_infos[file2]['type']
+                sub2 = file_infos[file2]['sub']
                 run2 = file_infos[file2]['run']
                 ses2 = file_infos[file2]['ses']
                 extension2 = extract_extension(filename2)
@@ -146,7 +148,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
                     condition2 = filename1 == filename2 and func_task1 == func_task2
                     condition3 = (type1==type2) and (run1==run2) and (seg_info1==seg_info2) and (func_task1==func_task2) and (func_info1==func_info2) and (ses1==ses2)
 
-                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']):
+                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']) and sub1 == sub2:
                         file1_duplicates_list.append(file2)
                         #visited.append(file2)
             visited.append(file1)
@@ -285,16 +287,23 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
 
         if key not in actual_duplicates.keys():
             to_skip = False
+            file1_size = None
             try:
                 file1_size = dbx.files_get_metadata(from_path1).size
                 assert file1_size <= MAX_FILE_SIZE_FOR_COMPARISON
                 dbx.files_download_to_file(to_path1, from_path1)
                 downloaded1 = True
             except:
-                not_downloaded[from_path1_without_source] = {
-                    'old_path': from_path1_without_source,
-                    'size': file1_size
-                }
+                if file1_size is not None:
+                    not_downloaded[from_path1_without_source] = {
+                        'old_path': from_path1_without_source,
+                        'size': file1_size
+                    }
+                else:
+                    not_downloaded[from_path1_without_source] = {
+                        'old_path': from_path1_without_source
+                    }
+
         else:
             to_skip = True
 
