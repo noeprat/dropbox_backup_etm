@@ -15,7 +15,7 @@ from utils.globals import STOP_FLAGS, EXACT_STOP_FLAGS
     
 def get_all_paths(TOKEN, dir='/source', recursive = True, remove_source = True, exceptions=True, verbose = True):
     """
-    Returns all file paths within a specified directory
+    Returns all file paths within a specified directory in dropbox
 
     Package
     ----
