@@ -45,3 +45,38 @@ STRS_TO_REMOVE_FOR_JSONS_TO_DATA = [
         'nonanonymous_',
         'ct_'
     ]
+
+STOP_FLAGS_UPLOAD = [
+    "_results",
+    ".feat",
+    "scripts",
+    "_all_stls",
+#    "_from_stls",
+#    "3d_generation",
+    "roots_out",
+    "physiolog",
+    "blender",
+    "tmp",
+    "code",
+    "aspinalgen",
+    "roots_rootlets"
+    ]
+
+EXACT_STOP_FLAGS_UPLOAD = [
+        #'3d_generation',
+        '_all_stls',
+        'stls',
+        'objs',
+        'roots_out',
+        'screenshots',
+        'dicom'
+    ]
+
+
+TO_UPLOAD_REGEXPS = [
+    r'/Functional/[^/]/fmri.json',
+    r'/Functional/[^/]/fmri.nii.gz'
+    r'/Structural_[^/]/',
+    r'/Physiological/',
+    r'/Timings/'
+    ]
