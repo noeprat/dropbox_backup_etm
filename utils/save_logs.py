@@ -226,56 +226,18 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
         all_files = file_infos.keys()
 
         for file in all_files:
-            try:
-                file_is_a_duplicate = file_infos[file]["confirmed_duplicate"]
-            except:
-                file_is_a_duplicate=False
-            if not file_is_a_duplicate:
-                if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
-                    jsons_dict[file] = file_infos[file]
-                else:
-                    data_dict[file] = file_infos[file]
+            if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
+                jsons_dict[file] = file_infos[file]
+            else:
+                data_dict[file] = file_infos[file]
     if debug:
         c=0
 
     for json_file in tqdm(jsons_dict.keys()):
-        json_filename = json_file.split('/')[-1][:-len('.json')].lower()
         out_dict[json_file] = []
         for data_file in data_dict.keys():
-            filename = data_file.split('/')[-1].lower()
-            curated_filename = remove_extension(filename)
-            curated_json_filename = json_filename
-            for s in STRS_TO_REMOVE_FOR_JSONS_TO_DATA:
-                curated_json_filename = curated_json_filename.replace(s,'')
-                curated_filename = curated_filename.replace(s,'')
-            if debug and c<10:
-                print('file: \n    ', filename)
-                print('curated json filename: \n    ', curated_json_filename)
-                c += 1
-            condition3 = False
-            if filename == 'fmri.nii.gz':
-                tasks_json = [
-                    side + part
-                    for side in ['l','r']
-                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
-                ]
-                tasks_json.append('restingstate')
-                tasks_nifti = [
-                    side +'_'+ part
-                    for side in ['left','right']
-                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
-                ]
-                tasks_nifti.append('rest')
-                for idx, task in enumerate(tasks_json):
-                    if task in json_file.lower() and tasks_nifti[idx] in data_file.lower():
-                        condition3 = True
-                    #specific to up2_sub01 (so far)
-                    elif task in json_file.lower() and (tasks_nifti[idx][len('right_'):] in data_file.lower() or tasks_nifti[idx][len('left_'):] in data_file.lower()):
-                        condition3 = True
-            condition1 = curated_json_filename == curated_filename
-            condition2 = json_filename == filename
-
-            if condition1 or condition2 or condition3:
+            #specific to lumbar healthy fmri
+            if remove_extension(data_file) == remove_extension(json_file):
                 out_dict[json_file].append(data_file)
 
     with open(jsons_to_data_path, 'w') as f:
