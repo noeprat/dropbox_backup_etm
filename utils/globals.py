@@ -6,7 +6,7 @@ STOP_FLAGS = [
     #    "_from_stls",
     #    "3d_generation",
     "roots_out",
-    "physiolog",
+    #"physiolog",
     "blender",
     "tmp",
     "code",
