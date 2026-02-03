@@ -19,7 +19,10 @@
         "dilate_03",
         "dilate_04",
         "dilate_05",
-        "bin_06"
+        "bin_06",
+        "others",
+        "physiological",
+        "raw"
     ],
     "to_search_in_filename": [
         "physiological",

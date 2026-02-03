@@ -1,111 +1,58 @@
 {
-    "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json": {
-        "old_path": "/UP2004/UP2004_Imaging/UP2004_MRI_Spine_NIFTI/_jsons/UP2004_Spine_MRI_Bold_Spine_Zoomit_Physiolog_125mes_2050930123858_23.json",
-        "id": "23",
-        "sub": "sub-04",
-        "type": "func",
-        "extension": ".json",
-        "category": "spine",
-        "func_task": "rest_125mes",
-        "func_info": "",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "bold",
-        "is_derivative": false
+    "/Vibrations/CC/Timings/_Raw/sub-CC_task-VibStim_seqAnkle1_20_01_23_15_15-STOP.txt": {
+        "suffix": "raw-stop"
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/STLs",
-        "id": "",
-        "sub": "sub-04",
-        "type": "modelling",
-        "is_derivative": true
+    "/Vibrations/CC/Timings/_Raw/sub-CC_task-VibStim_seqAnkle1_20_01_23_15_23Sortie du sujet.txt": {
+        "suffix": "raw-sortie_du_dujet"
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/muscles_only/volumes_UP2004.csv",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "extension": ".csv",
-        "category": "model_arm",
-        "seg_info": "volumes",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "v1",
-        "is_derivative": true
+    "/Vibrations/EK/Timings/_Raw/sub-EK_task-VibStim_seqKnee1_20_01_22_17_28.mauvaistxt": {
+        "extension": ".txt",
+        "suffix": "raw-mauvais"
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/segmentations/UP2004_List_Muscles_Labels.xlsx",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "extension": ".xlsx",
-        "category": "model_arm",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "list_muscles_labels_v1",
-        "is_derivative": true
+    "/Vibrations/CC/Physiological/_Raw/Ankle_1_Disconfort_Noise/": {
+        "suffix": "physiological_raw_discomfort_noise"
     },
-    "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb": {
-        "old_path": "/UP2004/Models/Model_Arm/Segementation_V1/2025-10-15-Scene.mrb",
-        "id": "",
-        "sub": "sub-04",
-        "type": "anat_segmentation",
-        "seg_info": "scene",
-        "extension": ".mrb",
-        "category": "model_arm",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "v1",
-        "is_derivative": true
+    "/Vibrations/EK/Physiological/_Raw/Knee_2_Tuble_Disattached/": {
+        "suffix": "physiological_raw_tuble_disattached"
     },
-    "/UP2004/Models/Model_Spine/UP2004.smash_Results": {
-        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash_Results",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": "",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "results",
-        "is_derivative": true
+    "/DL/Physiological/_Raw/Run_1/Hip_Flex_A_1.": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAA"
     },
-    "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470": {
-        "old_path": "/UP2004/Models/Model_Spine/UP2004.smash.f94d6557-848c-41e8-8cdc-d32b6d59b470",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": ".f94d6557-848c-41e8-8cdc-d32b6d59b470",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "saved_by_s4l",
-        "is_derivative": true
+    "/AF/Physiological/_Raw/Ankle_Flex_A_2.": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAB"
     },
-    "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4": {
-        "old_path": "/UP2004/Models/Model_Spine/.UP2004.smash.d975a096-80b1-469b-8948-b31e3caa30e4",
-        "id": "",
-        "sub": "sub-04",
-        "type": "simulation",
-        "extension": ".d975a096-80b1-469b-8948-b31e3caa30e4",
-        "category": "model_spine",
-        "is_tmp": false,
-        "is_localizer": false,
-        "is_other": false,
-        "is_a_previous_version": false,
-        "suffix": "saved_by_s4l",
-        "is_derivative": true
+    "/AF/Physiological/_Raw/Run_1/Ankle_Flex_A_1": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAC"
+    },
+    "/AF/Physiological/_Raw/Run_1/Ankle_Ext_A_1": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAD"
+    },
+    "/JM/Physiological/_Raw/Run_1/Hip_Ext_P_1": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAE"
+    },
+    "/PY/Physiological/_Raw/Run_1/": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAF"
+    },
+    "/MM/Physiological/_Raw/Hip_Run_1/Hip_Ext_P_1.": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAG"
+    },
+    "/MM/Physiological/_Raw/Hip_Ext_P_2.": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAH"
+    },
+    "/MM/Physiological/_Raw/Hip_Run_1/Hip_Flex_A_": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAI"
+    },
+    "/CL/Physiological/_Raw/Hip_Act_Flex_1.acq": {
+        "confirmed_duplicate": true,
+        "new_path": "AAAJ"
     }
 }

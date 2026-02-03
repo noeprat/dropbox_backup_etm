@@ -23,6 +23,18 @@
         "hip_ext_p"
     ],
     "to_search_in_filename": [
+        "ankle_flex_a",
+        "ankle_flex_p",
+        "ankle_ext_a",
+        "ankle_ext_p",
+        "knee_flex_a",
+        "knee_flex_p",
+        "knee_ext_a",
+        "knee_ext_p",
+        "hip_flex_a",
+        "hip_flex_p",
+        "hip_ext_a",
+        "hip_ext_p",
         "right_ankle",
         "left_ankle",
         "right_knee",
