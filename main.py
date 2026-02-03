@@ -6,7 +6,6 @@ from utils.exceptions import handle_exceptions
 from utils.misc import input_with_default
 
 import csv
-import json
 import os
 
 
@@ -154,7 +153,7 @@ if __name__ == '__main__':
         # handle duplicates    
 
         
-        s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/use_previous] \n')
+        s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/u(se_previous)] \n')
         
         if s == 'y':
             if not os.path.exists(potential_duplicates_path):
@@ -182,7 +181,7 @@ if __name__ == '__main__':
                 file_infos_path= file_infos_path,
                 new_file_infos_path= file_infos_path
             )
-        elif s == 'use_previous':
+        elif s == 'u':
             actual_duplicates_path_user = input_with_default('actual_duplicates_path')
             handle_duplicates_in_file_infos(
                 actual_duplicates_path=actual_duplicates_path_user,
@@ -190,7 +189,7 @@ if __name__ == '__main__':
                 new_file_infos_path= file_infos_path
             )
 
-        s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/use_previous] \n')
+        s = input('Match files with their metadata (possibly a time-consuming step)? [y/n/u(se_previous)] \n')
 
         if s=='y':
             save_jsons_to_data(
@@ -204,7 +203,7 @@ if __name__ == '__main__':
                             corrected_file_infos_path = corrected_file_infos_path
                         )
             
-        elif s == 'use_previous':
+        elif s == 'u':
             jsons_to_data_path_user = input_with_default('jsons_to_data_path')
 
             correct_file_infos_with_matching_metadata(
@@ -254,8 +253,6 @@ if __name__ == '__main__':
         input('Type enter to continue')
 
         # Save paths.txt and recap.json
-
-
 
         write_paths_file(
             file_infos_path= renamed_duplicates_file_infos_path,
