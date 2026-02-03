@@ -55,13 +55,36 @@ def extract_run(input_path, debug=False):
     match2 = re.search(pattern2, input_path)
     if match2:
         run_elt += match2.group(1)
-    pattern3 = re.compile(r'/([^/]*)_(Ext|Flex)_(A|P)_([\d]*)/')
+    pattern3 = re.compile(r'/([^/]*)_(Ext|Flex|ext|flex)_(A|P)_([\d]*)(/|\.)')
     match3 = re.search(pattern3, input_path)
     if match3:
         if int(match3.group(4))<10:
             run_elt += '0' + match3.group(4)
         else:
             run_elt += match3.group(4)
+    pattern4 = re.compile(r'/(Hip|Ankle|Knee)_([\d])')
+    match4 = re.search(pattern4, input_path)
+    if match4:
+        if int(match4.group(2))<10:
+            run_elt += '0' + match4.group(2)
+        else:
+            run_elt += match4.group(2)
+    pattern4 = re.compile(r'_seq(Hip|Ankle|Knee)([\d])')
+    match4 = re.search(pattern4, input_path)
+    if match4:
+        if int(match4.group(2))<10:
+            run_elt += '0' + match4.group(2)
+        else:
+            run_elt += match4.group(2)
+    pattern4 = re.compile(r'/t2_space_sag_p2_iso_([\d]+)\.')
+    match4 = re.search(pattern4, input_path)
+    if match4:
+        run_elt += match4.group(1)
+    pattern = re.compile(r'-(ankle|knee|hip)-(flex|ext)-(A|P)-(1|2)\.')
+    match = re.search(pattern,input_path)
+    if match:
+        run_elt += '0' + match.group(4)
+        
     if input_path.split('/')[1] == "_Others":
         pattern1 = re.compile(r'run-([\d]*)')
         match1 = re.search(pattern1,input_path)
@@ -103,7 +126,10 @@ def extract_sub(str, participants_dict):
 
 
     #   specific to lumbar_healthy_fmri
-    old_sub = str.split('/')[1]
+    if str.split('/')[1] == "Vibrations":
+        old_sub = str.split('/')[2]
+    else:
+        old_sub = str.split('/')[1]
     if old_sub in participants_dict.keys():
         sub = participants_dict[old_sub]
     else:
@@ -184,7 +210,7 @@ def extract_type(input_path, debug=False):
     elif "bold_moco_p2" in filename or "iso_tr2_pat2_on_wip_advphysio" in filename or "_bold_" in filename:
         type = "func"
     
-    elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename:
+    elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename or 'physiological' in root_dirs_keywords:
         type = "func"
 
     elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
@@ -237,7 +263,7 @@ def extract_type(input_path, debug=False):
 
 def get_ses(input_path, debug=False):
     """
-    Returns the session identifier
+    Returns the session identifier (specific to lumbar_healthy_fmri)
 
     Package
     ----
@@ -255,12 +281,21 @@ def get_ses(input_path, debug=False):
         ses: str,
             the session of the specified file
     """
-    try:
-        pattern1 = re.compile(r'/([^/]*)_(Ext|Flex)')
-        match1 = re.search(pattern1,input_path)
-        ses = match1.group(1).lower()
-    except:
-        ses=''
+    ses = ''
+    regexps = [
+        r'/(Ankle|Hip|Knee|ankle|hip|knee)_(Ext|Flex|ext|flex)',
+        r'/Structural_([^/]*)',
+        r'/(Vibrations)/',
+        r'/(Ankle|Hip|Knee)_\d'
+    ]
+    for regexp in regexps:
+        pattern = re.compile(regexp)
+        match = re.search(pattern,input_path)
+        if match and ses == '':
+            ses = match.group(1).lower()
+
+    if ses == 'vibrations':
+        ses = 'vibration'
     if input_path.split('/')[1] == "_Others":
         pattern1 = re.compile(r'/ses-([\d]*)/')
         match1 = re.search(pattern1,input_path)
@@ -373,6 +408,31 @@ def get_func_task(input_path, debug=False):
         data_path='utils/func_task.json'
     )
 
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Hip|Knee)_\d_(ext|flex)')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + match.group(2) + '_' + 'vibration'
+
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Hip|Knee)_\d/')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + 'vibration'
+
+    pattern = re.compile(r'task-VibStim_seq(Ankle|Hip|Knee)')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + 'vibration'
+    
+    pattern = re.compile(r'-(ankle|knee|hip)-(flex|ext)-(A|P)-(1|2)\.')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + match.group(2).lower() +'_' + match.group(3).lower()
+
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Knee|Hip)_(1|2)\.')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' "vibration"
+
     #specific to lumbar_health_fmri
     to_replace = ["_flex_", "_ext_", "_p", "_a"]
     replacements = ["_flexion_", "_extension_", "_passive", "_active"]
@@ -480,6 +540,10 @@ def get_suffix(string, debug=False):
     
     elif 't2' in keywords and 'space' in keywords and 'zoomit' in keywords:
         suffix = 't2_space_zoomit'
+        if debug:
+            print('uçzefuhieui',keywords[-1])
+        if keywords[-2] == 'zoomit':
+            suffix += '_' + keywords[-1]
     
     else:
         suffix = ''
