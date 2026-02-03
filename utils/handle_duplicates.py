@@ -148,7 +148,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
                     condition2 = filename1 == filename2 and func_task1 == func_task2
                     condition3 = (type1==type2) and (run1==run2) and (seg_info1==seg_info2) and (func_task1==func_task2) and (func_info1==func_info2) and (ses1==ses2)
 
-                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']) and sub1 == sub2:
+                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']) and sub1 == sub2 and run1 == run2 and ses1 == ses2:
                         file1_duplicates_list.append(file2)
                         #visited.append(file2)
             visited.append(file1)
@@ -350,6 +350,7 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
     
     with open(not_downloaded_path, 'w') as f:
         json.dump(not_downloaded, f, indent=4)
+    clean_up_tmpdir()
 
 def regroup_actual_duplicates(actual_duplicates_path, new_duplicates_path, debug=False):
     """
