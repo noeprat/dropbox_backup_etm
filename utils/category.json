@@ -17,6 +17,7 @@
         "ssl_tissues",
         "sct_tissues",
         "ssl",
+        "from_ssl",
         "ssl_post_pro_01",
         "ssl_post_pro_02",
         "ssl_straight",
@@ -140,7 +141,9 @@
         "post_op_prone",
         "pre_op_2d_secondaire",
         "pre_op_rapport_3d",
-        "pre_op"
+        "pre_op",
+        "t9_l4",
+        "t11_s1"
 
     ],
     "to_search_at_end_of_filename": [

@@ -83,5 +83,100 @@
     },
     "302_Eq_1": {
         "id": "302_eq_1"
+    },
+    "/README.md": {
+        "is_tmp": true
+    },
+    "/For_Paula/": {
+        "type": "misc",
+        "is_derivative": false
+    },
+    "/Model/Post_Op/3D_Generation/SPL003_Post_Op_STL_export.smash": {
+        "category": "post_op_3d_generation_spl_003",
+        "suffix": "stl_export"
+    },
+    "/Model/Post_Op/3D_Generation/SPL006_Post_Op_STL_export.smash": {
+        "category": "post_op_3d_generation_spl_006",
+        "suffix": "stl_export"
+    },
+    "/Model/Post_Op/SPL006_Post_Op_STL_export.smash": {
+        "category": "post_op_spl_006",
+        "suffix": "stl_export"
+    },
+    "/Model/Post_Op/SPL003_Simulations/SPL003.smash": {
+        "category": "post_op_spl_003_simulations"
+    },
+    "/Model/Post_Op/SPL003_Post_Op.smash": {
+        "category": "post_op_spl_003"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/SPL003_XRay_Pre_Op/SPL003_Pre_Op_Imagery_2D_secondaire_20240723_15_01_50_20240723145625_1721739710.nii.gz": {
+        "id": "1721739710",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_secondary_2d",
+        "new_path": "sub-03/xray/sub-03_pre_op_secondary_2d_id-1721739710.nii.gz"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/_jsons/SPL003_Pre_Op_Imagery_2D_secondaire_20240723_15_01_50_20240723145625_1721739710.json": {
+        "id": "1721739710",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_secondary_2d",
+        "new_path": "sub-03/xray/sub-03_pre_op_secondary_2d_id-1721739710.json"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/SPL003_XRay_Pre_Op/SPL003_Pre_Op_Imagery_3D_Profil_20240723_15_18_59_20240723145625_1721740739.nii.gz": {
+        "id": "1721740739",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_3d_profil",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_profil_id-1721740739.nii.gz"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/_jsons/SPL003_Pre_Op_Imagery_3D_Profil_20240723_15_18_59_20240723145625_1721740739.json": {
+        "id": "1721740739",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_3d_profil",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_profil_id-1721740739.json"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/SPL003_XRay_Pre_Op/SPL003_Pre_Op_Imagery_Rapport_3D_07_23_24_15_19_32_20240723145625_1721739710.nii.gz": {
+        "id": "1721739710",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_rapport_3d",
+        "new_path": "sub-03/xray/sub-03_pre_op_rapport_3d_id-1721739710.nii.gz"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/_jsons/SPL003_Pre_Op_Imagery_Rapport_3D_07_23_24_15_19_32_20240723145625_1721739710.json": {
+        "id": "1721739710",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_rapport_3d",
+        "new_path": "sub-03/xray/sub-03_pre_op_rapport_3d_id-1721739710.json"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/SPL003_XRay_Pre_Op/SPL003_Pre_Op_Imagery_3D_Face_20240723_15_18_55_20240723145625_1721740735.nii.gz": {
+        "id": "1721740735",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_3d_face",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_face_id-1721740735.nii.gz"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/_jsons/SPL003_Pre_Op_Imagery_3D_Face_20240723_15_18_55_20240723145625_1721740735.json": {
+        "id": "1721740735",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_3d_face",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_face_id-1721740735.json"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/SPL003_XRay_Pre_Op/SPL003_Pre_Op_Imagery_2D_secondaire_20240723_15_01_50_20240723145625_1721739710a.nii.gz": {
+        "id": "1721739710a",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_secondary_2d",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_face_id-1721739710a.nii.gz"
+    },
+    "/SPL003_Pre_Op_Imagery_NIFTI/_jsons/SPL003_Pre_Op_Imagery_2D_secondaire_20240723_15_01_50_20240723145625_1721739710a.json": {
+        "id": "1721739710a",
+        "sub": "sub-03",
+        "type": "xray",
+        "category": "pre_op_secondary_2d",
+        "new_path": "sub-03/xray/sub-03_pre_op_3d_face_id-1721739710a.json"
     }
 }
