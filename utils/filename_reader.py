@@ -131,7 +131,7 @@ def extract_type(input_path, debug=False):
     if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
         type = 'code'
     elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx'] or filename == 'screenshots':
-        type = 'misc'
+        type = 'misc_derivative'
     elif 'dti' in keywords or extension in ['.bval', '.bvec']:
         type = 'dti'
     
@@ -482,7 +482,7 @@ def is_derivative(type):
     --------
         is_derivative_bool: bool,
     """
-    return 'segmentation' in type or (type in ['modelling', 'simulation', 'misc']) or 'derivative' in type
+    return 'segmentation' in type or (type in ['modelling', 'simulation']) or 'derivative' in type
 
 def is_localizer(str):
     """
@@ -642,9 +642,14 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             new_path = 'code' + simplified_old_path
         else:
             new_path = 'code/' + sub + '/' + simplified_old_path
-    
-    elif type in ['misc','modelling']:
-        new_path = 'derivatives/' + type
+    elif type == 'misc':
+        simplified_old_path = old_path.lower()
+        if simplified_old_path[0] != '/':
+            simplified_old_path = '/' + simplified_old_path
+        new_path = 'misc/' + sub + simplified_old_path
+
+    elif type in ['misc_derivative','modelling']:
+        new_path = 'derivatives/' + type.split('_')[0]
 
         if old_path.lower().split('/')[1] in ['up200' + str(i) for i in range(1,5) ]:
             simplified_old_path = '/'.join(old_path.split('/')[2:]).lower()
