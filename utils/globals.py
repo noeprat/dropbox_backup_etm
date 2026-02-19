@@ -11,7 +11,8 @@ STOP_FLAGS = [
     "tmp",
     "code",
     "aspinalgen",
-    "roots_rootlets"
+    "roots_rootlets",
+    "rootlets"
     ]
 
 EXACT_STOP_FLAGS = [
