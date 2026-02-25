@@ -61,6 +61,14 @@ def extract_id(input_path, debug=False):
     match3 = re.search(pattern3, curated_input_path)
     if match3:
         id_elt += match3.group(1)
+    pattern = re.compile(r'SPL008_Post_Op_([\d]+)_')
+    match = re.search(pattern, input_path)
+    if match:
+        id_elt += match.group(1)
+    pattern = re.compile(r'SPL008_Post_Op_CT_77_([\d]+)_')
+    match = re.search(pattern, input_path)
+    if match:
+        id_elt += match.group(1)
     return id_elt
 
 
@@ -120,7 +128,6 @@ def extract_type(input_path, debug=False):
     dirs = '/'.join(input_path.split('/')[:-1]).lower()
     extension = extract_extension(input_path)
     keywords = [keyword.lower() for keyword in filename.split('_')]
-    root_dirs_keywords = []
     root_dirs_keywords = [keyword.lower() 
                       for dir in input_path.split('/')[:-1:]
                       for keyword in dir.split('_') ]
@@ -130,13 +137,16 @@ def extract_type(input_path, debug=False):
     
     if extension in ['.py', '.ipynb', '.pyc', '.sh', '.fsf' ] or 'scripts' in root_dirs_keywords or 'scripts' in filename :
         type = 'code'
-    elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx'] or filename == 'screenshots':
+    elif extension in ['.avi', '.png', '.pdf', '.mp4', '.pptx', '.docx', '.ai', '.jpg'] or filename == 'screenshots':
         type = 'misc_derivative'
     elif 'dti' in keywords or extension in ['.bval', '.bvec']:
         type = 'dti'
     
-    elif extension == '.smash' or 'selectivity' in filename:
+    elif extension == '.smash' or 'selectivity' in filename or 'simulations_result' in filename:
         type = 'simulation'
+    
+    elif ('rx' in root_dirs_keywords or 'rx' in keywords or 'x_ray' in input_path.lower()) and (not 'ct_rx' in input_path.lower()):
+        type = 'xray'
 
 
     elif extension in ['.stl', '.blend', '.blend1', '.obj', '.mtl','.glb', '.vdb', '.ply', '.step', '.3ds', '.iges', '.model', '.sab'] or filename in ['3d_generation', '_all_stls', 'blender'] or '3d_generation' in input_path.lower():
@@ -160,14 +170,20 @@ def extract_type(input_path, debug=False):
 
     elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
         pattern = re.compile(r'dilate_\d*')
-        if re.search(pattern, filename) or "wimagine_covers_center" in filename or "visualization" in root_dirs_keywords:
+        if re.search(pattern, filename) or "wimagine_covers_center" in filename or "visualization" in root_dirs_keywords or "/straighten_with_seg/" in input_path.lower():
             type = "anat_derivatives"
         elif 'seg' in keywords or 'mask' in keywords or 'tissues' in root_dirs_keywords or 'seg' in root_dirs_keywords or 'segmentations' in root_dirs_keywords or ('segmentation' in root_dirs_keywords and (not 'im' in root_dirs_keywords ) and (not 'im_straight' in root_dirs_keywords))or 'voxelized' in filename:
             type = 'anat_segmentation'
-        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or extension in ['.mat'] or 'im_straight' in root_dirs_keywords:
+        elif "spinal_levels" in dirs:
+            type = 'anat_segmentation'
+        elif 'betted' in filename or 'transf' in filename or 'template' in filename or 'preprocessed' in input_path.lower() or 'pre_processed' in input_path.lower() or extension in ['.mat'] or 'im_straight' in root_dirs_keywords:
             if debug:
                 print(filename)
             type = 'anat_derivatives'
+        elif filename in ['straight_ref', 'warp_straight2curve', "warp_curve2straight"]:
+            type = "anat_derivatives"
+        elif "straightening" in root_dirs_keywords or "straighten" in root_dirs_keywords:
+            type = "anat_derivatives"
         else:
             type = 'anat'
 
@@ -200,7 +216,8 @@ def extract_type(input_path, debug=False):
             type = 'anat_segmentation'
         else:
             type = 'anat'
-    
+    elif 'model' in root_dirs_keywords:
+        type = 'modelling'
     else:
         type = 'misc'
     
