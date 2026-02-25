@@ -35,6 +35,9 @@ STRS_TO_IGNORE_FOR_ID = [
         "_bin_99p",
         "ct_post_op_77",
         "ct_post_op_7.7",
+        "02x02x02",
+        "totalspineseg_step1",
+        "totalspineseg_step2"
     ]
 
 MAX_FILE_SIZE_FOR_COMPARISON = (2**10)**3 # 1Go limit when downloading for comparison
