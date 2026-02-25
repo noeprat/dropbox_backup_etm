@@ -144,7 +144,7 @@ def flag_potential_duplicates(file_infos_path, flagged_path):
                     condition2 = filename1 == filename2 and func_task1 == func_task2
                     condition3 = (type1==type2) and (id1==id2) and (seg_info1==seg_info2) and (func_task1==func_task2) and (func_info1==func_info2)
 
-                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling']):
+                    if (condition1 or condition2 or condition3) and (extension1==extension2) and (type1 not in ['code', 'misc', 'modelling', 'misc_derivative']):
                         file1_duplicates_list.append(file2)
                         #visited.append(file2)
             visited.append(file1)
@@ -297,8 +297,11 @@ def compare_potential_duplicates(flagged_path, actual_duplicates_path, not_downl
                 try:
                     file2_size = dbx.files_get_metadata(from_path2).size
                     assert file2_size <= MAX_FILE_SIZE_FOR_COMPARISON
-                    dbx.files_download_to_file(to_path2, from_path2)
-                    downloaded2 = True
+                    if file1_size == file2_size:
+                        dbx.files_download_to_file(to_path2, from_path2)
+                        downloaded2 = True
+                    else:
+                        downloaded2=False
                 except:
                     downloaded2 = False
                     not_downloaded[from_path2_without_source] = {
