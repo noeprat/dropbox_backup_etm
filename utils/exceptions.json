@@ -178,5 +178,145 @@
         "type": "xray",
         "category": "pre_op_secondary_2d",
         "new_path": "sub-03/xray/sub-03_pre_op_3d_face_id-1721739710a.json"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten/warp/": {
+        "is_tmp": true
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_4/straight_ref.nii.gz": {
+        "id": "4",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_straight_ref"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_space_sag_p2_iso_20241028144333_8/straight_ref.nii.gz": {
+        "id": "8",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_space_straight_ref"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_20241028144333_5/straight_ref.nii.gz": {
+        "id": "5",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_spc_zoomit_straight_ref"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_7/straight_ref.nii.gz": {
+        "id": "7",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_straight_ref"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_4/warp_straight2curve.nii.gz": {
+        "id": "4",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_warp_straight2curve"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_space_sag_p2_iso_20241028144333_8/warp_straight2curve.nii.gz": {
+        "id": "8",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_space_warp_straight2curve"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_20241028144333_5/warp_straight2curve.nii.gz": {
+        "id": "5",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_spc_zoomit_warp_straight2curve"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_7/warp_straight2curve.nii.gz": {
+        "id": "7",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_warp_straight2curve"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_4/warp_curve2straight.nii.gz": {
+        "id": "4",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_warp_curve2straight"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_space_sag_p2_iso_20241028144333_8/warp_curve2straight.nii.gz": {
+        "id": "8",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_space_warp_curve2straight"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_spc_tra_iso_ZOOMit_05_TR2500_interpol_20241028144333_5/warp_curve2straight.nii.gz": {
+        "id": "5",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info",
+        "suffix": "t2_spc_zoomit_warp_curve2straight"
+    },
+    "/SPL005_MRI_NIFTI/_straightening/straighten_with_seg/warp_info_SPL05_MRI_t2_trufi3d_cor_06_T9_L5_20241028144333_7/warp_curve2straight.nii.gz": {
+        "id": "7",
+        "type": "anat_derivatives",
+        "category": "straightening_straighten_with_seg_warp_info_t9_l5",
+        "suffix": "t2_trufi3d_warp_curve2straight"
+    },
+    "/SPL007_Imaging/SPL007_MRI_NIFTI/t2_space_cropped_2_t2_spc_zoomit/SPL007_MRI_PreOp_t2_space_sag_p2_iso_2050414142051_5_resampled_02x02x02_cropped_reg.nii.gz": {
+        "id": "5",
+        "category": "t2_space_cropped_2_t2_spc_zoomit_preop",
+        "suffix": "t2_space_resampled_02x02x02_cropped_reg"
+    },
+    "/SPL007_Imaging/SPL007_MRI_NIFTI/SPL007_MRI_PreOp_t2_space_sag_p2_iso_2050414142051_5_resampled_02x02x02_cropped.nii.gz": {
+        "id": "5",
+        "category": "preop",
+        "suffix": "t2_space_resampled_02x02x02_cropped"
+    },
+    "/SPL007_Imaging/_to_share/SPL007_DICOM_ANONYMOUS.zip": {
+        "sub": "sub-07",
+        "type": "anat",
+        "extension": ".zip",
+        "category": "dicom_anonymous",
+        "is_tmp": false,
+        "is_localizer": false,
+        "is_other": false,
+        "is_a_previous_version": false,
+        "suffix": "",
+        "is_derivative": false,
+        "new_path": "sub-07/anat/dicom/sub-07_dicom_anonymous.zip"
+    },
+    "/SPL008_Imaging/SPL008_Intra_Op_CT_Rx_NIFTI/": {
+        "type": "ct"
+    },
+    "/SPL008_Imaging/SPL008_Intra_Op_CT_Rx_TISSUES/": {
+        "type": "ct_segmentation"
+    },
+    "/SPL008_Imaging/SPL008_Post_Op_CT_Rx_NIFTI/": {
+        "type": "ct"
+    },
+    "/SPL008_Imaging/SPL008_Post_Op_CT_Rx_TISSUES/": {
+        "type": "ct_segmentation"
+    },
+    "/SPL008_Imaging/SPL008_Pre_Op_CT_Rx_NIFTI/SPL008_Pre_Op_CT_RX_Colonne": {
+        "type": "xray"
+    },
+    "/SPL008_Imaging/SPL008_Pre_Op_CT_Rx_NIFTI/SPL008_Pre_Op_CT_RX_7": {
+        "type": "ct"
+    },
+    "/SPL008_Imaging/SPL008_Intra_Op_CT_Rx_TISSUES/SPL008_Intra_Op_CT_High_Def_20250703071255_3_total_segment_tissues/SPL008_Intra_Op_CT_High_Def_3": {
+        "id": "3"
+    },
+    "/SPL008_Imaging/SPL008_Intra_Op_CT_Rx_TISSUES/SPL008_Intra_Op_CT_High_Def_20250703071255_2_total_segment_tissues/SPL008_Intra_Op_CT_High_Def_2": {
+        "id": "2"
+    },
+    "/SPL008_Imaging/SPL008_MRI_TISSUES/SPL008_MRI_SSL_TISSUES_Post_Pro_Step_02/SPL008_MRI_PreOp_t2_trufi3d_cor_06_T18L3_2050523154309_4_Roots_cc/SPL008_MRI_PreOp_t2_trufi3d_cor_06_T18L3_2050523154309_4_Roots_mask.nii_component": {
+        "id": "4"
+    },
+    "/Model/Simulations/SPL009.smash": {
+        "suffix": "simulations"
+    },
+    "/SPL009_Imaging/SPL009_MRI_TISSUES/Supervised_Models/supervised_segs_scp_ZOOMIT_bin_Dilate_10.nii.gz": {
+        "type": "anat_segmentation",
+        "seg_info": "supervised_segs_scp",
+        "category": "supervised_models",
+        "suffix": "zoomit_bin_dilate_10"
+    },
+    "/SPL009_Imaging/SPL009_MRI_TISSUES/Supervised_Models/supervised_segs_scp_ZOOMIT_bin_Dilate_5.nii.gz": {
+        "type": "anat_segmentation",
+        "seg_info": "supervised_segs_scp",
+        "category": "supervised_models",
+        "suffix": "zoomit_bin_dilate_5"
     }
 }
