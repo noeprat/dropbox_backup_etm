@@ -8,14 +8,7 @@
         "mri_brain",
         "ct_post_op_brain",
         "up2004_brain_mri",
-        "up2004_spine_mri",
-        "t2_ciss3d",
-        "preprocessed_for_nnunetv2",
-        "trufi3d_t9_l4",
-        "cor_06_t9_l4",
-        "cor_06_t9_l5",
-        "cor_06_t11_s1",
-        "rx_colonne"
+        "up2004_spine_mri"
     ],
     "to_search_in_dirs": [
         "50_z_boxes",
@@ -144,9 +137,7 @@
         "trunk",
         "neck",
         "totalspineseg",
-        "sct",
-        "roots_mask",
-        "supervised_segs_scp"
+        "sct"
     ],
     "to_search_at_end_of_filename": [
         "intersection_points_voxel_mod",

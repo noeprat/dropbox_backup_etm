@@ -3,39 +3,10 @@ from utils.save_logs import save_file_infos, save_file_list, read_file_list, sav
 from utils.save_logs import write_paths_file, write_general_recap_file, refresh_new_paths
 from utils.handle_duplicates import flag_same_new_paths, flag_potential_duplicates, rename_duplicates, compare_potential_duplicates, handle_duplicates_in_file_infos, regroup_actual_duplicates
 from utils.exceptions import handle_exceptions
-
-from tokens import ACCESS_TOKEN
+from utils.misc import input_with_default
 
 import csv
-import json
-
-def input_with_default(input_name):
-    try:
-        with open('inputs.json', 'r') as f:
-            default_inputs = json.load(f)
-    except:
-        default_inputs = {}
-    new_inputs = default_inputs.copy()
-
-    if input_name in default_inputs.keys():
-        if len(default_inputs[input_name]) < 100:
-            res = input(input_name + ': (default: ' + default_inputs[input_name] +') \n')
-        else:
-            res = input(input_name + ': (default: ' + default_inputs[input_name][:100] +'...) \n')
-        if res == '':
-            to_return = default_inputs[input_name]
-        else:
-            to_return = res
-            new_inputs[input_name] = res
-    else:
-        to_return = input(input_name + ': \n')
-        new_inputs[input_name] = to_return
-    try:
-        with open('inputs.json', 'w')as f:
-            json.dump(new_inputs, f, indent=4)
-    except:
-        print('could not update inputs.json')
-    return to_return
+import os
 
 
 
@@ -142,7 +113,7 @@ if __name__ == '__main__':
             participants_dict = {}
 
             try:
-                with open('participants.csv') as f:
+                with open('./utils/participants.csv') as f:
                     reader = csv.reader(f)
                     for row in reader:
                         left = row[0].strip()
@@ -185,10 +156,11 @@ if __name__ == '__main__':
         s = input('Compare the potential duplicates (possibly a time-consuming step, requires a dropbox access token)? [y/n/u(se previous)] \n')
         
         if s == 'y':
-            flag_potential_duplicates(
-                        file_infos_path=file_infos_path,
-                        flagged_path= potential_duplicates_path
-                    )
+            if not os.path.exists(potential_duplicates_path):
+                flag_potential_duplicates(
+                            file_infos_path=file_infos_path,
+                            flagged_path= potential_duplicates_path
+                        )
             input('Check potential duplicates in '+ potential_duplicates_path + '\n(type enter when done to continue)')
 
             compare_potential_duplicates(
@@ -287,8 +259,6 @@ if __name__ == '__main__':
         input('Type enter to continue')
 
         # Save paths.txt and recap.json
-
-
 
         write_paths_file(
             file_infos_path= renamed_duplicates_file_infos_path,

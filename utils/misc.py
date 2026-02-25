@@ -171,3 +171,61 @@ def clean_up_tmpdir(debug=False):
         if debug:
             print(file)
         os.remove('tmp_dir/' + file)
+
+def my_ls(dir, force_abspath=False):
+    """
+    Lists complete paths (files or subdirs) under `dir`
+    
+    Should be robust to posix or windows paths
+
+    Package
+    ----
+    `utils.misc.py`
+    
+    Parameters
+    ---
+        dir : str,
+            path to a directory
+
+    Returns
+    ---
+        ls : list(str)
+            list of paths under `dir`
+    """
+    l = os.listdir(dir)
+    ls = []
+    for entry in l:
+        if force_abspath:
+            ls.append(os.path.normpath(os.path.join(os.path.abspath(dir), entry)))
+        else:
+            ls.append(os.path.normpath(os.path.join(dir, entry)))
+    return ls
+
+def input_with_default(input_name):
+    try:
+        with open('inputs.json', 'r') as f:
+            default_inputs = json.load(f)
+    except:
+        default_inputs = {}
+    new_inputs = default_inputs.copy()
+
+    if input_name in default_inputs.keys():
+        if len(default_inputs[input_name]) < 100:
+            res = input(input_name + ': (default: ' + default_inputs[input_name] +') \n')
+        else:
+            res = input(input_name + ': (default: ' + default_inputs[input_name][:100] +'...) \n')
+        if res == '':
+            to_return = default_inputs[input_name]
+        else:
+            to_return = res
+            new_inputs[input_name] = res
+    else:
+        to_return = input(input_name + ': \n')
+        new_inputs[input_name] = to_return
+    try:
+        with open('inputs.json', 'w')as f:
+            json.dump(new_inputs, f, indent=4)
+    except:
+        print('could not update inputs.json')
+    return to_return
+

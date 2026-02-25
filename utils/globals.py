@@ -3,10 +3,10 @@ STOP_FLAGS = [
     ".feat",
     "scripts",
     "_all_stls",
-#    "_from_stls",
-#    "3d_generation",
+    #    "_from_stls",
+    #    "3d_generation",
     "roots_out",
-    "physiolog",
+    #"physiolog",
     "blender",
     "tmp",
     "code",
@@ -16,37 +16,67 @@ STOP_FLAGS = [
     ]
 
 EXACT_STOP_FLAGS = [
-        #'3d_generation',
-        '_all_stls',
-        'stls',
-        'objs',
-        'roots_out',
-        'screenshots'
-    ]
+    #'3d_generation',
+    "_all_stls",
+    "stls",
+    "objs",
+    "roots_out",
+    "screenshots",
+    "dicom",
+]
 
-STRS_TO_IGNORE_FOR_ID = [
-        'model_9',
-        'model_10',
-        'fat_candidate_1',
-        'fat_candidate_2',
-        'fat_candidate_3',
-        '_-_DLIR',
-        "_viz_99p",
-        "_bin_99p",
-        "ct_post_op_77",
-        "ct_post_op_7.7",
-        "02x02x02",
-        "totalspineseg_step1",
-        "totalspineseg_step2"
-    ]
+STRS_TO_IGNORE_FOR_RUN = [
+    "model_9",
+    "model_10",
+    "fat_candidate_1",
+    "fat_candidate_2",
+    "fat_candidate_3",
+    "_-_DLIR",
+    "_viz_99p",
+    "_bin_99p",
+]
 
-MAX_FILE_SIZE_FOR_COMPARISON = (2**10)**3 # 1Go limit when downloading for comparison
+MAX_FILE_SIZE_FOR_COMPARISON = (2**10) ** 3  # 1Go limit when downloading for comparison
 
 STRS_TO_REMOVE_FOR_JSONS_TO_DATA = [
-        '.',
-        'dicoms_',
-        't2g002_',
-        'brain_',
-        'nonanonymous_',
-        'ct_'
-    ]
+    ".",
+    "dicoms_",
+    "t2g002_",
+    "brain_",
+    "nonanonymous_",
+    "ct_",
+]
+
+STOP_FLAGS_UPLOAD = [
+    "_results",
+    ".feat",
+    "scripts",
+    "_all_stls",
+    "roots_out",
+    "blender",
+    "tmp",
+    "code",
+    "aspinalgen",
+    "roots_rootlets",
+]
+
+EXACT_STOP_FLAGS_UPLOAD = [
+    "_all_stls",
+    "stls",
+    "objs",
+    "roots_out",
+    "screenshots",
+    "dicom",
+]
+
+
+TO_UPLOAD_REGEXPS = [
+    r"/Functional/[^/]*/fmri.json",
+    r"/Functional/[^/]*/fmri.nii.gz",
+    r"/Structural_[^/]*/t2.(json|nii.gz)",
+    r"/Structural_[^/]*/t2_space_sag.*.(json|nii.gz)",
+    r"/Structural_[^/]*/Localizer/.*.(json|nii.gz)",
+    r"/Structural_[^/]*/Zoomit/.*.(json|nii.gz)",
+    r"/Physiological/_Raw/",
+    r"/Timings/",
+]

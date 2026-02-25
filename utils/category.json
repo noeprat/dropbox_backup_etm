@@ -102,8 +102,8 @@
         "t18_l3",
         "t9_l5",
         "best_binary_segmentations",
-        "high_def"
-
+        "high_def",
+        "processing"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",

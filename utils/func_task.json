@@ -9,61 +9,32 @@
         "elbow_2"
     ],
     "to_search_in_dirs": [
-        "right_ankle",
-        "left_ankle",
-        "right_knee",
-        "left_knee",
-        "right_hip",
-        "left_hip",
-        "right_grasp",
-        "left_grasp",
-        "grasp",
-        "right_shoulder",
-        "left_shoulder",
-        "shoulder",
-        "right_elbow",
-        "left_elbow",
-        "elbow",
-        "functional_rest",
-        "rest",
-
-        "left_wrist",
-        "left_wrist_ext_1",
-        "left_wrist_ext_2",
-
-        "wrist_left_ext_1",
-        "wrist_left_ext_2",
-
-        "right_wrist",
-        "right_wrist_ext_1",
-        "right_wrist_ext_2",
-
-        "wrist_right_ext_1",
-        "wrist_right_ext_2",
-
-        "left_fingers",
-        "left_fingers_ext_1",
-        "left_fingers_ext_2",
-
-        "fingers_left_ext_1",
-        "fingers_left_ext_2",
-
-        "right_fingers",
-        "right_fingers_ext_1",
-        "right_fingers_ext_2",
-        
-        "fingers_right_ext_1",
-        "fingers_right_ext_2",
-
-        "fingers_extension_1",
-        "fingers_extension_2",
-        "fingers_extension_3",
-        "wrist_extension_1",
-        "wrist_extension_2",
-        "wrist_extension_3",
-        "wrist_extension_4"
+        "ankle_flex_a",
+        "ankle_flex_p",
+        "ankle_ext_a",
+        "ankle_ext_p",
+        "knee_flex_a",
+        "knee_flex_p",
+        "knee_ext_a",
+        "knee_ext_p",
+        "hip_flex_a",
+        "hip_flex_p",
+        "hip_ext_a",
+        "hip_ext_p"
     ],
     "to_search_in_filename": [
+        "ankle_flex_a",
+        "ankle_flex_p",
+        "ankle_ext_a",
+        "ankle_ext_p",
+        "knee_flex_a",
+        "knee_flex_p",
+        "knee_ext_a",
+        "knee_ext_p",
+        "hip_flex_a",
+        "hip_flex_p",
+        "hip_ext_a",
+        "hip_ext_p",
         "right_ankle",
         "left_ankle",
         "right_knee",
@@ -85,47 +56,35 @@
         "right_shoulder",
         "left_shoulder",
         "shoulder",
-
         "right_elbow",
         "left_elbow",
         "elbow",
-        
         "right_grasp",
         "left_grasp",
         "grasp",
-        
         "left_wrist",
         "left_wrist_ext_1",
         "left_wrist_ext_2",
-
         "wrist_extens_left_stretch_1",
         "wrist_extens_left_stretch_2",
-
         "right_wrist",
         "right_wrist_ext_1",
         "right_wrist_ext_2",
-
         "wrist_extens_right_stretch_1",
-        "wrist_extens_right_stretch_2",        
-
+        "wrist_extens_right_stretch_2",
         "left_fingers",
         "left_fingers_ext_1",
         "left_fingers_ext_2",
-
         "fingers_flexors_left_stretch_1",
         "fingers_flexors_left_stretch_2",
-
         "right_fingers",
         "right_fingers_ext_1",
         "right_fingers_ext_2",
-        
         "fingers_flexors_right_stretch_1",
         "fingers_flexors_right_stretch_2",
-
         "rest_10min",
         "rest_125mes",
         "rest",
-
         "fingerextension1",
         "fingerextension2",
         "fingerextension3",
@@ -133,7 +92,6 @@
         "wristextension2",
         "wristextension3",
         "wristextension4",
-
         "lelbow",
         "lgrasp",
         "lshoulder",
@@ -142,8 +100,6 @@
         "rgrasp",
         "rshoulder",
         "rwrist"
-
-
     ],
     "to_search_at_end_of_filename": []
 }

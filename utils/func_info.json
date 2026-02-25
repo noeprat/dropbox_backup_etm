@@ -71,9 +71,7 @@
         "func_mean",
         "fmri_mean",
         "fmri_mean_centerline",
-        "mask_fmri",
         "slice_init",
-        "mask_padded",
         "slice_last",
         "warp_anat2fmri",
         "warp_fmri2anat",
@@ -103,8 +101,6 @@
         "cope1",
         "varcope1",
         "weights1",
-        "mask",
-        "mask_init",
         "zflame1uppertstat1",
         "tdof_t1",
         
@@ -112,6 +108,9 @@
         "4dvarcope",
         "nuisance_sc_dvars",
         "msctp0fmri",
+        "msctp0fmri_tsnr",
+        "msctp0fmri_tsnr_sc",
+        "tsnr",
         "lmax_zstat1_tal",
         "cluster_zstat1_std",
         "mean2firstrun",
@@ -137,6 +136,7 @@
         "full_wm_gm",
         "full_gm",
         "full_wm",
+        "events",
 
         
 

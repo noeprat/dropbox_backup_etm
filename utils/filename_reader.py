@@ -1,13 +1,13 @@
 import json
 import re
 
-from utils.globals import STRS_TO_IGNORE_FOR_ID
-from utils.misc import pick_largest_str_in_list, get_path_info, remove_extension, extract_extension
+from utils.globals import STRS_TO_IGNORE_FOR_RUN
+from utils.misc import get_path_info, remove_extension, extract_extension
 
     
-def extract_id(input_path, debug=False):
+def extract_run(input_path, debug=False):
     """
-    Returns the id of a filename (SeriesNumber with sometimes additional characters) as a string
+    Returns the run of a filename (SeriesNumber with sometimes additional characters) as a string
 
     Package
     ----
@@ -22,16 +22,15 @@ def extract_id(input_path, debug=False):
     
     Returns
     --------
-        id_elt: str,
-            the id of the specified filename
+        run_elt: str,
+            the run corresponding to the specified filename
     """
     filename = remove_extension(input_path).split('/')[-1].lower()
-    id_index = None
-    curated_input_path = input_path.lower()
+    run_index = None
 
     # curate filename to avoid confusions
     
-    for s in STRS_TO_IGNORE_FOR_ID:
+    for s in STRS_TO_IGNORE_FOR_RUN:
         filename = filename.replace(s, '')
         curated_input_path = curated_input_path.replace(s, '')
     
@@ -40,36 +39,36 @@ def extract_id(input_path, debug=False):
     for i,elt in enumerate(split[:-1]):
         #if is_date(elt) or (elt=='ct' and split[i+1].isnumeric()):
         if is_date(elt):
-            id_index = i+1
+            run_index = i+1
             break
-    id_elt = ''
+    run_elt = ''
 
-    if id_index is not None:
-        for split_elt in split[id_index:]:
+    if run_index is not None:
+        for split_elt in split[run_index:]:
             if (not split_elt.isalpha()) and (not split_elt in ['s4l']):
-                id_elt = id_elt + split_elt.lower()
+                run_elt = run_elt + split_elt.lower()
 
     pattern1 = re.compile(r'CT_\D*_([\d_]*)_bin')
     match1 = re.search(pattern1,input_path)
     if match1:
-        id_elt += match1.group(1)
+        run_elt += match1.group(1)
     pattern2 = re.compile(r'Pre_Op_CT_([\d_]*)_bin')
     match2 = re.search(pattern2, input_path)
     if match2:
-        id_elt += match2.group(1)
+        run_elt += match2.group(1)
     pattern3 = re.compile(r'ct_post_op_(\d+)')
     match3 = re.search(pattern3, curated_input_path)
     if match3:
-        id_elt += match3.group(1)
+        run_elt += match3.group(1)
     pattern = re.compile(r'SPL008_Post_Op_([\d]+)_')
     match = re.search(pattern, input_path)
     if match:
-        id_elt += match.group(1)
+        run_elt += match.group(1)
     pattern = re.compile(r'SPL008_Post_Op_CT_77_([\d]+)_')
     match = re.search(pattern, input_path)
     if match:
-        id_elt += match.group(1)
-    return id_elt
+        run_elt += match.group(1)
+    return run_elt
 
 
 def extract_sub(str, participants_dict):
@@ -92,17 +91,37 @@ def extract_sub(str, participants_dict):
         new_name: str,
             the new participant code ('sub-*')
     """
-    filename = str.split("/")[-1]
-    split = filename.split("_")
-    old_name = split[0]
-    i=1
-    while (old_name not in participants_dict.keys()) and i <len(split):
-        old_name += '_' + split[i]
-        i+=1
-    if old_name not in participants_dict.keys():
-        return ''
+    #filename = str.split("/")[-1]
+    #split = filename.split("_")
+    #old_name = split[0]
+    #i=1
+
+
+    #   specific to lumbar_healthy_fmri
+    if str.split('/')[1] == "Vibrations":
+        old_sub = str.split('/')[2]
     else:
-        return participants_dict[old_name]
+        old_sub = str.split('/')[1]
+    if old_sub in participants_dict.keys():
+        sub = participants_dict[old_sub]
+    else:
+        sub=''
+    if str.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'/(sub-[\d]*)/')
+        match1 = re.search(pattern1,str)
+        if match1:
+            sub = match1.group(1).lower()
+        else:
+            sub=''
+    return sub
+
+    #while (old_name not in participants_dict.keys()) and i <len(split):
+    #    old_name += '_' + split[i]
+    #    i+=1
+    #if old_name not in participants_dict.keys():
+    #    return ''
+    #else:
+    #    return participants_dict[old_name]
 
 def extract_type(input_path, debug=False):
     """
@@ -165,7 +184,7 @@ def extract_type(input_path, debug=False):
     elif "bold_moco_p2" in filename or "iso_tr2_pat2_on_wip_advphysio" in filename or "_bold_" in filename:
         type = "func"
     
-    elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename:
+    elif filename in ['order_runs', 'notes'] or 'timings' in root_dirs_keywords or 'physiological' in filename or 'physiological' in root_dirs_keywords:
         type = "func"
 
     elif ('structural' in keywords or 'structural' in root_dirs_keywords or 'mri' in keywords or 'mri' in root_dirs_keywords) and (not 'functional' in root_dirs_keywords):
@@ -191,7 +210,7 @@ def extract_type(input_path, debug=False):
     elif 'restingstate' in keywords or 'fmri' in input_path.lower() or 'functional' in input_path.lower() or 'physiolog' in filename or get_func_task(input_path) != '' or 'bold_moco_p2' in filename:
         if filename in ["fmri", "timings", "order_runs"] or 'bold_moco_p2' in filename:
             type = 'func'
-        elif 'seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower() or get_seg_info(input_path) != '':
+        elif ('seg' in root_dirs_keywords or 'segmentation' in root_dirs_keywords or 'segmentation_functional' in input_path.lower() or get_seg_info(input_path) != '') and extension != ".feat":
             type = 'func_segmentation'
         elif 'thresh_zscores' in input_path.lower() or "zstat1" in input_path.lower():
             type = 'func_derivatives'
@@ -222,6 +241,51 @@ def extract_type(input_path, debug=False):
         type = 'misc'
     
     return type
+
+def get_ses(input_path, debug=False):
+    """
+    Returns the session identifier (specific to lumbar_healthy_fmri)
+
+    Package
+    ----
+    `utils.filename_reader.py`
+    
+    Parameters
+    --------
+        input_path : str,
+            a path/filename string
+        debug : bool, default = False
+            prints variables if set to True
+    
+    Returns
+    --------
+        ses: str,
+            the session of the specified file
+    """
+    ses = ''
+    regexps = [
+        r'/(Ankle|Hip|Knee|ankle|hip|knee)_(Ext|Flex|ext|flex)',
+        r'/Structural_([^/]*)',
+        r'/(Vibrations)/',
+        r'/(Ankle|Hip|Knee)_\d'
+    ]
+    for regexp in regexps:
+        pattern = re.compile(regexp)
+        match = re.search(pattern,input_path)
+        if match and ses == '':
+            ses = match.group(1).lower()
+
+    if ses == 'vibrations':
+        ses = 'vibration'
+    if input_path.split('/')[1] == "_Others":
+        pattern1 = re.compile(r'/ses-([\d]*)/')
+        match1 = re.search(pattern1,input_path)
+        if match1:
+            ses = match1.group(1).lower()
+        else:
+            ses=''
+    return ses
+
 
 def get_category(input_path, debug=False):
     """
@@ -312,11 +376,49 @@ def get_func_task(input_path, debug=False):
     'right_grasp'
     'left_grasp'
     """
+    func_task = ''
+    if len(input_path.split('/')[1]) >= 2:
+        if input_path.split('/')[1] == "_Others":
+            pattern1 = re.compile(r'task-([^_]*)_')
+            match1 = re.search(pattern1,input_path)
+            if match1:
+                func_task = match1.group(1).lower()
     
-    func_task = get_path_info(
+    func_task += get_path_info(
         path= input_path,
         data_path='utils/func_task.json'
     )
+
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Hip|Knee)_\d_(ext|flex)')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + match.group(2) + '_' + 'vibration'
+
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Hip|Knee)_\d/')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + 'vibration'
+
+    pattern = re.compile(r'task-VibStim_seq(Ankle|Hip|Knee)')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + 'vibration'
+    
+    pattern = re.compile(r'-(ankle|knee|hip)-(flex|ext)-(A|P)-(1|2)\.')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' + match.group(2).lower() +'_' + match.group(3).lower()
+
+    pattern = re.compile(r'/Vibrations/.*/(Ankle|Knee|Hip)_(1|2)\.')
+    match = re.search(pattern,input_path)
+    if match:
+        func_task = match.group(1).lower() + '_' "vibration"
+
+    #specific to lumbar_health_fmri
+    to_replace = ["_flex_", "_ext_", "_p", "_a"]
+    replacements = ["_flexion_", "_extension_", "_passive", "_active"]
+    for idx, string in enumerate(to_replace):
+        func_task = func_task.replace(string, replacements[idx])
     return func_task
 
 
@@ -417,6 +519,13 @@ def get_suffix(string, debug=False):
     elif 't2' in keywords and 'spc' in keywords and 'zoomit' in keywords:
         suffix = 't2_spc_zoomit'
     
+    elif 't2' in keywords and 'space' in keywords and 'zoomit' in keywords:
+        suffix = 't2_space_zoomit'
+        if debug:
+            print('uçzefuhieui',keywords[-1])
+        if keywords[-2] == 'zoomit':
+            suffix += '_' + keywords[-1]
+    
     else:
         suffix = ''
 
@@ -427,7 +536,8 @@ def get_suffix(string, debug=False):
     if suffix=='':
         suffix = additional
     else:
-        suffix = suffix + '_' + additional
+        if additional not in suffix:
+            suffix = suffix + '_' + additional
 
     extras = data['extra']
     extras += ['v0' + str(i) for i in range(10)]
@@ -600,7 +710,7 @@ def is_tmp(input_path):
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
 
-def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+def generate_new_path(old_path, sub, ses, run, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
     
@@ -612,7 +722,8 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
     --------
         old_path : str,
         sub : str,
-        id : str,
+        ses : str,
+        run : str,
         type : str,
         category : str,
         seg_info : str,
@@ -632,6 +743,18 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
             new path for the original file
     """
     new_path = ''
+
+    sub_ses_folder = sub
+    sub_ses_file = sub
+
+
+    # for lumbar_healthy below
+    #if ses == '':
+    #    sub_ses_folder = sub
+    #    sub_ses_file = sub
+    #else:
+    #    sub_ses_folder = sub + '/' + 'ses-' + ses
+    #    sub_ses_file = sub + '_' + 'ses-' + ses
 
     if is_tmp_bool:
         new_path = 'tmp' + old_path
@@ -658,15 +781,10 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub == '':
             new_path = 'code' + simplified_old_path
         else:
-            new_path = 'code/' + sub + '/' + simplified_old_path
-    elif type == 'misc':
-        simplified_old_path = old_path.lower()
-        if simplified_old_path[0] != '/':
-            simplified_old_path = '/' + simplified_old_path
-        new_path = 'misc/' + sub + simplified_old_path
-
-    elif type in ['misc_derivative','modelling']:
-        new_path = 'derivatives/' + type.split('_')[0]
+            new_path = 'code/' + sub_ses_folder + simplified_old_path
+    
+    elif type in ['misc','modelling']:
+        new_path = 'derivatives/' + type
 
         if old_path.lower().split('/')[1] in ['up200' + str(i) for i in range(1,5) ]:
             simplified_old_path = '/'.join(old_path.split('/')[2:]).lower()
@@ -676,18 +794,18 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         if sub =='':
             new_path += simplified_old_path
         else:
-            new_path += '/' + sub + '/' + simplified_old_path
+            new_path += '/' + sub_ses_folder + '/' + simplified_old_path
     else:
         if is_derivative_bool:
             new_path += 'derivatives/'
             if 'segmentation' in type:
-                new_path += 'segmentation/' + sub + '/' + type.split('_')[0] + '/'
+                new_path += 'segmentation/' + sub_ses_folder + '/' + type.split('_')[0] + '/'
             elif 'derivatives' in type:
-                new_path += type.split('_')[0] + '/' + sub +'/'
+                new_path += type.split('_')[0] + '/' + sub_ses_folder +'/'
             else:
-                new_path += type +'/' + sub + '/'
+                new_path += type +'/' + sub_ses_folder + '/'
         else:
-            new_path += sub + '/' + type + '/'
+            new_path += sub_ses_folder + '/' + type + '/'
             if ('dicom' in old_path.lower() or type in ['anat','func','ct']) and extension==".zip":
                 new_path += 'dicom/'
 
@@ -698,10 +816,10 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
         elif is_a_previous_version_bool:
             new_path += '_previous_version/'
         
-        if id != '':
-            id_element = 'id-' +id
+        if run != '':
+            run_element = 'run-' +run
         else:
-            id_element = ''
+            run_element = ''
         suffix_elt = suffix
         if 'segmentation' in type and suffix in seg_info:
             suffix_elt = ''
@@ -716,12 +834,12 @@ def generate_new_path(old_path, sub, id, type, category, seg_info, func_task, fu
                 seg_info= ''
             elif func_info in seg_info:
                 func_info= ''
-            elements = [sub, category, id_element, task_elt, func_info, seg_info, suffix_elt]  
+            elements = [sub_ses_file, category, run_element, task_elt, func_info, seg_info, suffix_elt]  
         elif type == 'simulation' and 'selectivity' in old_path.split('/')[-1].lower():
             end = old_path.split('/')[-1].lower().strip('_')
-            elements = [sub, category, end]
+            elements = [sub_ses_file, category, end]
         else:
-            elements = [sub, category, id_element, seg_info, suffix_elt]
+            elements = [sub_ses_file, category, run_element, seg_info, suffix_elt]
 
         new_path += '_'.join([element for element in elements if element!= '']) + extension
         new_path = new_path.replace('//', '/')
@@ -754,6 +872,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     --------
         sub : str,
             precises the sub name
+        ses : str,
+            precises the session
         type : str,
             precises if it is 'anat', 'func', etc.
         category : str,
@@ -767,8 +887,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     """
     out = {}
     out["old_path"] = str
-    id = extract_id(str)
-    out["id"] = id
+    run = extract_run(str)
+    out["run"] = run
 
     if 'sub' not in kwargs.keys():
         try:
@@ -778,6 +898,12 @@ def create_filename_dict(str, participants_dict, **kwargs):
     else:
         sub = kwargs['sub']
     out["sub"] = sub
+
+    if "ses" in kwargs.keys():
+        ses = kwargs['ses']
+    else:
+        ses = get_ses(str)
+    out["ses"] = ses
     
     if 'type' not in kwargs.keys():
         type = extract_type(str)
@@ -854,7 +980,8 @@ def create_filename_dict(str, participants_dict, **kwargs):
     new_path = generate_new_path(
         str,
         sub,
-        id,
+        ses,
+        run,
         type,
         category,
         seg_info,

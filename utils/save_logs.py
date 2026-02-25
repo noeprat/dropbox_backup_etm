@@ -81,6 +81,8 @@ def save_file_infos(input_files, participants_dict, file_infos_path, tmpfile_inf
     --------
         sub : str,
             precises the sub name
+        ses : str,
+            precises the session
         type : str,
             precises if it is 'anat', 'func', etc.
         category : str,
@@ -167,14 +169,14 @@ def refresh_new_paths(file_infos_path, new_file_infos_path):
         
         if should_be_refreshed:
             new_path = generate_new_path(
-                old_path= file_infos[file]['old_path'],
+                old_path = file_infos[file]['old_path'],
                 sub = file_infos[file]['sub'],
-                id = file_infos[file]['id'],
+                run = file_infos[file]['run'],
                 type = file_infos[file]['type'],
                 category = file_infos[file]['category'],
                 seg_info = seg_info,
-                func_task= func_task,
-                func_info= func_info,
+                func_task = func_task,
+                func_info = func_info,
                 suffix = file_infos[file]['suffix'],
                 extension = file_infos[file]['extension'],
                 is_tmp_bool = file_infos[file]['is_tmp'],
@@ -223,56 +225,18 @@ def save_jsons_to_data(file_infos_path, jsons_to_data_path, debug=False):
         all_files = file_infos.keys()
 
         for file in all_files:
-            try:
-                file_is_a_duplicate = file_infos[file]["confirmed_duplicate"]
-            except:
-                file_is_a_duplicate=False
-            if not file_is_a_duplicate:
-                if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
-                    jsons_dict[file] = file_infos[file]
-                else:
-                    data_dict[file] = file_infos[file]
+            if file_infos[file]['extension'] == '.json' and file[-len('_ctd.json'):]!='_ctd.json':
+                jsons_dict[file] = file_infos[file]
+            else:
+                data_dict[file] = file_infos[file]
     if debug:
         c=0
 
     for json_file in tqdm(jsons_dict.keys()):
-        json_filename = json_file.split('/')[-1][:-len('.json')].lower()
         out_dict[json_file] = []
         for data_file in data_dict.keys():
-            filename = data_file.split('/')[-1].lower()
-            curated_filename = remove_extension(filename)
-            curated_json_filename = json_filename
-            for s in STRS_TO_REMOVE_FOR_JSONS_TO_DATA:
-                curated_json_filename = curated_json_filename.replace(s,'')
-                curated_filename = curated_filename.replace(s,'')
-            if debug and c<10:
-                print('file: \n    ', filename)
-                print('curated json filename: \n    ', curated_json_filename)
-                c += 1
-            condition3 = False
-            if filename == 'fmri.nii.gz':
-                tasks_json = [
-                    side + part
-                    for side in ['l','r']
-                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
-                ]
-                tasks_json.append('restingstate')
-                tasks_nifti = [
-                    side +'_'+ part
-                    for side in ['left','right']
-                    for part in ['ankle','knee', 'hip', 'grasp', 'elbow']
-                ]
-                tasks_nifti.append('rest')
-                for idx, task in enumerate(tasks_json):
-                    if task in json_file.lower() and tasks_nifti[idx] in data_file.lower():
-                        condition3 = True
-                    #specific to up2_sub01 (so far)
-                    elif task in json_file.lower() and (tasks_nifti[idx][len('right_'):] in data_file.lower() or tasks_nifti[idx][len('left_'):] in data_file.lower()):
-                        condition3 = True
-            condition1 = curated_json_filename == curated_filename
-            condition2 = json_filename == filename
-
-            if condition1 or condition2 or condition3:
+            #specific to lumbar healthy fmri
+            if remove_extension(data_file) == remove_extension(json_file):
                 out_dict[json_file].append(data_file)
 
     with open(jsons_to_data_path, 'w') as f:
@@ -331,7 +295,7 @@ def correct_file_infos_with_matching_metadata(file_infos_path, jsons_to_data_pat
                 print('json_file', json_file)
                 print('matching_file', matching_file)
             
-            for key in ['id', 'suffix', 'seg_info', 'func_info', 'func_task']:
+            for key in ['run', 'ses', 'suffix', 'seg_info', 'func_info', 'func_task']:
                 try:
                     old_json_value = file_infos[json_file][key]
                 except:
@@ -479,12 +443,21 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
                 is_duplicate_bool= 'confirmed_duplicates' in new_path
 
             sub = file_infos[file]['sub']
+            ses = file_infos[file]['ses']
+            ses_key = 'ses-' + ses
             if (not is_tmp_bool) and (type != 'misc') and (not is_duplicate_bool):
                 if sub not in out_data.keys():
                     out_data[sub] = {}
-                if type not in out_data[sub].keys():
+                if ses != '' and (ses_key not in out_data[sub].keys()):
+                    out_data[sub][ses_key] = {}
+                if ses != '' and (type not in out_data[sub][ses_key].keys()):
+                    out_data[sub][ses_key][type] = []
+                if ses == '' and (type not in out_data[sub].keys()):
                     out_data[sub][type] = []
-                out_data[sub][type].append(new_path)
+                if ses == '':
+                    out_data[sub][type].append(new_path)
+                else:
+                    out_data[sub][ses_key][type].append(new_path)
         json.dump(out_data, f, indent=4, sort_keys=True)
         
 
