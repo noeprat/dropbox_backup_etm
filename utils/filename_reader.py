@@ -26,6 +26,7 @@ def extract_run(input_path, debug=False):
             the run corresponding to the specified filename
     """
     filename = remove_extension(input_path).split('/')[-1].lower()
+    curated_input_path = input_path.lower()
     run_index = None
 
     # curate filename to avoid confusions
@@ -611,7 +612,7 @@ def is_derivative(type):
     """
     return 'segmentation' in type or (type in ['modelling', 'simulation']) or 'derivative' in type
 
-def is_localizer(str):
+def is_localizer(input_path):
     """
     Package
     ----
@@ -629,11 +630,15 @@ def is_localizer(str):
     
     Errors for json files will be handled thanks to functions in utils.save_logs
     """
+    filename = remove_extension(input_path).split('/')[-1].lower()
     try:
-        last_dir = str.split('/')[-2].lower()
-        return 'localizer' in last_dir
+        last_dir = input_path.split('/')[-2].lower()
     except:
-        return False
+        last_dir = ''
+    is_localizer_bool = 'localizer' in last_dir or 'localizer' in filename
+
+
+    return is_localizer_bool
 
 def is_other(str, debug=False):
     """
@@ -710,7 +715,7 @@ def is_tmp(input_path):
 #########################################################################################################################
 ################### INFO DICT ###########################################################################################
 
-def generate_new_path(old_path, sub, ses, run, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
+def generate_new_path(old_path, sub, run, type, category, seg_info, func_task, func_info, suffix, extension, is_tmp_bool, is_derivative_bool, is_localizer_bool, is_other_bool, is_a_previous_version_bool):
     """
     Returns a new_path string given all the information in the arguments
     
@@ -898,12 +903,6 @@ def create_filename_dict(str, participants_dict, **kwargs):
     else:
         sub = kwargs['sub']
     out["sub"] = sub
-
-    if "ses" in kwargs.keys():
-        ses = kwargs['ses']
-    else:
-        ses = get_ses(str)
-    out["ses"] = ses
     
     if 'type' not in kwargs.keys():
         type = extract_type(str)
@@ -980,7 +979,6 @@ def create_filename_dict(str, participants_dict, **kwargs):
     new_path = generate_new_path(
         str,
         sub,
-        ses,
         run,
         type,
         category,
