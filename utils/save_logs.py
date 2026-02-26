@@ -443,7 +443,10 @@ def write_general_recap_file(file_infos_path, out_path, new_prefix=''):
                 is_duplicate_bool= 'confirmed_duplicates' in new_path
 
             sub = file_infos[file]['sub']
-            ses = file_infos[file]['ses']
+            try:
+                ses = file_infos[file]['ses']
+            except:
+                ses = ''
             ses_key = 'ses-' + ses
             if (not is_tmp_bool) and (type != 'misc') and (not is_duplicate_bool):
                 if sub not in out_data.keys():
