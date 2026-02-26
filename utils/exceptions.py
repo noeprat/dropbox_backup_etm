@@ -1,5 +1,5 @@
 import json
-from utils.filename_reader import is_derivative, generate_new_path
+from utils.filename_reader import is_derivative
 
 def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path, debug=False):
     """
