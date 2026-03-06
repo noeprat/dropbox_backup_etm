@@ -1,7 +1,7 @@
 import json
 import re
 
-from utils.globals import STRS_TO_IGNORE_FOR_RUN
+from utils.globals import STRS_TO_IGNORE_FOR_RUN, STRS_TO_REMOVE_FOR_MODELLING_NEW_PATH
 from utils.misc import get_path_info, remove_extension, extract_extension
 
     
@@ -226,12 +226,12 @@ def extract_type(input_path, debug=False):
     
 
     
-    elif 'spinal_level' in dirs or sum([word in filename for word in ['roots_out','roots_rootlets', 'roots_seg_to_centerline']])>=1 or ('intersections' in filename) :
+    elif 'spinal_level' in dirs or sum([word in filename for word in ['roots_out','roots_rootlets', 'roots_seg_to_centerline', 'centerline']])>=1 or ('intersections' in filename) or ('segmentation' in input_path.lower()) :
         type = 'anat_segmentation'
 
     
 
-    elif extension=='.nii.gz':
+    elif extension in ['.nii.gz', '.nii']:
         if get_seg_info(input_path) != '':
             type = 'anat_segmentation'
         else:
@@ -795,6 +795,9 @@ def generate_new_path(old_path, sub, run, type, category, seg_info, func_task, f
             simplified_old_path = '/'.join(old_path.split('/')[2:]).lower()
         else:
             simplified_old_path = old_path.lower()
+
+        for string in STRS_TO_REMOVE_FOR_MODELLING_NEW_PATH:
+            simplified_old_path = simplified_old_path.replace(string.lower(),'')
         
         if sub =='':
             new_path += simplified_old_path
