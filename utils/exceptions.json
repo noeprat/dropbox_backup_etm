@@ -1,3 +1,57 @@
 {
-    
+    "/2 - NIfTI/old/volunteer2_vertebrae.nii": {
+        "sub": "sub-02",
+        "type": "anat",
+        "seg_info": "",
+        "suffix": "vertebrae_old",
+        "is_derivative": false,
+        "new_path": "sub-02/anat/sub-02_vertebrae_old.nii"
+    },
+    "/2 - NIfTI/volunteer2_butterfly.nii": {
+        "sub": "sub-02",
+        "type": "anat",
+        "seg_info": "",
+        "extension": ".nii",
+        "suffix": "butterfly",
+        "is_derivative": false,
+        "new_path": "sub-02/anat/sub-02_butterfly.nii"
+    },
+    "/4 - Model/": {
+        "type": "modelling"
+    },
+    "/5 - Centerlines/": {
+        "type": "anat_segmentation"
+    },
+    "/3 - Segmentation/transformix/": {
+        "type": "misc"
+    },
+    "/3 - Segmentation/elastix/": {
+        "type": "misc"
+    },
+    "/3 - Segmentation/transformix/result.nii.gz": {
+        "type": "anat_segmentation",
+        "seg_info": "transformix_result",
+        "is_derivative": true,
+        "new_path": "derivatives/segmentation/sub-13/anat/sub-13_transformix_result.nii.gz"
+    },
+    "/3 - Segmentation/elastix/result.0.nii.gz": {
+        "type": "anat_derivatives",
+        "category": "elastix_result",
+        "suffix": "0",
+        "is_derivative": true
+    },
+    "/3 - Segmentation/elastix/result.1.nii.gz": {
+        "type": "anat_derivatives",
+        "category": "elastix_result",
+        "suffix": "1",
+        "is_derivative": true
+    },
+    "/1 - DICOM.zip": {
+        "type": "anat",
+        "extension": ".zip"
+    },
+    "/DICOMDIR": {
+        "type": "anat",
+        "extension": ""
+    }
 }

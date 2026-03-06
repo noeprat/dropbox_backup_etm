@@ -103,7 +103,8 @@
         "t9_l5",
         "best_binary_segmentations",
         "high_def",
-        "processing"
+        "processing",
+        "iseg_projects"
     ],
     "to_search_in_filename": [
         "ssl_tissues_post_pro_step_02",

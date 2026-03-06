@@ -30,7 +30,10 @@
         "warp_straight2curve",
         "others",
         "physiological",
-        "raw"
+        "raw",
+        "old",
+        "old2",
+        "old3"
     ],
     "to_search_in_filename": [
         "physiological",
@@ -54,8 +57,10 @@
         "t1_vibe_dixon",
         "t1sp3d",
         "b_ffe",
+        "bffe",
         "t2_3d_tra_vista",
         "t2w_ffe",
+        "t2w",
         "t1_ts_exp_lq",
         "t1_ts_exp_1",
         "mp2rage_ts_exp_1",
@@ -125,6 +130,11 @@
         
     ],
     "to_search_at_end_of_filename": [
+        "dicom",
+        "dicomdir",
+        "old",
+        "old2",
+        "old3",
         "padded",
         "cropped",
         "notcropped",
@@ -139,6 +149,7 @@
         "dilate_05",
         "center",
         "centerline",
+        "centerlinenew",
         "centerline_box_mask",
         "centerline_cylinder_mask",
         "viz",
@@ -188,7 +199,8 @@
         "pre_simulations",
         "post_op_for_lead_transfer",
         "for_simulations",
-        "ready_to_export"
+        "ready_to_export",
+        "iseg"
     ],
     "extra": [
         "corrected2",
