@@ -47,6 +47,12 @@ STRS_TO_REMOVE_FOR_JSONS_TO_DATA = [
     "ct_",
 ]
 
+STRS_TO_REMOVE_FOR_MODELLING_NEW_PATH = [
+    '/4 - model',
+    '/OneDrive_2024-12-16(2)_zip',
+    '/2 - NIfTI'
+]
+
 STOP_FLAGS_UPLOAD = [
     "_results",
     ".feat",
