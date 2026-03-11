@@ -23,8 +23,6 @@ if __name__ == '__main__':
 
     jsons_to_data_path = 'file_infos/'+ subdir +'/jsons_to_data-' + n + '.json'
 
-    corrected_file_infos_path = file_infos_path[:-len('.json')] +'_corrected.json'
-
     same_new_paths_path = 'file_infos/'+ subdir +'/same_new_paths-' + n + '.json'
 
     potential_duplicates_path = 'file_infos/'+ subdir +'/potential_duplicates-' + n + '.json'
@@ -32,8 +30,6 @@ if __name__ == '__main__':
     actual_duplicates_path = 'file_infos/'+ subdir +'/actual_duplicates-' + n + '.json'
 
     not_downloaded_path = 'file_infos/'+ subdir +'/not_downloaded-' + n + '.json'
-
-    renamed_duplicates_file_infos_path = corrected_file_infos_path[:-len('.json')] +'_renamed_duplicates.json'
 
     exceptions_path = 'utils/exceptions.json'
 
@@ -55,6 +51,10 @@ if __name__ == '__main__':
 
     s = input("Use a preexisting file_infos.json ? [y/n]")
 
+    saved_paths_msg = 'Path logs saved in ' + txt_logs_path + '\nAnd in ' + tmpfiles_txt_logs_path
+    saved_recap_msg = 'Recap saved in ' + json_recap_path
+
+
     if s=="y":
         file_infos_path_user = input_with_default("file_infos_path")
         tmpfile_infos_path_user = input_with_default("tmpfile_infos_path")
@@ -65,8 +65,6 @@ if __name__ == '__main__':
             old_prefix=old_prefix,
             new_prefix=new_prefix
             )
-        
-        print('Path log saved in ' + txt_logs_path)
 
         write_paths_file(
             file_infos_path= tmpfile_infos_path_user,
@@ -74,8 +72,8 @@ if __name__ == '__main__':
             old_prefix=old_prefix,
             new_prefix=new_prefix
             )
-
-        print('Path log for tmps saved in ' + tmpfiles_txt_logs_path)
+        
+        print(saved_paths_msg)
         
         write_general_recap_file(
             file_infos_path= file_infos_path_user,
@@ -83,10 +81,10 @@ if __name__ == '__main__':
             new_prefix=new_prefix
             )
         
-        print('Recap saved in ' + json_recap_path)
+        print(saved_recap_msg)
 
         sort_source_to_target(
-            file_infos_path= renamed_duplicates_file_infos_path,
+            file_infos_path= file_infos_path,
             TOKEN=ACCESS_TOKEN
             )
     
@@ -206,7 +204,7 @@ if __name__ == '__main__':
             correct_file_infos_with_matching_metadata(
                             file_infos_path = file_infos_path,
                             jsons_to_data_path = jsons_to_data_path,
-                            corrected_file_infos_path = corrected_file_infos_path
+                            file_infos_path = file_infos_path
                         )
             
         elif s == 'u':
@@ -215,53 +213,28 @@ if __name__ == '__main__':
             correct_file_infos_with_matching_metadata(
                             file_infos_path = file_infos_path,
                             jsons_to_data_path = jsons_to_data_path_user,
-                            corrected_file_infos_path = corrected_file_infos_path
+                            file_infos_path = file_infos_path
                         )
 
         flag_same_new_paths(
-                            file_infos_path=corrected_file_infos_path,
+                            file_infos_path=file_infos_path,
                             flagged_path= same_new_paths_path
                         )
         
         rename_duplicates(
-                        corrected_file_infos_path,
+                        file_infos_path,
                         same_new_paths_path,
-                        renamed_duplicates_file_infos_path
+                        file_infos_path
                     )
         
 
-        print('\nCheck and correct the file infos in ' + renamed_duplicates_file_infos_path + ' before continuing \n')
-        s = input('Do you want to refresh the new paths ? [y/n] \n')
-
-        if s == 'y':
-            refresh_new_paths(
-                        renamed_duplicates_file_infos_path,
-                        renamed_duplicates_file_infos_path
-                    )
-            handle_exceptions(
-                    exceptions_path= exceptions_path,
-                    file_infos_path= renamed_duplicates_file_infos_path,
-                    new_file_infos_path= renamed_duplicates_file_infos_path
-                )
-        
-            flag_same_new_paths(
-                            file_infos_path=renamed_duplicates_file_infos_path,
-                            flagged_path= same_new_paths_path
-                        )
-            
-            rename_duplicates(
-                            renamed_duplicates_file_infos_path,
-                            same_new_paths_path,
-                            renamed_duplicates_file_infos_path
-                        )
-
-        print('\nLast chance to correct ' + renamed_duplicates_file_infos_path + ' before saving logs and copying files in Dropbox \n')
+        print('\nCheck and correct the file infos in ' + file_infos_path + ' before saving logs and copying files in Dropbox \n')
         input('Type enter to continue')
 
         # Save paths.txt and recap.json
 
         write_paths_file(
-            file_infos_path= renamed_duplicates_file_infos_path,
+            file_infos_path= file_infos_path,
             out_path = txt_logs_path,
             old_prefix=old_prefix,
             new_prefix=new_prefix
@@ -274,19 +247,17 @@ if __name__ == '__main__':
             new_prefix=new_prefix
             )
 
-        print('Path log saved in ' + txt_logs_path)
+        print(saved_paths_msg)
         
         write_general_recap_file(
-            file_infos_path= renamed_duplicates_file_infos_path,
+            file_infos_path= file_infos_path,
             out_path= json_recap_path,
             new_prefix=new_prefix
             )
         
-        print('Recap saved in ' + json_recap_path)
+        print(saved_recap_msg)
 
         sort_source_to_target(
-            file_infos_path= renamed_duplicates_file_infos_path,
+            file_infos_path= file_infos_path,
             TOKEN=ACCESS_TOKEN
             )
-        
-        
