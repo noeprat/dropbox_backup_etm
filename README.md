@@ -1,5 +1,7 @@
 # NR_data_sort
 
+>**OLD VERSION: any modification should be made on the GitLab**
+
 Scripts to help sorting imaging data from Dropbox, in an organization resembling BIDS. Requires [creating a registered Dropbox API app](https://www.dropbox.com/developers/apps/create) (I chose one with scoped access to a single folder).
 
 # Code organization
