@@ -1,15 +1,30 @@
 import json
 from utils.filename_reader import is_derivative
 
-def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path, debug=False):
+def handle_exceptions(exceptions_path, file_infos_path, new_file_infos_path):
     """
-    Applies the instructions in the exceptions file
+    Applies the instructions in the exceptions file to create a new file_infos.json
 
     **Overwrites data in `new_file_infos_path`**
 
     Package
     ----
     `utils.handle_exceptions.py`
+
+    Parameters
+    ----
+        exceptions_path: str,
+            path to a json containing the exceptions, usually `utils/exceptions.json`
+        file_infos_path: str,
+            path to the original file_infos.json
+        new_file_infos_path: str,
+            path to the updated file_infos.json
+    
+    Saves
+    ----
+        new_file_infos_path, json file
+            updated file_infos.json
+
     """
     with open(exceptions_path, 'r') as f1:
         exceptions = json.load(f1)
