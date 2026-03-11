@@ -182,7 +182,8 @@ def sort_source_to_target(file_infos_path, TOKEN, source_dir='/source', target_d
                 )
             except:
                 errors[from_path] = to_path
-    with open('transfer_errors.json', 'w') as f:
+
+    transfer_errors_path = 'transfer_errors.json'
+    with open(transfer_errors_path, 'w') as f:
         json.dump(errors, f, indent=4)
-    
-    print('Files successfully copied in target directory, except for the ones in transfer_errors.json')
+    print('Files successfully copied in target directory, except for the ones in ' + transfer_errors_path)
