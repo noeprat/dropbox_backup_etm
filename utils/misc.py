@@ -65,9 +65,20 @@ def remove_extension(str):
 
 def pick_largest_str_in_list(str_list):
     """
+    Returns the longest string in a list of strings (or any object from which `len` can be applied)
+
     Package
     ----
     `utils.misc.py`
+
+    Parameters
+    --------
+        str_list : list(str),
+
+    Returns
+    --------
+        res: str,
+            longest element in str_list
     """
     res = ''
     for s in str_list:
@@ -77,7 +88,7 @@ def pick_largest_str_in_list(str_list):
 
 def get_path_info(path, data_path, debug=False):
     """
-    Returns the infos contained in `path` by searching matching expressions from `data_path`
+    Returns the infos contained in `path` by searching matching expressions from the json in `data_path`
 
     Package
     ----
@@ -89,6 +100,32 @@ def get_path_info(path, data_path, debug=False):
             path to dropbox file
         data_path : str,
             path to a json containing the strings to search in `path`
+            
+            *required structure:*
+            ```
+            {
+                "to_ignore": [
+                    "exp1",
+                    "exp2",
+                    ...
+                ],
+                "to_search_in_dirs": [
+                    "dir_exp1",
+                    "dir_exp2",
+                    ...
+                ],
+                "to_search_in_filename": [
+                    "filename_exp1",
+                    "filename_exp2",
+                    ...
+                ],
+                "to_search_at_end_of_filename": [
+                    "end_of_filename_exp1",
+                    "end_of_filename_exp2",
+                    ...
+                ]
+            }
+            ```
     
     Returns
     --------
@@ -163,6 +200,8 @@ def get_path_info(path, data_path, debug=False):
 
 def clean_up_tmpdir(debug=False):
     """
+    Removes any file in `tmp_dir/`
+
     Package
     ----
     `utils.misc.py`
@@ -202,6 +241,26 @@ def my_ls(dir, force_abspath=False):
     return ls
 
 def input_with_default(input_name):
+    """
+    Works similarly as the `input` function, but proposes a default value stored in `inputs.json`.
+    An empty input will return the default value
+
+    Updates `inputs.json` if the input is different than the default value
+
+    Package
+    ----
+    `utils.misc.py`
+    
+    Parameters
+    ---
+        input_name : str,
+            key under which the default value is going to be stored in inputs.json
+
+    Returns
+    ---
+        to_return : str
+            the effective input value
+    """
     try:
         with open('inputs.json', 'r') as f:
             default_inputs = json.load(f)

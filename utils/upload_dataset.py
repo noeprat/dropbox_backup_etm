@@ -39,7 +39,7 @@ def upload(
         timeout=900 : int,
             timeout limit in seconds
         chunk_size=4MB : int,
-            whunk size, should not exceed 150 MB
+            chunk size, should not exceed 150 MB
 
     Saves
     --------
@@ -137,7 +137,25 @@ def get_local_paths(dir, recursive=True, exceptions=True, force_abspath=False):
 
 def curate_paths_list(all_paths, file_list_path, root):
     """
-    TODO
+    Saves a json file in `file_list_path` listing the files in `all_paths` that match any of the regexps in `TO_UPLOAD_REGEXPS` (see `utils/globals.py`)
+
+    Package
+    ----
+    `utils.upload_dataset.py`
+
+    Parameters
+    --------
+        all_paths : list(str),
+            list of paths returned by `get_local_paths`
+        file_list_path : str,
+            path where the curated file list will be saved
+        root : str,
+            path to the local root, that will be removed for the `relative_paths`
+
+    Saves
+    --------
+        file_list_path : json file,
+            dictionary with two keys: "relative_paths" and "absolute_paths"
     """
     relative_paths = []
     absolute_paths = []
@@ -162,6 +180,29 @@ def curate_paths_list(all_paths, file_list_path, root):
 
 
 def upload_file_list(file_list_path, access_token, uploaded_file_list_path):
+    """
+    Uploads the files listed in file_list_path from their local absolute path to the 'upload' subdirectory in the Dropbox app directory.
+
+    Writes a list of the uploaded files in `uploaded_file_list_path`.
+
+    Package
+    ----
+    `utils.upload_dataset.py`
+
+    Parameters
+    --------
+        file_list_path : str,
+            path to the list of files that should be uploaded
+        access_token : str,
+            access token for the Dropbox API
+        uploaded_file_list_path : str,
+            path to the list of files that were uploaded
+
+    Saves
+    --------
+        uploaded_file_list_path : json file,
+            Dropbox paths of the uploaded files
+    """
     with open(file_list_path, "r") as f:
         paths = json.load(f)
     relative_paths = paths["relative_paths"]
